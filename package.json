@@ -1,0 +1,28 @@
+{
+  "name": "node-virustotal",
+  "version": "0.1.0",
+  "description": "An implementation of the Virustotal API for Node.js",
+  "main": "code.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natewatson999/node-virustotal.git"
+  },
+  "keywords": [
+    "Virustotal",
+    "malware",
+    "IPaddress",
+    "URL"
+  ],
+  "author": "Nate Watson <natewatson999@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/natewatson999/node-virustotal/issues"
+  },
+  "dependencies": {
+    "yellow-stream": "^0.0.13"
+  },
+  "homepage": "https://github.com/natewatson999/node-virustotal#readme"
+}
