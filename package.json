@@ -1,6 +1,6 @@
 {
   "name": "node-virustotal",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "An implementation of the Virustotal API for Node.js",
   "main": "code.js",
   "scripts": {

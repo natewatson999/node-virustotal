@@ -1,7 +1,6 @@
 var https = require("https");
 var yellowStream = require("yellow-stream");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
-var features = {};
 var PublicConnection = function(){
 	var key = apiKey;
 	var jobDelay = 15000;
@@ -51,36 +50,41 @@ var PublicConnection = function(){
 		}
 		return;
 	};
-	this.checkIPv4 = function(addr, responseProc, errProc){
-		var checkURL = "https://www.virustotal.com/vtapi/v2/ip-address/report?ip=" + addr + "&apikey=" + key;
-		var checkProc = function(){
-			https.get(checkURL, function(raw){
-				var stream = new yellowStream.consolidator(raw);
-				stream.on("error", function(e){
-					errProc(e);
+	var makeGet = function (URL) {
+		return function(addr, responseProc, errProc){
+			var checkURL = URL + addr + "&apikey=" + key;
+			var checkProc = function(){
+				https.get(checkURL, function(raw){
+					var stream = new yellowStream.consolidator(raw);
+					stream.on("error", function(e){
+						errProc(e);
+					});
+					stream.on("end", function(data){
+						var response = JSON.parse(data);
+						switch(response.response_code) {
+							case -2:
+								addJob(checkProc);
+								return;
+							case 0:
+							case 1:
+								responseProc(data);
+								return;
+							case -1:
+							default:
+								errProc(data);
+								return;
+						}
+					});
 				});
-				stream.on("end", function(data){
-					var response = JSON.parse(data);
-					switch(response.response_code) {
-						case -2:
-							addJob(checkProc);
-							return;
-						case 0:
-						case 1:
-							responseProc(data);
-							return;
-						case -1:
-						default:
-							errProc(data);
-							return;
-					}
-				});
-			});
+			};
+			addJob(checkProc);
 		};
-		addJob(checkProc);
 	};
+	this.checkIPv4 = makeGet("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=");
+	this.checkDomain = makeGet("https://www.virustotal.com/vtapi/v2/domain/report?domain=");
 	return;
 };
+var features = {};
 features.MakePublicConnection = function(){
 	return new PublicConnection();
 };

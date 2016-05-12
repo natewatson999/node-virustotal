@@ -44,6 +44,9 @@ This function returns the delay between any two jobs performed by the connection
 ### PublicConnection.checkIPv4()
 This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
+### PublicConnection.checkDomain()
+This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
+
 ### PublicConnection example
 
 ```
@@ -58,6 +61,12 @@ con.checkIPv4("90.156.201.27",function(data){
 }, function(err){
   console.error(err);
 });
+con.checkDomain("wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+/*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
 ## MakeHoneypot2Connection
@@ -75,8 +84,11 @@ This function takes an integer, sets the delay between any two jobs performed by
 ### Honeypot2Connection.getDelay()
 This function returns the delay between any two jobs performed by the connection. By default, this is 1000.
 
-### PublicConnection.checkIPv4()
+### Honeypot2Connection.checkIPv4()
 This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
+
+### Honeypot2Connection.checkDomain()
+This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
 ### Honeypot2Connection example
 
@@ -92,5 +104,11 @@ con.checkIPv4("90.156.201.27",function(data){
 }, function(err){
   console.error(err);
 });
+con.checkDomain("wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+/*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
