@@ -22,7 +22,7 @@ npm install -g node-virustotal
 
 ## Background Information
 
-Virustotal is a service provided by Google which provides supplemental malware analysis and address analysis. Go here for more information: https://www.virustotal.com/ . This module simplifies the process of interacting with Virustotal from a Node.js perspective. This API comes with a working public API key, but users should get their own and use that instead.
+Virustotal is a service provided by Google which provides supplemental malware analysis and address analysis. Go here for more information: https://www.virustotal.com/ . This module simplifies the process of interacting with Virustotal from a Node.js perspective. This API comes with a working public API key, but users should get their own and use that instead. It also uses the default key for the honeypot API. This must be changed.
 
 This API provides factory methods which make connection objects, which act as job queues. 
 
@@ -59,3 +59,38 @@ con.checkIPv4("90.156.201.27",function(data){
   console.error(err);
 });
 ```
+
+## MakeHoneypot2Connection
+This function makes a new honeypot 2 connection object, using public API version 2, with honeypot permissions. You can contact VirusTotal to get the honeypot permission for a particular API key. This is based on public API version 2, not version 1.
+
+### Honeypot2Connection.setKey()
+This function takes a hexadecimal string, and attempts to use said string as the API key for tasks in the queue. This must be used before any tasks are performed.
+
+### Honeypot2Connection.getKey()
+This function returns the key that the connection is currently using.
+
+### Honeypot2Connection.setDelay()
+This function takes an integer, sets the delay between any two jobs performed by the connection object to said integer. By default, this is 1000 milliseconds. This should not be changed unless you have specific permission from VirusTotal.
+
+### Honeypot2Connection.getDelay()
+This function returns the delay between any two jobs performed by the connection. By default, this is 1000.
+
+### PublicConnection.checkIPv4()
+This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
+
+### Honeypot2Connection example
+
+```
+var vt = require("node-virustotal");
+var con = vt.MakeHoneypot2Connection();
+con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
+console.log(con.getKey());
+con.setDelay(15000);
+console.log(con.getDelay());
+con.checkIPv4("90.156.201.27",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+```
+

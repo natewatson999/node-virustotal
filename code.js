@@ -84,4 +84,9 @@ var PublicConnection = function(){
 features.MakePublicConnection = function(){
 	return new PublicConnection();
 };
+features.MakeHoneypot2Connection = function(){
+	var workingConnection = new PublicConnection();
+	workingConnection.setDelay(1000);
+	return workingConnection;
+};
 module.exports = exports = features;
