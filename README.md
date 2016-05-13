@@ -24,7 +24,7 @@ npm install -g node-virustotal
 
 Virustotal is a service provided by Google which provides supplemental malware analysis and address analysis. Go here for more information: https://www.virustotal.com/ . This module simplifies the process of interacting with Virustotal from a Node.js perspective. This API comes with a working public API key, but users should get their own and use that instead. It also uses the default key for the honeypot API. This must be changed.
 
-This API provides factory methods which make connection objects, which act as job queues. 
+This API provides factory methods which make connection objects, which act as job queues.
 
 ## MakePublicConnection
 This function makes a new public connection object, using public API version 2.
@@ -44,7 +44,7 @@ This function returns the delay between any two jobs performed by the connection
 ### PublicConnection.checkIPv4()
 This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
-### PublicConnection.checkDomain()
+### PublicConnection.getDomainReport()
 This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
 ### PublicConnection example
@@ -61,7 +61,7 @@ con.checkIPv4("90.156.201.27",function(data){
 }, function(err){
   console.error(err);
 });
-con.checkDomain("wikionemore.com",function(data){
+con.getDomainReport("wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
@@ -87,7 +87,7 @@ This function returns the delay between any two jobs performed by the connection
 ### Honeypot2Connection.checkIPv4()
 This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
-### Honeypot2Connection.checkDomain()
+### Honeypot2Connection.getDomainReport()
 This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
 ### Honeypot2Connection example
@@ -104,7 +104,7 @@ con.checkIPv4("90.156.201.27",function(data){
 }, function(err){
   console.error(err);
 });
-con.checkDomain("wikionemore.com",function(data){
+con.getDomainReport("wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
@@ -112,3 +112,7 @@ con.checkDomain("wikionemore.com",function(data){
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
+## Security Notes
+The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
+
+The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that.

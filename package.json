@@ -1,6 +1,6 @@
 {
   "name": "node-virustotal",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "An implementation of the Virustotal API for Node.js",
   "main": "code.js",
   "scripts": {
@@ -22,7 +22,9 @@
     "url": "https://github.com/natewatson999/node-virustotal/issues"
   },
   "dependencies": {
-    "yellow-stream": "^0.0.13"
+    "yellow-stream": "^0.0.13",
+	"speedconcat": "^1.0.2",
+	"request": "^2.72.0"
   },
   "homepage": "https://github.com/natewatson999/node-virustotal#readme"
 }
