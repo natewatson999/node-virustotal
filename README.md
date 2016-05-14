@@ -59,6 +59,12 @@ This function takes 3 parameters: a URL for scanning "with the protocol", a func
 ### PublicConnection.publishUrlComment()
 This function takes 4 parameters: A full URL "with the protocol", a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The URLs are the same as for submitUrlForScanning and retrieveUrlAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
 
+### PublicConnection.submitFileForAnalysis()
+This takes 5 parameters: a file's name "as found in the wild", a mime type "ideally as specific as possible", the actual content of the file, a function to execute when a confirmation is received, and a function to perform if an error happens. The two functions each take a single parameter, which can either be the confirmation information or the error, as appropriate. The confirmation will be an object, and the error might be an object. This function is to submit a file for analysis by Virustotal. Part of the response will be a set of identifiers for the file.
+
+### PublicConnection.rescanFile()
+rescanFile() asks Virustotal to rescan a file which has already been submitted. This function takes 3 parameters: a hashcode, a function to perform if a normal response is received, and a function to perform if an error happens. The hashcode must be either an MD5, SHA1, or SHA256 code of the file being rescanned. None of these options are good hash algorithms, but MD5 and SHA1 are worse than SHA256. The two functions each have one parameter. The parameters are similar to the other functions.
+
 ### PublicConnection example
 
 ```
@@ -92,6 +98,16 @@ con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just t
   console.dir(data);
 }, function(err){
   console.error(err);
+});
+con.submitFileForAnalysis("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
+con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
 });
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
@@ -130,6 +146,12 @@ This function takes 3 parameters: a URL for scanning "with the protocol", a func
 ### Honeypot2Connection.publishUrlComment()
 This function takes 4 parameters: A full URL "with the protocol", a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The URLs are the same as for submitUrlForScanning and retrieveUrlAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
 
+### Honeypot2Connection.submitFileForAnalysis()
+This takes 5 parameters: a file's name "as found in the wild", a mime type "ideally as specific as possible", the actual content of the file, a function to execute when a confirmation is received, and a function to perform if an error happens. The two functions each take a single parameter, which can either be the confirmation information or the error, as appropriate. The confirmation will be an object, and the error might be an object. This function is to submit a file for analysis by Virustotal. Part of the response will be a set of identifiers for the file.
+
+### Honeypot2Connection.rescanFile()
+rescanFile() asks Virustotal to rescan a file which has already been submitted. This function takes 3 parameters: a hashcode, a function to perform if a normal response is received, and a function to perform if an error happens. The hashcode must be either an MD5, SHA1, or SHA256 code of the file being rescanned. None of these options are good hash algorithms, but MD5 and SHA1 are worse than SHA256. The two functions each have one parameter. The parameters are similar to the other functions.
+
 ### Honeypot2Connection example
 
 ```
@@ -163,6 +185,16 @@ con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just t
   console.dir(data);
 }, function(err){
   console.error(err);
+});
+con.submitFileForAnalysis("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
+con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
 });
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
