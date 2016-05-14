@@ -1,4 +1,5 @@
 var events = require("events");
+var speedconcat = require("speedconcat");
 var breakByLine = function(basis, posix, macOS, windows, reverseWindows){
 	if (posix==null) {
 		posix = true;
@@ -91,15 +92,15 @@ var splitStream =  function(basis, splitPhrase){
 	return;
 };
 var consolidator = function(basis){
-	var buffer = "";
+	var workingConcatenator = new speedconcat.newConcatenator("");
 	basis.on("data", function(data){
-		buffer = buffer + data;
+		workingConcatenator.append(data);
 	});
 	this.on = function(condition, callback){
 		switch(condition) {
 			case "end":
 				basis.on("end", function(){
-					callback(buffer);
+					callback(workingConcatenator.getResult());
 				});
 				break;
 			case "error":

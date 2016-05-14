@@ -163,9 +163,51 @@ var PublicConnection = function(){
 		addJob(workingJob);
 		return;
 	};
+	var sendFile = function(filename, filetype, filecontent, responseProc, errProc){
+		var sendOptions = {
+			url: "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key,
+			formData: {
+				file: {
+					value: filecontent,
+					options: {
+						filename: filename,
+						filetype: filetype
+					}
+				}
+			}
+		};
+		var sendFileProc = function(){
+			request.post(sendOptions, function(error, response, body){
+				if (error) {
+					errProc(error);
+					return;
+				}
+				try{
+					var data = JSON.parse(body);
+					switch (data.response_code) {
+						case 1:
+							responseProc(data);
+							return;
+						case 0:
+						case -1:
+						case -2:
+						default:
+							errProc(data);
+							return;
+					}
+				} catch (e) {
+					errProc(e);
+					return;
+				}
+			});
+		};
+		addJob(sendFileProc);
+	};
+	this.submitFileForAnalysis = sendFile;
+	this.publishFileComment = publishUrlComment;
 	this.publishUrlComment = publishUrlComment;
-	this.retrieveUrlAnalysis = PostWithoutBody("http://www.virustotal.com/vtapi/v2/url/report?resource=", -2);
-	this.retrieveUrlAnalysisWithRescan = PostWithoutBody("http://www.virustotal.com/vtapi/v2/url/report?scan=1&resource=", -2);
+	this.retrieveUrlAnalysis = PostWithoutBody("https://www.virustotal.com/vtapi/v2/url/report?resource=", -2);
+	this.retrieveUrlAnalysisWithRescan = PostWithoutBody("https://www.virustotal.com/vtapi/v2/url/report?scan=1&resource=", -2);
 	this.submitUrlForScanning = PostWithoutBody("https://www.virustotal.com/vtapi/v2/url/scan?url=", 0);
 	this.checkIPv4 = makeGet("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=");
 	this.getDomainReport = makeGet("https://www.virustotal.com/vtapi/v2/domain/report?domain=");

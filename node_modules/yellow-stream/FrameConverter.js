@@ -7,63 +7,63 @@ var frameTypeNormalize = function(input) {
     case 0:
     case "DC":
     case "dc":
-      return "0";
+      return 0;
     case 1:
     case "1":
     case "1hz":
     case "1HZ":
-      return "1";
+      return 1;
     case "5":
     case 5:
     case "commonLowFormat"
-      return "5"
+      return 5
     case "60":
     case 60:
     case "NTSCtotal":
     case "60hz":
     case "60HZ":
-      return "60";
+      return 60;
     case "50":
     case 50:
     case "PALtotal":
     case "SECAMtotal":
     case "50hz":
     case "50HZ":
-      return "50";
+      return 50;
     case 25:
     case "25":
     case "PALhalf":
     case "SECAMhalf":
     case "25hz":
     case "25HZ":
-      return "25";
+      return 25;
     case 30:
     case "30":
     case "NTSChalf":
     case "30hz":
     case "30HZ":
-      return "30";
+      return 30;
     case 40:
     case "40":
     case "40hz":
     case "40HZ":
-      return "40";
+      return 40;
     case 400:
     case "400":
     case "400hz":
     case "400HZ":
     case "MIL-STD-704":
-      return "400";
+      return 400;
     case 100:
     case "100":
     case "100hz":
     case "100HZ":
-      return "100";
+      return 100;
     case 600:
     case "600":
     case "600hz":
     case "600HZ":
-      return "600";
+      return 600;
     case 120:
     case "120":
     case "120hz":
@@ -73,20 +73,20 @@ var frameTypeNormalize = function(input) {
     case "200":
     case "200hz":
     case "200HZ":
-      return "200";
+      return 200;
     case 240:
     case "240":
     case "240hz":
     case "240HZ":
-      return "240";
+      return 240;
     case 1200:
     case "1200":
     case "1200hz":
     case "1200HZ":
     case "commonHighFormat"
-      return "1200";
+      return 1200;
     default:
-      return "0";
+      return 0;
   }
 };
 var FrameMultiplexer = function(rawInmode, rawOutmode, instream){
@@ -112,27 +112,36 @@ var FrameMultiplexer = function(rawInmode, rawOutmode, instream){
         return;
     }
   };
-  if ((inmode=="0")||(outmode=="0")){
+  if ((inmode==0)||(outmode==0)){
     return result;
   }
-  if (inmode=="5") {
-
-  }
-  outerSwitch:
-  switch(inmode){
-    case "0"
-      break outerSwitch;
-    case "60":
-      switch60:
-      switch(outmode){
-        case "120":
-          instream.on("data", function(input){
-            FrameEmitter.emit("data", input);
-            FrameEmitter.emit("data", input);
-          })
-          break switch60;
+  if (inmode==1) {
+    instream.on("data", function(data){
+      for (var index = 0; index < outmode; index++) {
+        FrameEmitter.emit("data", data);
       }
-      break outerSwitch;
+    });
+    return result;
+  }
+  if (inmode==5) {
+    if (outmode==1) {
+      var rotate = -1;
+      instream.on("data", function(data){
+        rotate++;
+        rotate%=inmode;
+        if (rotate==0) {
+          FrameEmitter.emit("data", data);
+        }
+      });
+      return result;
+    }
+    var reduced = outmode / 5;
+    instream.on("data", function(data){
+      for (var index = 0; index < reduced; index++) {
+        FrameEmitter.emit("data", data);
+      }
+    });
+    return result;
   }
   return result;
 };

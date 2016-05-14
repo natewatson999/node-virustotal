@@ -26,5 +26,10 @@ con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just t
 }, function(err){
   console.error(err);
 });
+con.submitFileForAnalysis("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
 
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
