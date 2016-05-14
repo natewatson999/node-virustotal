@@ -71,6 +71,9 @@ getFileReport() asks Virustotal for the report of a file that was previously sub
 ### PublicConnection.publishFileComment()
 This function takes 4 parameters: A file identifier, a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The file identifier can be either an MD5, SHA1, or SHA256 hashcode of the file in question. None of these are recommended, but MD5 and SHA1 are worse. These hashcodes can be obtained from the confirmation from submitFileForAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
 
+### PublicConnection.UrlEvaluation()
+This function is a convenience function which combines submitUrlForScanning and retrieveUrlAnalysis. This takes a URL which may or may not have been scanned in the past, cues it for scanning, waits for the scanning to be finished, and outputs the scan results. This function takes 3 parameters: a URL, a result callback function, and an error function. The URL should have the protocol. The result callback function has the same output as retrieveUrlAnalysis. The error function is mandatory, and is under the same rules as all of the other error functions in the public API.
+
 ### PublicConnection example
 
 ```
@@ -125,6 +128,11 @@ con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d881
 }, function(err){
   console.error(err);
 });
+con.UrlEvaluation("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
@@ -173,6 +181,9 @@ getFileReport() asks Virustotal for the report of a file that was previously sub
 
 ### Honeypot2Connection.publishFileComment()
 This function takes 4 parameters: A file identifier, a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The file identifier can be either an MD5, SHA1, or SHA256 hashcode of the file in question. None of these are recommended, but MD5 and SHA1 are worse. These hashcodes can be obtained from the confirmation from submitFileForAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
+
+### Honeypot2Connection.UrlEvaluation()
+This function is a convenience function which combines submitUrlForScanning and retrieveUrlAnalysis. This takes a URL which may or may not have been scanned in the past, cues it for scanning, waits for the scanning to be finished, and outputs the scan results. This function takes 3 parameters: a URL, a result callback function, and an error function. The URL should have the protocol. The result callback function has the same output as retrieveUrlAnalysis. The error function is mandatory, and is under the same rules as all of the other error functions in the public API.
 
 ### Honeypot2Connection example
 
@@ -224,6 +235,11 @@ con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff65
   console.log(mistake);
 });
 con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.UrlEvaluation("http://wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);

@@ -276,6 +276,14 @@ var PublicConnection = function(){
 	this.submitUrlForScanning = PostWithoutBody("https://www.virustotal.com/vtapi/v2/url/scan?url=", 0);
 	this.checkIPv4 = makeGet("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=");
 	this.getDomainReport = makeGet("https://www.virustotal.com/vtapi/v2/domain/report?domain=");
+
+	var self = this;
+	var UrlEvaluation = function(target, resultProc, errProc){
+		self.submitUrlForScanning(target, function(data){
+			self.retrieveUrlAnalysis(target, resultProc, errProc);
+		}, errProc);
+	};
+	this.UrlEvaluation = UrlEvaluation;
 	return;
 };
 var features = {};
