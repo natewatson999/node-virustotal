@@ -232,6 +232,41 @@ var PublicConnection = function(){
 		};
 		addJob(rescanFileProc);
 	};
+	var getFileReport = function(resourceID, responseProc, errProc, scanID) {
+		var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?resource=" + resourceID + "&apikey=" + key;
+		if ((scanID != null) && (scanID != "")) {
+			fileResourceURL = fileResourceURL + "&scan_id=" + scanID;
+		}
+		var retrieveProc = function(){
+			request({url: fileResourceURL, method: "POST"}, function(error, response, body){
+				if (error) {
+					errProc(error);
+					return;
+				}
+				try {
+					var data = JSON.parse(body);
+					switch (data.response_code){
+						case 1:
+							responseProc(data);
+							return;
+						case -2:
+							addJob(retrieveProc);
+							return;
+						case 0:
+						case -1:
+						default:
+							errProc(data);
+							return;
+					}
+				} catch (e) {
+					errProc(e);
+					return;
+				}
+			});
+		};
+		addJob(retrieveProc)
+	};
+	this.getFileReport = getFileReport;
 	this.rescanFile = rescanFile;
 	this.submitFileForAnalysis = sendFile;
 	this.publishFileComment = publishUrlComment;

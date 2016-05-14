@@ -36,5 +36,10 @@ con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6
 }, function(mistake){
   console.log(mistake);
 });
+con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
 
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
