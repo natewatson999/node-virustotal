@@ -65,6 +65,12 @@ This takes 5 parameters: a file's name "as found in the wild", a mime type "idea
 ### PublicConnection.rescanFile()
 rescanFile() asks Virustotal to rescan a file which has already been submitted. This function takes 3 parameters: a hashcode, a function to perform if a normal response is received, and a function to perform if an error happens. The hashcode must be either an MD5, SHA1, or SHA256 code of the file being rescanned. None of these options are good hash algorithms, but MD5 and SHA1 are worse than SHA256. The two functions each have one parameter. The parameters are similar to the other functions.
 
+### PublicConnection.getFileReport()
+getFileReport() asks Virustotal for the report of a file that was previously submitted. It takes 3 or 4 parameters. The first parameter is the file's identification. See the documentation for rescanFile() for the identification. The next two parameters are the usual response and error functions. The 4th parameter is optional this can be used to request the report for a specific scan_id of a file, rather than simply the latest scanjob. This is useful if multiple versions exist, or if there's a hash collision. The scan_id can be obtained from the result of submitFileForAnalysis. By default, if Virustotal reports that the file in question hasn't been scanned yet, then this function will continue to request reports until one is obtained or an error happens. This requesting process happens within the bounds of the job queueing system that the rest of this API uses. However, depending on Virustotal's load, this can take hours, so whatever you do, don't use this for real time responses.
+
+### PublicConnection.publishFileComment()
+This function takes 4 parameters: A file identifier, a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The file identifier can be either an MD5, SHA1, or SHA256 hashcode of the file in question. None of these are recommended, but MD5 and SHA1 are worse. These hashcodes can be obtained from the confirmation from submitFileForAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
+
 ### PublicConnection example
 
 ```
@@ -109,6 +115,16 @@ con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6
 }, function(mistake){
   console.log(mistake);
 });
+con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
+con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
@@ -151,6 +167,12 @@ This takes 5 parameters: a file's name "as found in the wild", a mime type "idea
 
 ### Honeypot2Connection.rescanFile()
 rescanFile() asks Virustotal to rescan a file which has already been submitted. This function takes 3 parameters: a hashcode, a function to perform if a normal response is received, and a function to perform if an error happens. The hashcode must be either an MD5, SHA1, or SHA256 code of the file being rescanned. None of these options are good hash algorithms, but MD5 and SHA1 are worse than SHA256. The two functions each have one parameter. The parameters are similar to the other functions.
+
+### Honeypot2Connection.getFileReport()
+getFileReport() asks Virustotal for the report of a file that was previously submitted. It takes 3 or 4 parameters. The first parameter is the file's identification. See the documentation for rescanFile() for the identification. The next two parameters are the usual response and error functions. The 4th parameter is optional this can be used to request the report for a specific scan_id of a file, rather than simply the latest scanjob. This is useful if multiple versions exist, or if there's a hash collision. The scan_id can be obtained from the result of submitFileForAnalysis. By default, if Virustotal reports that the file in question hasn't been scanned yet, then this function will continue to request reports until one is obtained or an error happens. This requesting process happens within the bounds of the job queueing system that the rest of this API uses. However, depending on Virustotal's load, this can take hours, so whatever you do, don't use this for real time responses.
+
+### Honeypot2Connection.publishFileComment()
+This function takes 4 parameters: A file identifier, a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The file identifier can be either an MD5, SHA1, or SHA256 hashcode of the file in question. None of these are recommended, but MD5 and SHA1 are worse. These hashcodes can be obtained from the confirmation from submitFileForAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
 
 ### Honeypot2Connection example
 
@@ -195,6 +217,16 @@ con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6
   console.log(data);
 }, function(mistake){
   console.log(mistake);
+});
+con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
+con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
 });
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```

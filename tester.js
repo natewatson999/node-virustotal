@@ -41,5 +41,10 @@ con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff65
 }, function(mistake){
   console.log(mistake);
 });
+con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
 
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
