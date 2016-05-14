@@ -129,6 +129,41 @@ var PublicConnection = function(){
 			addJob(jobProc);
 		};
 	};
+	var publishUrlComment = function(resource, comment, resultProc, errProc){
+		if (errProc==null) {
+			errProc = function(e) {
+				publishUrlComment(resource, comment, resultProc, null);
+				return;
+			}
+		}
+		var workingURL = "https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource) + "&comment=" + encodeURIComponent(comment) + "&apikey=" + key ;
+		var workingJob = function(){
+			request({url:workingURL, method:"POST"}, function(error, response, body){
+				if (error) {
+					errProc(error);
+					return;
+				}
+				try {
+					var result = JSON.parse(body);
+					switch (result.response_code) {
+						case 1:
+							resultProc(result);
+							return;
+						case 0:
+						default:
+							errProc(result);
+							return;
+					}
+				} catch (e) {
+					errProc(e);
+					return;
+				}
+			});
+		};
+		addJob(workingJob);
+		return;
+	};
+	this.publishUrlComment = publishUrlComment;
 	this.retrieveUrlAnalysis = PostWithoutBody("http://www.virustotal.com/vtapi/v2/url/report?resource=", -2);
 	this.retrieveUrlAnalysisWithRescan = PostWithoutBody("http://www.virustotal.com/vtapi/v2/url/report?scan=1&resource=", -2);
 	this.submitUrlForScanning = PostWithoutBody("https://www.virustotal.com/vtapi/v2/url/scan?url=", 0);

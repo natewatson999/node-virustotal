@@ -56,6 +56,9 @@ This function takes 3 parameters: a URL for scanning "with the protocol", a func
 ### PublicConnection.retrieveUrlAnalysisWithRescan()
 This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. This does the same thing as retrieveUrlAnalysis, but it also requests that the URL in question be rescanned.
 
+### PublicConnection.publishUrlComment()
+This function takes 4 parameters: A full URL "with the protocol", a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The URLs are the same as for submitUrlForScanning and retrieveUrlAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
+
 ### PublicConnection example
 
 ```
@@ -81,6 +84,11 @@ con.submitUrlForScanning("http://wikionemore.com",function(data){
   console.error(err);
 });
 con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just testing an API.", function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
@@ -119,6 +127,9 @@ This function takes 3 parameters: a URL for scanning "with the protocol", a func
 ### Honeypot2Connection.retrieveUrlAnalysisWithRescan()
 This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. This does the same thing as retrieveUrlAnalysis, but it also requests that the URL in question be rescanned.
 
+### Honeypot2Connection.publishUrlComment()
+This function takes 4 parameters: A full URL "with the protocol", a comment about it, a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The URLs are the same as for submitUrlForScanning and retrieveUrlAnalysis. Read the Virustotal API documentation for information about what a useful comment is. The confirmation function is business as usual. The error function is optional. If the error function is not specified, the script will simply keep attempting to submit the comment.
+
 ### Honeypot2Connection example
 
 ```
@@ -144,6 +155,11 @@ con.submitUrlForScanning("http://wikionemore.com",function(data){
   console.error(err);
 });
 con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just testing an API.", function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
