@@ -55,4 +55,9 @@ con.UrlEvaluation("http://wikionemore.com",function(data){
 }, function(err){
   console.error(err);
 });
+con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/

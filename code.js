@@ -284,6 +284,12 @@ var PublicConnection = function(){
 		}, errProc);
 	};
 	this.UrlEvaluation = UrlEvaluation;
+	var FileEvaluation = function(filename, filetype, filecontent, responseProc, errProc){
+		self.submitFileForAnalysis(filename, filetype, filecontent, function(responseData){
+			self.getFileReport(responseData.sha256, responseProc, errProc, responseData.scan_id);
+		}, errProc);
+	};
+	this.FileEvaluation = FileEvaluation;
 	return;
 };
 var features = {};

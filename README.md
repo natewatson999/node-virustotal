@@ -74,6 +74,9 @@ This function takes 4 parameters: A file identifier, a comment about it, a funct
 ### PublicConnection.UrlEvaluation()
 This function is a convenience function which combines submitUrlForScanning and retrieveUrlAnalysis. This takes a URL which may or may not have been scanned in the past, cues it for scanning, waits for the scanning to be finished, and outputs the scan results. This function takes 3 parameters: a URL, a result callback function, and an error function. The URL should have the protocol. The result callback function has the same output as retrieveUrlAnalysis. The error function is mandatory, and is under the same rules as all of the other error functions in the public API.
 
+### PublicConnection.FileEvaluation()
+This is a convenience function which combines submitFileForAnalysis and getFileReport. Basically, this function lets the developer submit a file for analysis, and get the analysis without any intermediate work. The parameters are identical to those of submitFileForAnalysis, except the response callback function fires when the file has been analyzed by Virustotal, rather than merely submitted. Depending on Virustotal's traffic, the evaluation process can take up to 2 hours to finish, so it's a really bad idea to use this for anything approaching real-time.
+
 ### PublicConnection example
 
 ```
@@ -133,6 +136,11 @@ con.UrlEvaluation("http://wikionemore.com",function(data){
 }, function(err){
   console.error(err);
 });
+con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
@@ -184,6 +192,9 @@ This function takes 4 parameters: A file identifier, a comment about it, a funct
 
 ### Honeypot2Connection.UrlEvaluation()
 This function is a convenience function which combines submitUrlForScanning and retrieveUrlAnalysis. This takes a URL which may or may not have been scanned in the past, cues it for scanning, waits for the scanning to be finished, and outputs the scan results. This function takes 3 parameters: a URL, a result callback function, and an error function. The URL should have the protocol. The result callback function has the same output as retrieveUrlAnalysis. The error function is mandatory, and is under the same rules as all of the other error functions in the public API.
+
+### Honeypot2Connection.FileEvaluation()
+This is a convenience function which combines submitFileForAnalysis and getFileReport. Basically, this function lets the developer submit a file for analysis, and get the analysis without any intermediate work. The parameters are identical to those of submitFileForAnalysis, except the response callback function fires when the file has been analyzed by Virustotal, rather than merely submitted. Depending on Virustotal's traffic, the evaluation process can take up to 2 hours to finish, so it's a really bad idea to use this for anything approaching real-time.
 
 ### Honeypot2Connection example
 
@@ -244,12 +255,19 @@ con.UrlEvaluation("http://wikionemore.com",function(data){
 }, function(err){
   console.error(err);
 });
+con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
-## Security Notes
+## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
 The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that.
 
 The site mentioned in the example code is a known phishing site. It was shut down, but I still advise against going to it. It is used here because it makes an easy to understand example.
+
+All of this code is under the MIT license, with the possible exception of the modules, which are under their own licenses, which should be readable in their documentation. While this code is under the MIT license, the Virustotal REST API is under a custom license which should be read separately, before attempting to use this API.
