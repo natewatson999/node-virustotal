@@ -203,6 +203,36 @@ var PublicConnection = function(){
 		};
 		addJob(sendFileProc);
 	};
+	var rescanFile = function(resourceID, responseProc, errProc) {
+		var workingURL = "https://www.virustotal.com/vtapi/v2/file/rescan?resource=" +resourceID + "&apikey=" + key;
+		var rescanFileProc = function(){
+			request({url:workingURL, method:"POST"}, function(error, response, body){
+				if (error) {
+					errProc(error);
+					return;
+				}
+				try {
+					var data = JSON.parse(body);
+					switch (data.response_code){
+						case 1:
+							responseProc(data);
+							return;
+						case 0:
+						case -1:
+						case -2:
+						default:
+							errProc(data);
+							return;
+					}
+				} catch (e) {
+					errProc(e);
+					return;
+				}
+			});
+		};
+		addJob(rescanFileProc);
+	};
+	this.rescanFile = rescanFile;
 	this.submitFileForAnalysis = sendFile;
 	this.publishFileComment = publishUrlComment;
 	this.publishUrlComment = publishUrlComment;
