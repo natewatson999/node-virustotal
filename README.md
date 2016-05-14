@@ -42,10 +42,19 @@ This function takes an integer, sets the delay between any two jobs performed by
 This function returns the delay between any two jobs performed by the connection. By default, this is 15000.
 
 ### PublicConnection.checkIPv4()
-This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
+This function takes 3 parameters: an IPv4 address, a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It analyzes a particular IP address.
 
 ### PublicConnection.getDomainReport()
-This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
+This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It analyzes a domain name.
+
+### PublicConnection.submitUrlForScanning()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It submits a URL for the analysis queue.
+
+### PublicConnection.retrieveUrlAnalysis()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It checks to see if the report on a given URL is done, and continues checking until it's done or an error happens. This can take hours, so DO NOT USE THIS FOR ANYTHING WITH A CLIENT RESPONSE!
+
+### PublicConnection.retrieveUrlAnalysisWithRescan()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. This does the same thing as retrieveUrlAnalysis, but it also requests that the URL in question be rescanned.
 
 ### PublicConnection example
 
@@ -62,6 +71,16 @@ con.checkIPv4("90.156.201.27",function(data){
   console.error(err);
 });
 con.getDomainReport("wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.submitUrlForScanning("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
@@ -90,6 +109,16 @@ This function takes 3 parameters: an IPv4 address, a function to perform if a re
 ### Honeypot2Connection.getDomainReport()
 This function takes 3 parameters: a DNS address "without the protocol", a function to perform if a result is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind.
 
+
+### Honeypot2Connection.submitUrlForScanning()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It submits a URL for the analysis queue.
+
+### Honeypot2Connection.retrieveUrlAnalysis()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. It checks to see if the report on a given URL is done, and continues checking until it's done or an error happens. This can take hours, so DO NOT USE THIS FOR ANYTHING WITH A CLIENT RESPONSE!
+
+### Honeypot2Connection.retrieveUrlAnalysisWithRescan()
+This function takes 3 parameters: a URL for scanning "with the protocol", a function to perform if a confirmation is obtained, and a function to perform if an error is obtained. The two functions both take a single parameter. In the case of the first function, said parameter will always be a response object. In the case of the second parameter, this is an error object which may be an object of some kind. This does the same thing as retrieveUrlAnalysis, but it also requests that the URL in question be rescanned.
+
 ### Honeypot2Connection example
 
 ```
@@ -109,6 +138,16 @@ con.getDomainReport("wikionemore.com",function(data){
 }, function(err){
   console.error(err);
 });
+con.submitUrlForScanning("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
@@ -116,3 +155,5 @@ con.getDomainReport("wikionemore.com",function(data){
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
 The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that.
+
+The site mentioned in the example code is a known phishing site. It was shut down, but I still advise against going to it. It is used here because it makes an easy to understand example.
