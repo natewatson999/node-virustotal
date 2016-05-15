@@ -71,9 +71,47 @@ var privateAPI = function(){
 				errProc(e);
 				return;
 			}
-		)};
+		});
 		return;
 	};
+  var getReport = function(queryURL, responseProc, errProc) {
+    request(queryURL, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case 1:
+          case 0:
+            responseProc(data);
+            return;
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.getDomainReport = function(domain, responseProc, errProc){
+    getReport("https://www.virustotal.com/vtapi/v2/domain/report?domain=" + domain + "&apikey=" + key, responseProc, errProc);
+    return;
+  };
+  this.getIP4Report = function(ip, responseProc, errProc){
+    getReport("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=" + ip + "&apikey=" + key, responseProc, errProc);
+    return;
+  };
 	this.publishFileComment = publishUrlComment;
 	this.publishUrlComment = publishUrlComment;
   this.getFileComments = getComments;

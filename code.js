@@ -303,5 +303,5 @@ features.MakeHoneypot2Connection = function(){
 	workingConnection.setDelay(1000);
 	return workingConnection;
 };
-features.makePrivateAPI = privateAPI.makePrivateAPI;
+features.makePrivateConnection = privateAPI.makePrivateAPI;
 module.exports = exports = features;

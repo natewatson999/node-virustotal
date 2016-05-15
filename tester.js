@@ -60,4 +60,13 @@ con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_v
 }, function(mistake){
   console.log(mistake);
 });
+/*
+var con = vt.makePrivateConnection();
+con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
+con.getIP4Report("90.156.201.27",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+*/
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/

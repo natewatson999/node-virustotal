@@ -263,6 +263,16 @@ con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_v
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
+## makePrivateConnection
+This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
+
+### makePrivateConnection.publishUrlComment()
+The interaction with this version of publishUrlComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
+
+### makePrivateConnection.publishFileComment()
+The interaction with this version of publishFileComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run. 
+
+
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
