@@ -266,6 +266,12 @@ con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_v
 ## makePrivateConnection
 This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
 
+### makePrivateConnection.setKey()
+This function sets the apikey that the connection is using. It takes one parameter: the API key. It returns the connection object.
+
+### makePrivateConnection.getKey()
+This function returns the API key that the connection is using. It has no parameters.
+
 ### makePrivateConnection.publishUrlComment()
 The interaction with this version of publishUrlComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
 
@@ -283,6 +289,23 @@ getUrlComments is a private-only feature. This gathers all of the comments on a 
 
 ### makePrivateConnection.getFileComments()
 getFileComments is a private-only feature. This gathers all of the comments on a particular file that people have made using the API or the web interface. This function takes 3 parameters: a file identifier, a callback function for any valid responses, and a callback function for errors. The file identifier must be either the SHA1, MD5, or SHA256 hash of the file being looked up. The response callback will have a single parameter: an object with the data. The error callback will have a single parameter which may be an object or a string.
+
+### makePrivateConnection example
+```
+var con = vt.makePrivateConnection();
+con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
+console.log(con.getKey());
+con.getIP4Report("90.156.201.27",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.getDomainReport("wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+```
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
