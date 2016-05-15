@@ -270,8 +270,19 @@ This returns a new privateConnection object, using private API version 2. I was 
 The interaction with this version of publishUrlComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
 
 ### makePrivateConnection.publishFileComment()
-The interaction with this version of publishFileComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run. 
+The interaction with this version of publishFileComment is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
 
+### makePrivateConnection.getDomainReport()
+The interaction with this version of getDomainReport is identical to the interaction with the same method in the public and honeypot API. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
+
+### makePrivateConnection.getIP4Report()
+The interaction with this function is identical to the interaction with checkIPv4 in the public and honeypot APIs. The only difference is a lack of task spooling, so it has a chance of taking less than 15 seconds to run.
+
+### makePrivateConnection.getUrlComments()
+getUrlComments is a private-only feature. This gathers all of the comments on a particular URL that people have made using the API or the web interface. This function takes 3 parameters: a URL "with protocol", a callback function for any valid responses, and a callback function for errors. The response callback will have a single parameter: an object with the data. The error callback will have a single parameter which may be an object or a string.
+
+### makePrivateConnection.getFileComments()
+getFileComments is a private-only feature. This gathers all of the comments on a particular file that people have made using the API or the web interface. This function takes 3 parameters: a file identifier, a callback function for any valid responses, and a callback function for errors. The file identifier must be either the SHA1, MD5, or SHA256 hash of the file being looked up. The response callback will have a single parameter: an object with the data. The error callback will have a single parameter which may be an object or a string.
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
