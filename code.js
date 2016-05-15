@@ -2,8 +2,10 @@ var https = require("https");
 var yellowStream = require("yellow-stream");
 var speedconcat = require("speedconcat");
 var request = require("request");
+var emailAPI = require("./emailAPI.js");
+var privateAPI = require("./privateAPI.js");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
-var PublicConnection = function(){
+var PublicConnection = function(enablePrivateFeatures){
 	var key = apiKey;
 	var jobDelay = 15000;
 	this.setKey = function(replacement){
@@ -301,4 +303,5 @@ features.MakeHoneypot2Connection = function(){
 	workingConnection.setDelay(1000);
 	return workingConnection;
 };
+features.makePrivateAPI = privateAPI.makePrivateAPI;
 module.exports = exports = features;
