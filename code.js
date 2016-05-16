@@ -86,7 +86,7 @@ var PublicConnection = function(enablePrivateFeatures){
 	};
 	var PostWithoutBody = function(rawURL, mode) {
 		return function(resource, responseProc, errProc){
-			var fullURL = rawURL + resource + "&apikey=" + key;
+			var fullURL = rawURL + encodeURIComponent(resource) + "&apikey=" + key;
 			var jobProc = function(){
 				request({
 					method: "POST",

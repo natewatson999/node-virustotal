@@ -165,6 +165,37 @@ var privateAPI = function(){
     });
     return;
   };
+  var submitUrlForScanning = function(URL, resultProc, errProc){
+    var fullURL = "https://www.virustotal.com/vtapi/v2/url/scan?url=" + encodeURIComponent(URL) + "&apikey=" + key;
+    request({url: URL, method:"POST"}, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try{
+        var data = JSON.parse(body);
+        switch(data.response_code) {
+          case 1:
+            resultProc(data);
+            return;
+          case 0:
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+  };
+
   this.submitFileForAnalysis = sendFilePreLogic;
   this.getDomainReport = function(domain, responseProc, errProc){
     getReport("https://www.virustotal.com/vtapi/v2/domain/report?domain=" + domain + "&apikey=" + key, responseProc, errProc);
@@ -174,6 +205,7 @@ var privateAPI = function(){
     getReport("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=" + ip + "&apikey=" + key, responseProc, errProc);
     return;
   };
+  this.submitUrlForScanning = submitUrlForScanning;
 	this.publishFileComment = publishUrlComment;
 	this.publishUrlComment = publishUrlComment;
   this.getFileComments = getComments;
