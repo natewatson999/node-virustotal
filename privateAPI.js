@@ -104,6 +104,68 @@ var privateAPI = function(){
     });
     return;
   };
+
+  var upperLimit = 32*1024*1024;
+  var sendFileToURL = function(filename, filetype, content, URL, callback){
+    var sendOptions = {
+      url: URL,
+      formData: {file: { value: filecontent, options: { filename: filename, filetype: filetype}}}
+		};
+    request.post(sendOptions, callback);
+  };
+  var sendFilePreLogic = function(filename, filetype, content, resultProc, errProc){
+    var callbackProc = function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case 1:
+            resultProc(data);
+            return;
+          case 0:
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    };
+    if (content.length < upperLimit ) {
+      sendFileToURL(filename, filetype, content, "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key, callbackProc);
+      return;
+    }
+    request.get("https://www.virustotal.com/vtapi/v2/file/scan/upload_url?apikey=" + key, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        sendFileToURL(filename, filetype, content, data.upload_url, callbackProc);
+        return;
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.submitFileForAnalysis = sendFilePreLogic;
   this.getDomainReport = function(domain, responseProc, errProc){
     getReport("https://www.virustotal.com/vtapi/v2/domain/report?domain=" + domain + "&apikey=" + key, responseProc, errProc);
     return;
