@@ -121,7 +121,7 @@ con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6
 }, function(mistake){
   console.log(mistake);
 });
-con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+con.getFileReport("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724", function(data){
   console.log(data);
 }, function(mistake){
   console.log(mistake);
@@ -239,7 +239,7 @@ con.rescanFile("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6
 }, function(mistake){
   console.log(mistake);
 });
-con.getFileReport("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+con.getFileReport("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724", function(data){
   console.log(data);
 }, function(mistake){
   console.log(mistake);
@@ -297,6 +297,9 @@ This is identical to makePublicConnection.submitUrlForScanning(), except without
 
 ### makePrivateConnection.retrieveUrlAnalysis()
 This version is very different from its counterpart in the public and honeypot API. What it's actually used for is identical though. This version has 5 or 6 parameters. The first parameter is the URL that a report is wanted on. The second and third parameters are the usual response and error callback functions with the usual parameters. The next one is a boolean variable which indicates if the script should request that Virustotal rescan the URL. The next boolean variable is if you want the extended data, with false giving the same output you'd get with public and honeypot mode; and true giving extra sandbox information. The final parameter is optional. If the final parameter is not specified; then if Virustotal doesn't have results for the URL yet, then the function will keep retrying every 5 minutes until it gets results. If the function is specified; then if Virustotal hasn't scanned the URL yet, then the function will be fired with the response body as the only parameter.
+
+### makePrivateConnection.getFileReport
+This contacts Virustotal and attempts to get the report of a specified file. It takes 4 or 5 parameters. The first parameter is the file's scanID. This is obtained in the same way as in the public and honeypot APIs. The second and third parameters are the response and error callback functions, which have the usual parameters. The 4th parameter is a boolean value, which tells Virustotal to provide the extended data if true, and the regular data if false. The next parameter is optional. It is a callback function to perform if Virustotal hasn't analyzed the file yet. The only parameter is the body of the HTTPS response. If this function isn't specified, then the API will keep trying every 5 minutes until it gets a report or gives an error.
 
 ### makePrivateConnection example
 ```
@@ -361,6 +364,13 @@ con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
   console.error(err);
 }, false, true, function(stillWaiting){
   console.log(stillWaiting);
+});
+con.getFileReport("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+}, true, function(waitingMessage){
+  console.log(waitingMessage);
 });
 ```
 

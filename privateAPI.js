@@ -241,6 +241,49 @@ var privateAPI = function(){
     });
     return;
   };
+  var getFileReport = function(scanID, responseProc, errProc, extendedData, continueProc){
+    var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key + "&resource=" + scanID;
+    if (extendedData==true) {
+      fileResourceURL = fileResourceURL + "&allinfo=1";
+    }
+    request(fileResourceURL, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case -2:
+            if (continueProc==null) {
+              var next = function(){
+                getFileReport(scanID, responseProc, errProc, extendedData, null);
+              };
+              setTimeout(next, 300000);
+              return;
+            }
+            continueProc(data);
+            return;
+          case 1:
+          case 0:
+            responseProc(data);
+            return;
+          case -1:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+  };
+  this.getFileReport = getFileReport;
   this.retrieveUrlAnalysis = retrieveUrlAnalysis;
   this.submitFileForAnalysis = sendFilePreLogic;
   this.getDomainReport = function(domain, responseProc, errProc){
