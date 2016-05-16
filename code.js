@@ -234,11 +234,8 @@ var PublicConnection = function(enablePrivateFeatures){
 		};
 		addJob(rescanFileProc);
 	};
-	var getFileReport = function(resourceID, responseProc, errProc, scanID) {
-		var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?resource=" + resourceID + "&apikey=" + key;
-		if ((scanID != null) && (scanID != "")) {
-			fileResourceURL = fileResourceURL + "&scan_id=" + scanID;
-		}
+	var getFileReport = function(scanID, responseProc, errProc) {
+		var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key + "&resource=" + scanID;
 		var retrieveProc = function(){
 			request({url: fileResourceURL, method: "POST"}, function(error, response, body){
 				if (error) {
@@ -288,7 +285,7 @@ var PublicConnection = function(enablePrivateFeatures){
 	this.UrlEvaluation = UrlEvaluation;
 	var FileEvaluation = function(filename, filetype, filecontent, responseProc, errProc){
 		self.submitFileForAnalysis(filename, filetype, filecontent, function(responseData){
-			self.getFileReport(responseData.sha256, responseProc, errProc, responseData.scan_id);
+			self.getFileReport(responseData.scan_id, responseProc, errProc);
 		}, errProc);
 	};
 	this.FileEvaluation = FileEvaluation;
