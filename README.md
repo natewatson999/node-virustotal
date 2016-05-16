@@ -290,6 +290,9 @@ getUrlComments is a private-only feature. This gathers all of the comments on a 
 ### makePrivateConnection.getFileComments()
 getFileComments is a private-only feature. This gathers all of the comments on a particular file that people have made using the API or the web interface. This function takes 3 parameters: a file identifier, a callback function for any valid responses, and a callback function for errors. The file identifier must be either the SHA1, MD5, or SHA256 hash of the file being looked up. The response callback will have a single parameter: an object with the data. The error callback will have a single parameter which may be an object or a string.
 
+### makePrivateConnection.submitFileForAnalysis
+This is similar to makePublicConnection.submitFileForAnalysis(). The difference is that this one has a larger size limit of 200 megabytes instead of the standard 32 megabytes, and there's no job queueing.
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -304,6 +307,11 @@ con.getDomainReport("wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
+});
+con.submitFileForAnalysis("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_virus.svg"), function(data){
+  console.log(data);
+}, function(mistake){
+  console.log(mistake);
 });
 ```
 
