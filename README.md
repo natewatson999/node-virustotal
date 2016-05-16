@@ -290,14 +290,39 @@ getUrlComments is a private-only feature. This gathers all of the comments on a 
 ### makePrivateConnection.getFileComments()
 getFileComments is a private-only feature. This gathers all of the comments on a particular file that people have made using the API or the web interface. This function takes 3 parameters: a file identifier, a callback function for any valid responses, and a callback function for errors. The file identifier must be either the SHA1, MD5, or SHA256 hash of the file being looked up. The response callback will have a single parameter: an object with the data. The error callback will have a single parameter which may be an object or a string.
 
-### makePrivateConnection.submitFileForAnalysis
+### makePrivateConnection.submitFileForAnalysis()
 This is similar to makePublicConnection.submitFileForAnalysis(). The difference is that this one has a larger size limit of 200 megabytes instead of the standard 32 megabytes, and there's no job queueing.
+
+### makePrivateConnection.submitUrlForScanning()
+This is identical to makePublicConnection.submitUrlForScanning(), except without the task spooling.
 
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
+con.getFileComments("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
+  var comments = data.comments;
+  if (comments.length > 0) {
+    for (var index = 0; index < comments.length; index++) {
+      console.log(comments[index].date);
+      console.log(comments[index].comment);
+    }
+  }
+}, function(err){
+  console.error(err);
+});
+con.getUrlComments("http://wikionemore.com",function(data){
+  var comments = data.comments;
+  if (comments.length > 0) {
+    for (var index = 0; index < comments.length; index++) {
+      console.log(comments[index].date);
+      console.log(comments[index].comment);
+    }
+  }
+}, function(err){
+  console.error(err);
+});
 con.getIP4Report("90.156.201.27",function(data){
   console.dir(data);
 }, function(err){
@@ -312,6 +337,21 @@ con.submitFileForAnalysis("obvious_virus.svg", "text/svg", fs.readFileSync("./ob
   console.log(data);
 }, function(mistake){
   console.log(mistake);
+});
+con.publishUrlComment("http://wikionemore.com", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.publishFileComment("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", "Ignore this comment. I'm just testing an API.", function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+});
+con.submitUrlForScanning("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
 });
 ```
 
