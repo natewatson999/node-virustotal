@@ -296,6 +296,9 @@ This is similar to makePublicConnection.submitFileForAnalysis(). The difference 
 ### makePrivateConnection.submitUrlForScanning()
 This is identical to makePublicConnection.submitUrlForScanning(), except without the task spooling.
 
+### makePrivateConnection.retrieveUrlAnalysis()
+This version is very different from its counterpart in the public and honeypot API. What it's actually used for is identical though. This version has 5 or 6 parameters. The first parameter is the URL that a report is wanted on. The second and third parameters are the usual response and error callback functions with the usual parameters. The next one is a boolean variable which indicates if the script should request that Virustotal rescan the URL. The next boolean variable is if you want the extended data, with false giving the same output you'd get with public and honeypot mode; and true giving extra sandbox information. The final parameter is optional. If the final parameter is not specified; then if Virustotal doesn't have results for the URL yet, then the function will keep retrying every 5 minutes until it gets results. If the function is specified; then if Virustotal hasn't scanned the URL yet, then the function will be fired with the response body as the only parameter.
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -352,6 +355,13 @@ con.submitUrlForScanning("http://wikionemore.com",function(data){
   console.dir(data);
 }, function(err){
   console.error(err);
+});
+con.retrieveUrlAnalysis("http://wikionemore.com",function(data){
+  console.dir(data);
+}, function(err){
+  console.error(err);
+}, false, true, function(stillWaiting){
+  console.log(stillWaiting);
 });
 ```
 

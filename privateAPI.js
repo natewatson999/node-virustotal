@@ -195,7 +195,53 @@ var privateAPI = function(){
       }
     });
   };
-
+  var retrieveUrlAnalysis = function(URL, responseProc, errProc, rescan, extendedData, continueProc) {
+    var query = "https://www.virustotal.com/vtapi/v2/url/report?apikey=" + key + "&url=" + encodeURIComponent(URL);
+    if (rescan==true) {
+      query = query + "&rescan=1";
+    }
+    if (extendedData==true) {
+      query = query + "&allinfo=1";
+    }
+    request.get(query, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case -2:
+            if (continueProc==null) {
+              var next = function(){
+                retrieveUrlAnalysis(URL, responseProc, errProc, false, extendedData, null);
+              };
+              setTimeout(next, 300000);
+              return;
+            }
+            continueProc(data);
+            return;
+          case 1:
+          case 0:
+            responseProc(data);
+            return;
+          case -1:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.retrieveUrlAnalysis = retrieveUrlAnalysis;
   this.submitFileForAnalysis = sendFilePreLogic;
   this.getDomainReport = function(domain, responseProc, errProc){
     getReport("https://www.virustotal.com/vtapi/v2/domain/report?domain=" + domain + "&apikey=" + key, responseProc, errProc);
