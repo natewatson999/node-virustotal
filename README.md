@@ -301,6 +301,9 @@ This version is very different from its counterpart in the public and honeypot A
 ### makePrivateConnection.getFileReport
 This contacts Virustotal and attempts to get the report of a specified file. It takes 4 or 5 parameters. The first parameter is the file's scanID. This is obtained in the same way as in the public and honeypot APIs. The second and third parameters are the response and error callback functions, which have the usual parameters. The 4th parameter is a boolean value, which tells Virustotal to provide the extended data if true, and the regular data if false. The next parameter is optional. It is a callback function to perform if Virustotal hasn't analyzed the file yet. The only parameter is the body of the HTTPS response. If this function isn't specified, then the API will keep trying every 5 minutes until it gets a report or gives an error.
 
+### makePrivateConnection.getFile
+This function is extremely dangerous. Do not use this on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. It is recommended that this function not be used, since it downloads malware. getFile downloads a piece of suspected malware from Virustotal. It takes 3 parameters: a hashcode and two callback functions. The hashcode is an MD5, SHA1, or SHA256 identifier of the file being requested. MD5 and SHA1 are heavily discouraged for this due to real and suspected collisions. SHA256 is discouraged for security reasons. The other two parameters are the response and error callback functions.
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -371,6 +374,11 @@ con.getFileReport("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6
   console.error(err);
 }, true, function(waitingMessage){
   console.log(waitingMessage);
+});
+con.getFile("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c", function(malware){
+    SendToEvilPeople(malware,"crosswindsyouth.org");
+}, function(error){
+    console.log(error);
 });
 ```
 

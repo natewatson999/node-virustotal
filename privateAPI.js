@@ -283,6 +283,29 @@ var privateAPI = function(){
       }
     });
   };
+  var getFile = function(hashCode, responseProc, errProc){
+    var requestURL = "https://www.virustotal.com/vtapi/v2/file/download?apikey=" + key + "&hash=" + hashCode;
+    var getFileProc = function(){
+      request(requestURL, function(error, response, body){
+        if (error) {
+          errProc(error);
+          return;
+        }
+        if (response.statusCode == 404) {
+          errProc(response);
+          return;
+        }
+        if (response.statusCode > 399) {
+          getFileProc();
+          return;
+        }
+        responseProc(body);
+        return;
+      });
+    };
+    return;
+  };
+  this.getFile = getFile;
   this.getFileReport = getFileReport;
   this.retrieveUrlAnalysis = retrieveUrlAnalysis;
   this.submitFileForAnalysis = sendFilePreLogic;
