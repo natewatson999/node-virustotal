@@ -66,7 +66,7 @@ var rescan = function(resource, key){
     if (notifyURL != null) {
       formattedRequest = formattedRequest + "&notify_url=" + notifyURL + "&notify_changes_only" + changesOnly;
     }
-    request(formattedRequest, function(error, response, body){
+    request.post(formattedRequest, function(error, response, body){
       if (error) {
         errProc(error);
         return;
@@ -96,7 +96,7 @@ var rescan = function(resource, key){
     return this;
   };
   this.cancel = function(responseProc, errProc) {
-    request("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + key + "&resource=" + resource, function(error, response, body){
+    request.post("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + key + "&resource=" + resource, function(error, response, body){
       if (error) {
         errProc(error);
         return;
