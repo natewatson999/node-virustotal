@@ -314,7 +314,19 @@ This function is the function that actually sends the rescan request to Virustot
 This function cancels a rescan request that was previously sent to Virustotal. This function has the exact same parameters as sendRequest.
 
 #### makePrivateConnection.rescan.setDate
-This function schedules a rescan for an arbitrary point in time, rather than the default behavior of "Whenever Virustotal has the server capacity to perform the scan". It takes 6 parameters: a 4 digit year, a 2 digit month, a 2 digit day, a 2 digit hour "in European format", a 2 digit minute, and a 2 digit second variables.   
+This function schedules a rescan for an arbitrary point in time, rather than the default behavior of "Whenever Virustotal has the server capacity to perform the scan". It takes 6 parameters: a 4 digit year, a 2 digit month, a 2 digit day, a 2 digit hour "in European format", a 2 digit minute, and a 2 digit second variables.
+
+#### makePrivateConnection.rescan.setPeriod
+This function basically states "after the first rescan, keep running this every X number of days" where X is the only parameter of the function.
+
+#### makePrivateConnection.rescan.setRepeatCount
+This function basically states "rescan this file X number of times, using the time between scans specified in setPeriod()", where X is the only parameter. If this isn't used, and setPeriod is used, the rescans will continue forever.
+
+#### makePrivateConnection.rescan.setNotifyURL
+This function basically states "Virustotal, when you're done scanning this file, POST the results to X URL", where X is a fully qualified domain name, and the only parameter.
+
+#### makePrivateConnection.rescan.setNotifyChangesOnly
+This function basically states "Virustotal, remember that URL I sent you using setNotifyURL? if X is 1, only send the results if you find something you didn't find in previous scans. If X is 0, send the results no matter how inconsequential they are.", where X is the only parameter, and can be a 0 or 1.   
 
 ### makePrivateConnection example
 ```
