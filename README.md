@@ -404,6 +404,18 @@ con.getFile("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c", 
 }, function(error){
     console.log(error);
 });
+var rescanJob = con.makeRescan("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c");
+rescanJob.setPeriod(1).setRepeatCount(1).setDate(2016,12,31,23,59,59).setNotifyURL("https://www.google.com:3073").setNotifyChangesOnly(0);
+rescanJob.sendRequest(function(response){
+  console.dir(response);
+}, function(err){
+  console.error(err);
+});
+rescanJob.cancel(function(response){
+  console.dir(response);
+}, function(err){
+  console.error(err);
+})
 ```
 
 ## Security And Legal Notes
