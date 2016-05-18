@@ -304,6 +304,18 @@ This contacts Virustotal and attempts to get the report of a specified file. It 
 ### makePrivateConnection.getFile
 This function is extremely dangerous. Do not use this on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. It is recommended that this function not be used, since it downloads malware. getFile downloads a piece of suspected malware from Virustotal. It takes 3 parameters: a hashcode and two callback functions. The hashcode is an MD5, SHA1, or SHA256 identifier of the file being requested. MD5 and SHA1 are heavily discouraged for this due to real and suspected collisions. SHA256 is discouraged for security reasons. The other two parameters are the response and error callback functions.
 
+### makePrivateConnection.rescan
+This function is extremely different from its counterpart in the public and honeypot APIs. It takes a signature of either MD5, SHA1, or SHA256; and returns a rescan object. The rescan object contains several configuration methods, an execution method, and a cancel method. Like its counterparts, this is used to ask Virustotal to rescan a file.
+
+#### makePrivateConnection.rescan.sendRequest
+This function is the function that actually sends the rescan request to Virustotal. It takes two parameters, both of which are callback functions. One is for a response, the other for an error. The usual rules apply with these.
+
+#### makePrivateConnection.rescan.cancel
+This function cancels a rescan request that was previously sent to Virustotal. This function has the exact same parameters as sendRequest.
+
+#### makePrivateConnection.rescan.setDate
+This function schedules a rescan for an arbitrary point in time, rather than the default behavior of "Whenever Virustotal has the server capacity to perform the scan". It takes 6 parameters: a 4 digit year, a 2 digit month, a 2 digit day, a 2 digit hour "in European format", a 2 digit minute, and a 2 digit second variables.   
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
