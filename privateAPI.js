@@ -1,5 +1,132 @@
 var request = require("request");
 var features = {};
+var leftPad = function(raw, length, padPhrase) {
+  var workingString = raw;
+  while (workingString.length < length) {
+    workingString = padPhrase + workingString;
+  }
+  return workingString;
+};
+var rescan = function(resource, key){
+  var dateString = null;
+  var period = null;
+  var repeatCount = null;
+  var changesOnly = 0;
+  var notifyURL = null;
+  this.setDate = function(year, month, day, hour, minute, second){
+    year = leftPad("" + year, 4, "0");
+    month = leftPad("" + month, 2, "0");
+    day = leftPad("" + day, 2, "0");
+    hour = leftPad("" + hour, 2, "0");
+    minute = leftPad("" + minute, 2, "0");
+    second = leftPad("" + second, 2, "0");
+    dateString = year + month + day + hour + minute + second;
+    return this;
+  };
+  this.setPeriod = function(input){
+    period = input;
+    return this;
+  };
+  this.setRepeatCount = function(input) {
+    repeatCount = input;
+    return this;
+  };
+  this.setNotifyURL = function(replacement){
+    notifyURL = replacement;
+    return this;
+  };
+  this.setNotifyChangesOnly = function(input) {
+    switch(input) {
+      case null:
+        changesOnly = 0;
+        return this;
+      case 1:
+      case true:
+        changesOnly = 1;
+        return this;
+      case 0:
+      case false:
+      default:
+        changesOnly = 0;
+        return this;
+    }
+    return this;
+  };
+  this.sendRequest = function(responseProc, errProc){
+    var formattedRequest = "https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + key + "&resource=" + resource;
+    if (dateString != null) {
+      formattedRequest = formattedRequest + "&date=" + dateString;
+    }
+    if (period != null) {
+      formattedRequest = formattedRequest + "&period=" + period;
+    }
+    if (repeatCount != null) {
+      formattedRequest = formattedRequest + "&repeat=" + repeatCount;
+    }
+    if (notifyURL != null) {
+      formattedRequest = formattedRequest + "&notify_url=" + notifyURL + "&notify_changes_only" + changesOnly;
+    }
+    request(formattedRequest, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case 1:
+            responseProc(data);
+            return;
+          case 0:
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return this;
+  };
+  this.cancel = function(responseProc, errProc) {
+    request("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + key + "&resource=" + resource, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        data = JSON.parse(body);
+        switch (data.response_code) {
+          case 1:
+            responseProc(data);
+            return;
+          case 0:
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return this;
+  };
+  return;
+};
 var privateAPI = function(){
   var key = "";
   this.setKey = function(replacement){
@@ -305,6 +432,10 @@ var privateAPI = function(){
     };
     return;
   };
+  var makeRescan = function(resource) {
+    return new rescan(resource, key);
+  };
+  this.makeRescan = makeRescan;
   this.getFile = getFile;
   this.getFileReport = getFileReport;
   this.retrieveUrlAnalysis = retrieveUrlAnalysis;
