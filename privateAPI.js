@@ -1,7 +1,7 @@
 var request = require("request");
 var features = {};
 var leftPad = function(raw, length, padPhrase) {
-  var workingString = raw;
+  var workingString = "" + raw;
   while (workingString.length < length) {
     workingString = padPhrase + workingString;
   }
@@ -516,6 +516,28 @@ var privateAPI = function(){
     });
     return;
   };
+  var tarBZ2toString = (rawString, errProc, resultProc){
+    return;
+  };
+  var makeFeedFunction = function(location) {
+    return function(year, month, day, hour, minute, resultProc, errProc){
+      var queryString = location + key + "&package=" + leftPad(year, 4, "20") + leftPad(month, 2, "0") + leftPad(day, 2, "0") + "T" + leftPad(hour, 2, "0") + leftPad(minute, 2, "0");
+      request(queryString, function(error, response, body){
+        if (error) {
+          errProc(error);
+          return;
+        }
+        if (response.statusCode > 399) {
+          errProc(body);
+          return;
+        }
+
+      });
+      return;
+    };
+  };
+  //this.getUrlFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/url/feed?key=");
+  //this.getFileFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/file/feed?key=");
   this.getClusters = getClusters;
   this.getFileNetworkActivity = getFileNetworkActivity;
   this.getFileBehavior = getFileBehavior;
