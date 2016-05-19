@@ -334,6 +334,9 @@ This function asks Virustotal for a behavior report for a particular file. There
 ### makePrivateConnection.getFileNetworkActivity
 This function asks Virustotal for a network activity report for a particular file. There are 3 parameters. The first one is either an MD5, SHA1, or SHA256; with SHA256 being the least non-preferred one. The other two parameters are the usual response and error callbacks with the usual parameters. The response might not have a response_code.
 
+### makePrivateConnection.getClusters
+This function asks Virustotal for a cluster analysis of the files submitted for a particular date. There are 5 parameters. The first 3 are a year, month, and date; in 4 digit, 2 digit, and 2 digit numbers respectively. The last two are the usual response and error callbacks with the usual parameters. The cluster list may be of length 0 or greater.
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -416,6 +419,11 @@ con.getFileBehavior("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff
   console.log(error);
 });
 con.getFileNetworkActivity("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(response) {
+  console.dir(respose);
+}, function(error){
+  console.log(error);
+});
+con.getClusters(2015,12,31, function(response) {
   console.dir(respose);
 }, function(error){
   console.log(error);
