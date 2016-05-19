@@ -485,6 +485,38 @@ var privateAPI = function(){
     });
     return;
   };
+  var getClusters = function(year, month, date, resultProc, errProc){
+    var queryString = "https://www.virustotal.com/vtapi/v2/file/clusters?apikey=" + key + "&date=" + leftPad(year+"", 4, "20") + "-" + leftPad(month+"",2,"0") + "-" + leftPad(date+"",2,"0");
+    request(queryString, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch(data.response_code) {
+          case 1:
+          case 0:
+            resultProc(data);
+            return;
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.getClusters = getClusters;
   this.getFileNetworkActivity = getFileNetworkActivity;
   this.getFileBehavior = getFileBehavior;
   this.makeRescan = makeRescan;
