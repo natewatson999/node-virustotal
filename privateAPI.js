@@ -435,6 +435,58 @@ var privateAPI = function(){
   var makeRescan = function(resource) {
     return new rescan(resource, key);
   };
+  var getFileBehavior = function(resource, responseProc, errProc) {
+    request("https://www.virustotal.com/vtapi/v2/file/behaviour?apikey=" + key + "&hash=" + resource, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        if (data.response_code) {
+          errProc(data);
+          return;
+        }
+        responseProc(data);
+        return;
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  var getFileNetworkActivity = function(resource, responseProc, errProc) {
+    request("https://www.virustotal.com/vtapi/v2/file/network-traffic?apikey=" + key + "&hash=" + resource, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        if (data.response_code) {
+          errProc(data);
+          return;
+        }
+        responseProc(data);
+        return;
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.getFileNetworkActivity = getFileNetworkActivity;
+  this.getFileBehavior = getFileBehavior;
   this.makeRescan = makeRescan;
   this.getFile = getFile;
   this.getFileReport = getFileReport;
