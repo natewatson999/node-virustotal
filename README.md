@@ -328,6 +328,12 @@ This function basically states "Virustotal, when you're done scanning this file,
 #### makePrivateConnection.rescan.setNotifyChangesOnly
 This function basically states "Virustotal, remember that URL I sent you using setNotifyURL? if X is 1, only send the results if you find something you didn't find in previous scans. If X is 0, send the results no matter how inconsequential they are.", where X is the only parameter, and can be a 0 or 1.   
 
+### makePrivateConnection.getFileBehavior
+This function asks Virustotal for a behavior report for a particular file. There are 3 parameters. The first one is either an MD5, SHA1, or SHA256; with SHA256 being the least non-preferred one. The other two parameters are the usual response and error callbacks with the usual parameters. The response might not have a response_code.
+
+### makePrivateConnection.getFileNetworkActivity
+This function asks Virustotal for a network activity report for a particular file. There are 3 parameters. The first one is either an MD5, SHA1, or SHA256; with SHA256 being the least non-preferred one. The other two parameters are the usual response and error callbacks with the usual parameters. The response might not have a response_code.
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -403,6 +409,16 @@ con.getFile("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c", 
     SendToEvilPeople(malware,"crosswindsyouth.org");
 }, function(error){
     console.log(error);
+});
+con.getFileBehavior("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(response) {
+  console.dir(respose);
+}, function(error){
+  console.log(error);
+});
+con.getFileNetworkActivity("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(response) {
+  console.dir(respose);
+}, function(error){
+  console.log(error);
 });
 var rescanJob = con.makeRescan("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c");
 rescanJob.setPeriod(1).setRepeatCount(1).setDate(2016,12,31,23,59,59).setNotifyURL("https://www.google.com:3073").setNotifyChangesOnly(0);
