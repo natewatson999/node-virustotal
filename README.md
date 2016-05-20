@@ -337,6 +337,12 @@ This function asks Virustotal for a network activity report for a particular fil
 ### makePrivateConnection.getClusters
 This function asks Virustotal for a cluster analysis of the files submitted for a particular date. There are 5 parameters. The first 3 are a year, month, and date; in 4 digit, 2 digit, and 2 digit numbers respectively. The last two are the usual response and error callbacks with the usual parameters. The cluster list may be of length 0 or greater.
 
+### makePrivateConnection.getFileFeed
+This function asks Virustotal for an array of all of the analysis information of files submitted in a particular minute. It takes 7 parameters. The first 5 are year, month, date, hour, and minute being requested, in 4 digits, 2 digits, 2 digits, 2 digits, and 2 digits respectively. Virustotal only keeps records for 24 hours, so this should probably be used in tandem with Cron. The other two parameters are the usual response and error callbacks. The response's only parameter is an array of objects. The error is either a string or an object, probably a string.
+
+### makePrivateConnection.getUrlFeed
+This function asks Virustotal for an array of all of the analysis information of URLs submitted in a particular minute. It takes 7 parameters. The first 5 are year, month, date, hour, and minute being requested, in 4 digits, 2 digits, 2 digits, 2 digits, and 2 digits respectively. Virustotal only keeps records for 24 hours, so this should probably be used in tandem with Cron. The other two parameters are the usual response and error callbacks. The response's only parameter is an array of objects. The error is either a string or an object, probably a string. 
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
@@ -423,10 +429,24 @@ con.getFileNetworkActivity("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299
 }, function(error){
   console.log(error);
 });
-con.getClusters(2015,12,31, function(response) {
+con.getClusters(2015,12,31,function(response) {
   console.dir(respose);
 }, function(error){
   console.log(error);
+});
+con.getUrlFeed(2016,12,31,23,59,function(responses){
+    for (var index = 0; index < responses.length; index++) {
+      console.dir(responses[index]);
+    }
+}, function(error){
+    console.log(error);
+});
+con.getFileFeed(2016,12,31,23,59,function(responses){
+    for (var index = 0; index < responses.length; index++) {
+      console.dir(responses[index]);
+    }
+}, function(error){
+    console.log(error);
 });
 var rescanJob = con.makeRescan("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c");
 rescanJob.setPeriod(1).setRepeatCount(1).setDate(2016,12,31,23,59,59).setNotifyURL("https://www.google.com:3073").setNotifyChangesOnly(0);
