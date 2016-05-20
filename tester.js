@@ -1,5 +1,6 @@
 var vt = require("./code.js");
 var fs = require("fs");
+
 var con = vt.MakePublicConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
