@@ -591,6 +591,54 @@ var privateAPI = function(){
     });
     return;
   };
+  var search = function(queryObject, offset, responseProc, errProc){
+    var queryURL = "https://www.virustotal.com/vtapi/v2/file/search?apikey=" + key + "&query=";
+    var queryComponents = [];
+    if (queryObject.type != null) {
+      queryComponents[queryComponents.length] = "type%3A" + queryObject.type;
+    }
+    if (queryObject.name != null) {
+      queryComponents[queryComponents.length] = "name%3A\"" + queryObject.name + "\"";
+    }
+    queryURL = queryURL + queryComponents.join(" ");
+    if (queryObject.offset != null) {
+      queryURL = queryURL + "&offset=" + queryObject.offset;
+    }
+    request(queryURL, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case 0:
+          case 1:
+            if (data.offset==null) {
+              data.offset = "";
+            }
+            if (data.hashes == null) {
+              data.hashes = [];
+            }
+            responseProc(data);
+            return;
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+  };
+  this.search = search
   this.getNextFalsePositive = getNextFalsePositive;
   this.getUrlFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/url/feed?key=");
   this.getFileFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/file/feed?key=");
