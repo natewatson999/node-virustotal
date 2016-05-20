@@ -560,6 +560,34 @@ var privateAPI = function(){
       return;
     };
   };
+  var getNextFalsePositive = function(resultProc, errProc){
+    request({
+	    url: "https://www.virustotal.com/vtapi/v2/file/false-positives?limit=1&apikey=" + key,
+      gzip: true,
+	    headers: {
+		    "User-Agent": "gzip"
+	    }
+    }, function(err, response, body){
+      if (err) {
+        errProc(err);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(body);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        resultProc(data);
+        return;
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
+  };
+  this.getNextFalsePositive = getNextFalsePositive;
   this.getUrlFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/url/feed?key=");
   this.getFileFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/file/feed?key=");
   this.getClusters = getClusters;
