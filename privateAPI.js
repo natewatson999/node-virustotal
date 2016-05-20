@@ -578,7 +578,11 @@ var privateAPI = function(){
       }
       try {
         var data = JSON.parse(body);
-        resultProc(data);
+        if (data.length > 0) {
+          resultProc(data[0]);
+          return;
+        }
+        resultProc({});
         return;
       } catch (e) {
         errProc(e);

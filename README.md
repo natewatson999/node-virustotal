@@ -341,7 +341,10 @@ This function asks Virustotal for a cluster analysis of the files submitted for 
 This function asks Virustotal for an array of all of the analysis information of files submitted in a particular minute. It takes 7 parameters. The first 5 are year, month, date, hour, and minute being requested, in 4 digits, 2 digits, 2 digits, 2 digits, and 2 digits respectively. Virustotal only keeps records for 24 hours, so this should probably be used in tandem with Cron. The other two parameters are the usual response and error callbacks. The response's only parameter is an array of objects. The error is either a string or an object, probably a string.
 
 ### makePrivateConnection.getUrlFeed
-This function asks Virustotal for an array of all of the analysis information of URLs submitted in a particular minute. It takes 7 parameters. The first 5 are year, month, date, hour, and minute being requested, in 4 digits, 2 digits, 2 digits, 2 digits, and 2 digits respectively. Virustotal only keeps records for 24 hours, so this should probably be used in tandem with Cron. The other two parameters are the usual response and error callbacks. The response's only parameter is an array of objects. The error is either a string or an object, probably a string. 
+This function asks Virustotal for an array of all of the analysis information of URLs submitted in a particular minute. It takes 7 parameters. The first 5 are year, month, date, hour, and minute being requested, in 4 digits, 2 digits, 2 digits, 2 digits, and 2 digits respectively. Virustotal only keeps records for 24 hours, so this should probably be used in tandem with Cron. The other two parameters are the usual response and error callbacks. The response's only parameter is an array of objects. The error is either a string or an object, probably a string.
+
+### makePrivateConnection.getNextFalsePositive
+This asks Virustotal for the next false positive in the queue of false positives. The Virustotal documentation does a better job explaining what the false positives are for, than I can explain it: https://www.virustotal.com/en/documentation/private-api/#file-false-positives . This asks Virustotal with a limit of 1. It takes 2 parameters: The usual response and error callbacks. The error's only parameter will be a string or object of some kind. The response's parameter will be a false positive Object, or an empty object, depending on if there was anything in the queue. The second one is unlikely, but should still be accounted for.
 
 ### makePrivateConnection example
 ```
@@ -447,6 +450,11 @@ con.getFileFeed(2016,12,31,23,59,function(responses){
     }
 }, function(error){
     console.log(error);
+});
+con.getNextFalsePositive(function(response){
+  console.dir(response);
+},function(error){
+  console.log(error);
 });
 var rescanJob = con.makeRescan("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c");
 rescanJob.setPeriod(1).setRepeatCount(1).setDate(2016,12,31,23,59,59).setNotifyURL("https://www.google.com:3073").setNotifyChangesOnly(0);
