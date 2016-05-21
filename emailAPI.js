@@ -90,10 +90,10 @@ var emailFeatures = function(config){
           });
         };
         getResponses();
-        smtpConnection = email.server.connect(config.SMTP);
         internalEmitter.emit("open");
       });
     });
+    smtpConnection = email.server.connect(config.SMTP);
     return self;
   };
   this.endConnection = function(){
