@@ -50,47 +50,49 @@ var emailFeatures = function(config){
     imapConnection.once("error", function(e){
       internalEmitter.emit("error", e);
     });
-    imapConnection.openBox('INBOX', true, function(err, box){
-      if (err) {
-        internalEmitter.emit("error", err);
-        return;
-      }
-      imapOpen = true;
-      var getResponses = function(){
-        var messageQuery = imapConnection.seq.search(['UNSEEN', ['FROM', 'scan@virustotal.com']], function(err1, results){
-          if (err1) {
-            internalEmitter.emit(err1);
-            return;
-          }
-          var messages = imapConnection.fetch(results, {bodies : ['TEXT'] });
-          messages.on("message", function(msg, seqno){
-            var bodyText = "";
-            msg.on('attributes', function(attrs) {});
-            msg.on("body",function(stream, info){
-              stream.on("error", function(e2){
-                internalEmitter.emit("error", e2);
-              });
-              stream.on("data", function(segment) {
-                bodyText = bodyText + segment;
-              });
-              stream.on("end", function(){
-                internalEmitter.emit("analysis", rawToObject(bodyText));
+    imapConnection.once("ready", function(){
+      imapConnection.openBox('INBOX', true, function(err, box){
+        if (err) {
+          internalEmitter.emit("error", err);
+          return;
+        }
+        imapOpen = true;
+        var getResponses = function(){
+          var messageQuery = imapConnection.seq.search(['UNSEEN', ['FROM', 'scan@virustotal.com']], function(err1, results){
+            if (err1) {
+              internalEmitter.emit(err1);
+              return;
+            }
+            var messages = imapConnection.fetch(results, {bodies : ['TEXT'], markSeen: true});
+            messages.on("message", function(msg, seqno){
+              var bodyText = "";
+              msg.on('attributes', function(attrs) {});
+              msg.on("body",function(stream, info){
+                stream.on("error", function(e2){
+                  internalEmitter.emit("error", e2);
+                });
+                stream.on("data", function(segment) {
+                  bodyText = bodyText + segment;
+                });
+                stream.on("end", function(){
+                  internalEmitter.emit("analysis", rawToObject(bodyText));
+                });
               });
             });
+            messages.once("error", function(e){
+              internalEmitter.emit("error", e);
+            });
+            messages.once("end", function(){
+              if (imapOpen==true) {
+                setTimeout(getResponses, 360000);
+              }
+            });
           });
-          messages.once("error", function(e){
-            internalEmitter.emit("error", e);
-          });
-          messages.once("end", function(){
-            if (imapOpen==true) {
-              setTimeout(getResponses, 360000);
-            }
-          });
-        });
-      };
-      getResponses();
-      smtpConnection = email.server.connect(config.SMTP);
-      internalEmitter.emit("open");
+        };
+        getResponses();
+        smtpConnection = email.server.connect(config.SMTP);
+        internalEmitter.emit("open");
+      });
     });
     return self;
   };
