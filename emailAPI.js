@@ -38,7 +38,7 @@ var rawToObject = function(raw){
   return result;
 };
 var emailFeatures = function(config){
-  var self = this, imapConnection = {}, smtpConnection = {};
+  var self = this, imapConnection = {};
   var imapOpen = false;
   var internalEmitter = new events.EventEmitter();
   this.on = function(condition, callback){
@@ -93,7 +93,6 @@ var emailFeatures = function(config){
         internalEmitter.emit("open");
       });
     });
-    smtpConnection = emailjs.server.connect(config.SMTP);
     return self;
   };
   this.endConnection = function(){
@@ -105,18 +104,17 @@ var emailFeatures = function(config){
     return self;
   };
   this.submitFileForAnalysis = function(fileContent, fileName, type){
+    var smtpConnection = emailjs.server.connect(config.SMTP);
     smtpConnection.send({
-      text: "",
-      from: config.sender,
-      to: "scan@virustotal.com",
+      text: " ",
+      from: config.sender + " <" + config.sender + ">",
+      to: "scan <scan@virustotal.com>",
       subject: "SCAN",
-      attachment: [
-        {
-          data: fileContent,
+      attachment: {
+          data: "" + fileContent,
           type: type,
           name: fileName
         }
-      ]
     }, function(err, message){
       if (err) {
         internalEmitter.emit("error", err);
