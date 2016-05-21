@@ -505,6 +505,9 @@ rescanJob.cancel(function(response){
 })
 ```
 
+## makeEmailConnection
+This returns an EmailConnection object. Unlike the other APIs, which all use REST services, this uses Virustotal's email service. It's also event-driven rather than callback-driven. This is because of dependencies.
+
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 

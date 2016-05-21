@@ -93,7 +93,7 @@ var emailFeatures = function(config){
         internalEmitter.emit("open");
       });
     });
-    smtpConnection = email.server.connect(config.SMTP);
+    smtpConnection = emailjs.server.connect(config.SMTP);
     return self;
   };
   this.endConnection = function(){
