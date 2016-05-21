@@ -601,7 +601,7 @@ var privateAPI = function(){
       queryComponents[queryComponents.length] = "name%3A\"" + queryObject.name + "\"";
     }
     queryURL = queryURL + queryComponents.join(" ");
-    if (queryObject.offset != null) {
+    if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;
     }
     request(queryURL, function(error, response, body){

@@ -346,11 +346,44 @@ This function asks Virustotal for an array of all of the analysis information of
 ### makePrivateConnection.getNextFalsePositive
 This asks Virustotal for the next false positive in the queue of false positives. The Virustotal documentation does a better job explaining what the false positives are for, than I can explain it: https://www.virustotal.com/en/documentation/private-api/#file-false-positives . This asks Virustotal with a limit of 1. It takes 2 parameters: The usual response and error callbacks. The error's only parameter will be a string or object of some kind. The response's parameter will be a false positive Object, or an empty object, depending on if there was anything in the queue. The second one is unlikely, but should still be accounted for.
 
+### makePrivateConnection.search
+This searches the Virustotal database based on signature information. It takes 3 parameters: a query object, a response callback, and an error callback.
+
+The error callback's only parameter is an error which is either a string or an object. the response callback's only parameter is an Object whose members are response_code, offset, and hashes. response_code will be a 1 or 0, depending on if there were any results. hashes is an array of SHA256 signatures of files that meet the search query. offset is the most complex one. Search only returns the results in blocks of 300 or less. So if there's more than 300 valid results, another query is needed. In this API, the secondary query can be performed by using search again, but with the query object including the member variable 'offset', with the offset as its value. This will return another block of 300 or less. If there's less than 300 results remaining for a query, the offset will be an empty string.
+
+The query object can have the following member variables. It must have at least one valid member variable that is not offset. Virustotal supports many more parameters, but these are the only ones supported by the API at this time. They will be updated.
+
+* type : this one is the file type, in the form of file extension such as 'exe' or 'pdf'
+* name : this is the file's known name in the wild
+* offset : this specifies offset, as defined in the second paragraph of the search documentation
+
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
+
+var searchQuery ={
+  type:"svg",
+  name:"obviousVirus.svg"
+};
+var searchProc = function(){
+  con.search(searchQuery, function(results){
+    for (var index = 0; index < results.hashes.length; index++) {
+      console.log(results.hashes[index]);
+    }
+    if (results.offset != "") {
+      searchQuery.offset = results.offset;
+      searchProc();
+    }
+    return;
+  },function(error){
+    console.log(error);
+    return;
+  });
+};
+searchProc();
+
 con.getFileComments("de053e0e115fc94a81eb3dc074b02c68efaa60ff4251f386e299d8814ff657a6", function(data){
   var comments = data.comments;
   if (comments.length > 0) {
