@@ -301,4 +301,5 @@ features.MakeHoneypot2Connection = function(){
 	return workingConnection;
 };
 features.makePrivateConnection = privateAPI.makePrivateAPI;
+features.makeEmailConnection = emailAPI.makeEmailConnection;
 module.exports = exports = features;

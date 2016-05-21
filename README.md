@@ -22,9 +22,11 @@ npm install -g node-virustotal
 
 ## Background Information
 
-Virustotal is a service provided by Google which provides supplemental malware analysis and address analysis. Go here for more information: https://www.virustotal.com/ . This module simplifies the process of interacting with Virustotal from a Node.js perspective. This API comes with a working public API key, but users should get their own and use that instead. It also uses the default key for the honeypot API. This must be changed.
+Virustotal is a service provided by Google which provides supplemental malware analysis and address analysis. Go here for more information: https://www.virustotal.com/ . This module simplifies the process of interacting with Virustotal from a Node.js perspective. This API comes with a working API key, but users should get their own and use that instead. It also uses the default key for the honeypot API. This must be changed.
 
-This API provides factory methods which make connection objects, which act as job queues.
+This API provides factory methods which make connection objects, which act as job queues. There are 4 kinds of connections: with the public API, public API with honeypot permissions, private API, and email API.
+
+If you would like to subsidize the development of this module, please consider donating on patreon: https://www.patreon.com/user?u=3336787&ty=h
 
 ## MakePublicConnection
 This function makes a new public connection object, using public API version 2.
