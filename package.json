@@ -1,6 +1,6 @@
 {
   "name": "node-virustotal",
-  "version": "0.5.2",
+  "version": "0.5.4",
   "description": "An implementation of the Virustotal API for Node.js",
   "main": "code.js",
   "scripts": {
@@ -30,7 +30,9 @@
 	   "speedconcat": "^1.0.2",
 	    "request": "^2.72.0",
 		"compressjs": "^1.0.3",
-    "tar": "^2.2.1"
+    "tar": "^2.2.1",
+    "emailjs": "^1.0.4",
+    "imap": "^0.8.17"
   },
   "homepage": "https://github.com/natewatson999/node-virustotal#readme"
 }
