@@ -70,7 +70,7 @@ var emailFeatures = function(config){
         internalEmitter.emit("analysis", rawToObject(message.text));
         return;
       }
-      for (var index = 0; index < message.from.length, index++) {
+      for (var index = 0; index < message.from.length; index++) {
         if (message.from[index] == "scan@virustotal.com") {
           internalEmitter.emit("analysis", rawToObject(message.text));
           return;
