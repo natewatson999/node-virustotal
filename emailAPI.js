@@ -1,4 +1,3 @@
-var imap = require("imap");
 var emailjs = require("emailjs");
 var events = require("events");
 var mailNotifier = require("mail-notifier");
