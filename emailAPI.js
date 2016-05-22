@@ -1,7 +1,11 @@
 var imap = require("imap");
 var emailjs = require("emailjs");
 var events = require("events");
+var mailListener = require("mail-listener2");
 var spaceReduce = function(raw){
+  while(raw.indexOf("\t")>-1) {
+    raw = raw.replace("\t"," ");
+  }
   while(raw.indexOf("   ")>-1) {
     raw = raw.replace("   "," ");
   }
@@ -39,70 +43,57 @@ var rawToObject = function(raw){
 };
 var emailFeatures = function(config){
   var self = this, imapConnection = {};
-  var imapOpen = false;
   var internalEmitter = new events.EventEmitter();
   this.on = function(condition, callback){
     internalEmitter.on(condition, callback);
     return self;
-  }; /*
-  this.connect = function(){
-    imapConnection = new imap(config.IMAP);
-    imapConnection.once("error", function(e){
-      internalEmitter.emit("error", e);
-    });
-    imapConnection.once("ready", function(){
-      imapConnection.openBox('INBOX', true, function(err, box){
-        if (err) {
-          internalEmitter.emit("error", err);
+  };
+  var checker = new mailListener({
+    username: config.IMAP.username,
+    password: config.IMAP.password,
+    host: config.IMAP.host,
+    port: config.IMAP.port,
+    tls: config.IMAP.tls,
+    mailbox: config.IMAP.mailbox,
+    searchFilter: ["UNSEEN"],
+    markSeen: true,
+    fetchUnreadOnStart: true,
+  });
+  checker.start();
+  checker.on("error", function(e){
+    internalEmitter.emit("error", e);
+    return;
+  });
+  checker.on("mail", function(message){
+    var senders = message.from;
+    if (senders=="scan@virustotal.com"){
+      internalEmitter.emit("result", rawToObject(mesage.text));
+      return;
+    }
+    if(senders.address != null) {
+      if (senders.address=="scan@virustotal.com"){
+        internalEmitter.emit("result", rawToObject(mesage.text));
+      }
+      return;
+    }
+    if (senders[0] != null) {
+      for (var index = 0; index < senders.length; index++) {
+        if (senders[index]=="scan@virustotal.com") {
+          internalEmitter.emit("result", rawToObject(mesage.text));
           return;
         }
-        imapOpen = true;
-        var getResponses = function(){
-          var messageQuery = imapConnection.seq.search(['UNSEEN', ['FROM', 'scan@virustotal.com']], function(err1, results){
-            if (err1) {
-              internalEmitter.emit(err1);
-              return;
-            }
-            var messages = imapConnection.fetch(results, {bodies : ['TEXT'], markSeen: true});
-            messages.on("message", function(msg, seqno){
-              var bodyText = "";
-              msg.on('attributes', function(attrs) {});
-              msg.on("body",function(stream, info){
-                stream.on("error", function(e2){
-                  internalEmitter.emit("error", e2);
-                });
-                stream.on("data", function(segment) {
-                  bodyText = bodyText + segment;
-                });
-                stream.on("end", function(){
-                  internalEmitter.emit("analysis", rawToObject(bodyText));
-                });
-              });
-            });
-            messages.once("error", function(e){
-              internalEmitter.emit("error", e);
-            });
-            messages.once("end", function(){
-              if (imapOpen==true) {
-                setTimeout(getResponses, 360000);
-              }
-            });
-          });
-        };
-        getResponses();
-        internalEmitter.emit("open");
-      });
-    });
+        if (senders[index].address=="scan@virustotal.com") {
+          internalEmitter.emit("result", rawToObject(mesage.text));
+          return;
+        }
+      }
+    }
+    return;
+  });
+  this.endConnection = function(){
+    checker.stop();
     return self;
   };
-  this.endConnection = function(){
-    imapOpen = false;
-    imapConnection.once("end", function(){
-      internalEmitter.emit("end");
-    });
-    imapConnection.end();
-    return self;
-  };*/
   this.submitFileForAnalysis = function(fileContent, fileName, type){
     var smtpConnection = emailjs.server.connect(config.SMTP);
     smtpConnection.send({
