@@ -1,7 +1,8 @@
 var imap = require("imap");
 var emailjs = require("emailjs");
 var events = require("events");
-var mailListener = require("mail-listener2");
+var mailNotifier = require("mail-notifier");
+
 var spaceReduce = function(raw){
   while(raw.indexOf("\t")>-1) {
     raw = raw.replace("\t"," ");
@@ -48,52 +49,52 @@ var emailFeatures = function(config){
     internalEmitter.on(condition, callback);
     return self;
   };
-  var checker = new mailListener({
-    username: config.IMAP.username,
-    password: config.IMAP.password,
-    host: config.IMAP.host,
-    port: config.IMAP.port,
-    tls: config.IMAP.tls,
-    mailbox: config.IMAP.mailbox,
-    searchFilter: ["UNSEEN"],
-    markSeen: true,
-    fetchUnreadOnStart: true,
-  });
-  checker.start();
-  checker.on("error", function(e){
-    internalEmitter.emit("error", e);
-    return;
-  });
-  checker.on("mail", function(message){
-    var senders = message.from;
-    if (senders=="scan@virustotal.com"){
-      internalEmitter.emit("result", rawToObject(mesage.text));
-      return;
-    }
-    if(senders.address != null) {
-      if (senders.address=="scan@virustotal.com"){
-        internalEmitter.emit("result", rawToObject(mesage.text));
+  this.startCheckingForResponses = function(){
+    var inboxConfig = {
+      username: config.IMAP.username,
+      password: config.IMAP.password,
+      host: config.IMAP.host,
+      port: config.IMAP.port,
+      tls: config.IMAP.tls,
+      mailbox: config.IMAP.mailbox,
+      searchFilter: ["UNSEEN"],
+      markSeen: true,
+      fetchUnreadOnStart: true,
+    };
+    imapConnection = mailNotifier(inboxConfig);
+    imapConnection.on("mail", function(message){
+      if (message.from=="scan@virustotal.com") {
+        internalEmitter.emit("analysis", rawToObject(message.text));
+        return;
       }
-      return;
-    }
-    if (senders[0] != null) {
-      for (var index = 0; index < senders.length; index++) {
-        if (senders[index]=="scan@virustotal.com") {
-          internalEmitter.emit("result", rawToObject(mesage.text));
+      if ((message.from.address != null)&&( message.from.address == "scan@virustotal.com")) {
+        internalEmitter.emit("analysis", rawToObject(message.text));
+        return;
+      }
+      for (var index = 0; index < message.from.length, index++) {
+        if (message.from[index] == "scan@virustotal.com") {
+          internalEmitter.emit("analysis", rawToObject(message.text));
           return;
         }
-        if (senders[index].address=="scan@virustotal.com") {
-          internalEmitter.emit("result", rawToObject(mesage.text));
+        if (message.from[index].address=="scan@virustotal.com") {
+          internalEmitter.emit("analysis", rawToObject(message.text));
           return;
         }
       }
+      return;
+    });
+    imapConnection.on("error", function(e){
+      internalEmitter.emit("error", e);
+    })
+    imapConnection.start();
+  };
+  this.stopCheckingForResponses = function(){
+    if (imapConnection != null) {
+      imapConnection.close();
     }
-    return;
-  });
-  this.endConnection = function(){
-    checker.stop();
     return self;
   };
+
   this.submitFileForAnalysis = function(fileContent, fileName, type){
     var smtpConnection = emailjs.server.connect(config.SMTP);
     smtpConnection.send({
