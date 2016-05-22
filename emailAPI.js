@@ -44,7 +44,7 @@ var emailFeatures = function(config){
   this.on = function(condition, callback){
     internalEmitter.on(condition, callback);
     return self;
-  };
+  }; /*
   this.connect = function(){
     imapConnection = new imap(config.IMAP);
     imapConnection.once("error", function(e){
@@ -102,13 +102,13 @@ var emailFeatures = function(config){
     });
     imapConnection.end();
     return self;
-  };
+  };*/
   this.submitFileForAnalysis = function(fileContent, fileName, type){
     var smtpConnection = emailjs.server.connect(config.SMTP);
     smtpConnection.send({
       text: " ",
-      from: config.sender + " <" + config.sender + ">",
-      to: "scan <scan@virustotal.com>",
+      from: config.sender,
+      to: "scan@virustotal.com",
       subject: "SCAN",
       attachment: {
           data: "" + fileContent,
