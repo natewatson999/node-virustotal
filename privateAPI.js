@@ -600,6 +600,15 @@ var privateAPI = function(){
     if (queryObject.name != null) {
       queryComponents[queryComponents.length] = "name%3A\"" + queryObject.name + "\"";
     }
+    if (queryObject.lowerSize != null) {
+      queryComponents[queryComponents.length] = "size%3A" + queryObject.lowerSize + "%2B";
+    }
+    if (queryObject.upperSize != null) {
+      queryComponents[queryComponents.length] = "size%3A" + queryObject.upperSize + "-";
+    }
+    if (queryObject.tag != null) {
+      queryComponents[queryComponents.length] = "tag%3A" + queryObject.tag;
+    }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;

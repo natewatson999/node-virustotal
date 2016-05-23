@@ -355,9 +355,12 @@ The error callback's only parameter is an error which is either a string or an o
 
 The query object can have the following member variables. It must have at least one valid member variable that is not offset. Virustotal supports many more parameters, but these are the only ones supported by the API at this time. They will be updated.
 
-* type : this one is the file type, in the form of file extension such as 'exe' or 'pdf'
-* name : this is the file's known name in the wild
-* offset : this specifies offset, as defined in the second paragraph of the search documentation
+* type : this one is the file type, in the form of file extension such as 'exe' or 'pdf'.
+* name : this is the file's known name in the wild.
+* offset : this specifies offset, as defined in the second paragraph of the search documentation.
+* lowerSize : this asks Virustotal "only give results whose filesize is at least this size in kilobytes". Must be an integer.
+* upperSize : this asks Virustotal "only give results whose filesize is at most this size in kilobytes". Must be an integer.
+* tag : this reduces the results to only files which have been tagged with certain characteristics. https://www.virustotal.com/intelligence/help/file-search/#search-modifiers includes a list of valid tags.
 
 ### makePrivateConnection example
 ```
