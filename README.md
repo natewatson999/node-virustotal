@@ -509,17 +509,68 @@ rescanJob.cancel(function(response){
 This returns an EmailConnection object. Unlike the other APIs, which all use REST services, this uses Virustotal's email service. It's also event-driven rather than callback-driven. This is because of dependencies. It takes one parameter: a configuration object. The configuration object must have 3 member variables:
 * SMTP: this is SMTP connection data, as outlined in the documentation for emailjs: https://github.com/eleith/emailjs
 * sender: this is a string with the email address the files shall be sent from.
-* IMAP: this is the IMAP connection data, as outlined in the documentation for node-imap: https://www.npmjs.com/package/imap
+* IMAP: this is the IMAP connection data, as outlined in the documentation for mail-notifier: https://www.npmjs.com/package/mail-notifier
 
 ### makeEmailConnection.submitFileForAnalysis
 This emails Virustotal with a potentially malicious file. It takes 3 parameters: the file's content, filename as found in the wild, and mime type. It will result in the "error" or "sent" emissions.
+
+### makeEmailConnection.startCheckingForResponses
+This starts querying the email server for responses from Virustotal. Whenever a response is received, an analysis event is fired.
+
+### makeEmailConnection.stopCheckingForResponses
+This stops the querying to the email provider for responses. Note: Unless this is used, the script won't end by natural means. It will still end in the event of a system failure, node failure, unhandled exception, or use of CTRL-C.
 
 ### makeEmailConnection.on
 #### makeEmailConnection.on("error")
 This is a generic error emission. The only parameter of the callback function is either a string or an error object.
 
 #### makeEmailConnection.on("sent")
-This is fired when a file is sent to Virustotal. The parameter is the message object of the transmission. 
+This is fired when a file is sent to Virustotal. The only parameter is the message object of the transmission.
+
+#### makeEmailConnection.on("analysis")
+This is fired when an analysis of a file is recieved. The only parameter is an analysis object. The analysis object has the following member variables:
+* verbose: it's the verbose message sent by Virustotal.
+* filename: the filename
+* size: the filesize in kilobytes
+* MD5: the file's MD5 signature.
+* SHA1: the file's SHA1 signature.
+* scans: an array of all of the scan jobs:
+* scans[index].scanner: the program which scanned the file
+* scans[index].versionTimestamp: contains the program's versioncode and date of scan. These don't have a unified version system.
+* scans[index].verbose: contains the verbose output of the scan operation
+
+
+### makeEmailConnection example
+```
+var virustotal = require("node-virustotal");
+var fs = require("fs");
+var workingEmail = virustotal.makeEmailConnection({
+	IMAP: {
+		username: 'yourEmailHere',
+		password: 'yourPasswordHere',
+		host: 'imap.gmail.com',
+		port: 993,
+		tls: true,
+		mailbox: "Inbox" /*may change for other providers, but is usually Inbox*/
+	},
+	SMTP: {
+		user: 'yourEmailHere',
+		password: 'yourPasswordHere',
+		host: "smtp.gmail.com",
+		ssl: true
+	},
+	sender: "jainri.developer@gmail.com"
+});
+workingEmail.on("error", function(e){
+	console.log(e);
+});
+workingEmail.on("analysis", function(analysis){
+	console.dir(analysis);
+  workingEmail.stopCheckingForResponses();
+});
+workingEmail.startCheckingForResponses();
+workingEmail.submitFileForAnalysis(fs.readFileSync("./obvious_virus.svg"), "obvious_virus.svg", "text/svg");
+```
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
