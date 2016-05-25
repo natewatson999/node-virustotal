@@ -365,6 +365,10 @@ The query object can have the following member variables. It must have at least 
 * firstSubmittedAfter : A Date object which specifies that the file was first submitted after a certain point in time.
 * lastSubmittedBefore : A Date object which specifies that the file was last submitted before a certain point in time.
 * lastSubmittedAfter : A Date object which specifies that the file was last submitted after a certain point in time.
+* AtLeastPositives : An integer which asks Virustotal to only return files which have at least this many malware services flagging this as malware.
+* AtMostPositives : An integer which asks Virustotal to only return files which have at most this many malware services flagging this as malware.
+* AtLeastChildPositives : An integer which asks Virustotal to ony return files which have at least this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
+* AtMostChildPositives : An integer which asks Virustotal to ony return files which have at most this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
 
 ### makePrivateConnection example
 ```
