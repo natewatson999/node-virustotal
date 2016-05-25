@@ -375,8 +375,13 @@ The query object can have the following member variables. It must have at least 
 * AtMostSources : An integer which asks Virustotal to only return files which have been submitted from at most this many sources.
 * RegionOfFirstSubmitter : A string which asks Virustotal to only return files which were first allegedly submitted from the country with this ISO 3166-1-alpha-2 code, such as "CN" for the People's Republic of China. I advise against using this feature for several reasons. The main reason being that it's ineffective; due to VPNs, GeoIP bypasses, the existence of TOR, general fraud, etc.
 * itw : Return only the files that have been downloaded from a URL containing the literal provided.
-* metadataString : A string which asks Virustotal to only return files that contain the multi-word string in the metadata
-* metadataLiteral : A string which asks Virustotal to only return files that contain the single-word string in the metadata
+* metadataString : A string which asks Virustotal to only return files that contain the multi-word string in the metadata.
+* metadataLiteral : A string which asks Virustotal to only return files that contain the single-word string in the metadata.
+* containsAndroguardResult : A string which asks Virustotal to only return results whose Androguard results included the string.
+* containsLanguage : A string which asks Virustotal to only return results which contain the specified language. The virustotal documentation lists supported formats and languages. https://www.virustotal.com/intelligence/help/file-search/#search-modifiers
+* containsSignatureString : Filter the files returned according to sigcheck fields. Finds all those files that have some sigcheck/codesign (PE signature, Apple code signing) field containing the literal(s) provided. Example: "google inc"
+* compilationDatetimeMin : A Date object which asks Virustotal to only return results whose compilation datetime was after the datetime specified.
+* compilationDatetimeMax : A Date object which asks Virustotal to only return results whose compilation datetime was before the datetime specified.
 
 ### makePrivateConnection example
 ```

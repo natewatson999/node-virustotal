@@ -669,8 +669,11 @@ var privateAPI = function(){
     if (queryObject.containsSignatureString != null) {
       queryComponents[queryComponents.length] = "signature%3A\"" + encodeURIComponent(queryObject.containsSignatureString) + "\"";
     }
-    if (queryObject.compilationDatetime != null) {
-      queryComponents[queryComponents.length] = "signature%3A\"" + dateToString(queryObject.compilationDatetime) + "\"";
+    if (queryObject.compilationDatetimeMin != null) {
+      queryComponents[queryComponents.length] = "signature%3A" + dateToString(queryObject.compilationDatetimeMin) + "-";
+    }
+    if (queryObject.compilationDatetimeMax != null) {
+      queryComponents[queryComponents.length] = "signature%3A" + dateToString(queryObject.compilationDatetimeMax) + "%2B";
     }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
