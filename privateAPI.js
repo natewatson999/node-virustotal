@@ -648,6 +648,18 @@ var privateAPI = function(){
     if (queryObject.AtMostSources != null) {
       queryComponents[queryComponents.length] = "sources%3A" + queryObject.AtMostSources + "-";
     }
+    if (queryObject.RegionOfFirstSubmitter != null) {
+      queryComponents[queryComponents.length] = "submitter%3A" + queryObject.RegionOfFirstSubmitter;
+    }
+    if (queryObject.itw != null) {
+      queryComponents[queryComponents.length] = "itw%3A\"" + encodeURIComponent(queryObject.itw) + "\"";
+    }
+    if (queryObject.metadataString != null) {
+      queryComponents[queryComponents.length] = "metadata%3A\"" + encodeURIComponent(queryObject.metadataString) + "\"";
+    }
+    if (queryObject.metadataLiteral != null) {
+      queryComponents[queryComponents.length] = "metadata%3A" + queryObject.metadataLiteral;
+    }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;
