@@ -373,6 +373,10 @@ The query object can have the following member variables. It must have at least 
 * AtMostSubmissions : An integer which asks Virustotal to only return files which have been submitted at most this number of times.
 * AtLeastSources : An integer which asks Virustotal to only return files which have been submitted from at least this many sources.
 * AtMostSources : An integer which asks Virustotal to only return files which have been submitted from at most this many sources.
+* RegionOfFirstSubmitter : A string which asks Virustotal to only return files which were first allegedly submitted from the country with this ISO 3166-1-alpha-2 code, such as "CN" for the People's Republic of China. I advise against using this feature for several reasons. The main reason being that it's ineffective; due to VPNs, GeoIP bypasses, the existence of TOR, general fraud, etc.
+* itw : Return only the files that have been downloaded from a URL containing the literal provided.
+* metadataString : A string which asks Virustotal to only return files that contain the multi-word string in the metadata
+* metadataLiteral : A string which asks Virustotal to only return files that contain the single-word string in the metadata
 
 ### makePrivateConnection example
 ```
