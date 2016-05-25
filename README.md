@@ -367,8 +367,12 @@ The query object can have the following member variables. It must have at least 
 * lastSubmittedAfter : A Date object which specifies that the file was last submitted after a certain point in time.
 * AtLeastPositives : An integer which asks Virustotal to only return files which have at least this many malware services flagging this as malware.
 * AtMostPositives : An integer which asks Virustotal to only return files which have at most this many malware services flagging this as malware.
-* AtLeastChildPositives : An integer which asks Virustotal to ony return files which have at least this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
-* AtMostChildPositives : An integer which asks Virustotal to ony return files which have at most this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
+* AtLeastChildPositives : An integer which asks Virustotal to only return files which have at least this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
+* AtMostChildPositives : An integer which asks Virustotal to only return files which have at most this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
+* AtLeastSubmissions : An integer which asks Virustotal to only return files which have been submitted at least this number of times.
+* AtMostSubmissions : An integer which asks Virustotal to only return files which have been submitted at most this number of times.
+* AtLeastSources : An integer which asks Virustotal to only return files which have been submitted from at least this many sources.
+* AtMostSources : An integer which asks Virustotal to only return files which have been submitted from at most this many sources.
 
 ### makePrivateConnection example
 ```
@@ -586,7 +590,7 @@ workingEmail.submitFileForAnalysis(fs.readFileSync("./obvious_virus.svg"), "obvi
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
-The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that. Note that the email API only supports MD5 and SHA1. 
+The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that. Note that the email API only supports MD5 and SHA1.
 
 The site mentioned in the example code is a known phishing site. It was shut down, but I still advise against going to it. It is used here because it makes an easy to understand example.
 
