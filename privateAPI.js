@@ -616,13 +616,25 @@ var privateAPI = function(){
       queryComponents[queryComponents.length] = "fs%3A" + dateToString(queryObject.firstSubmittedBefore) + "-";
     }
     if (queryObject.firstSubmittedAfter) {
-      queryComponents[queryComponents.length] = "fs%3A" + dateToString(queryObject.firstSubmittedAfter) + "+";
+      queryComponents[queryComponents.length] = "fs%3A" + dateToString(queryObject.firstSubmittedAfter) + "%2B";
     }
     if (queryObject.lastSubmittedBefore) {
       queryComponents[queryComponents.length] = "ls%3A" + dateToString(queryObject.lastSubmittedBefore) + "-";
     }
     if (queryObject.lastSubmittedAfter) {
-      queryComponents[queryComponents.length] = "ls%3A" + dateToString(queryObject.lastSubmittedAfter) + "+";
+      queryComponents[queryComponents.length] = "ls%3A" + dateToString(queryObject.lastSubmittedAfter) + "%2B";
+    }
+    if (queryObject.AtLeastPositives != null) {
+      queryComponents[queryComponents.length] = "positives%3A" + queryObject.AtLeastPositives + "%2B";
+    }
+    if (queryObject.AtMostPositives != null) {
+      queryComponents[queryComponents.length] = "positives%3A" + queryObject.AtMostPositives + "-";
+    }
+    if (queryObject.AtLeastChildPositives != null) {
+      queryComponents[queryComponents.length] = "children_positives%3A" + queryObject.AtLeastChildPositives + "%2B";
+    }
+    if (queryObject.AtMostChildPositives != null) {
+      queryComponents[queryComponents.length] = "children_positives%3A" + queryObject.AtMostChildPositives + "-";
     }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
