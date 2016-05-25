@@ -586,7 +586,7 @@ workingEmail.submitFileForAnalysis(fs.readFileSync("./obvious_virus.svg"), "obvi
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
-The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that.
+The Virustotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member of the SHA2 family". MD5 is well known to be broken. SHA1 is theorized to have collisions, though none are known. SHA2 is not widely regarded as flawed, but was published by the US NSA, so make what you will of that. Note that the email API only supports MD5 and SHA1. 
 
 The site mentioned in the example code is a known phishing site. It was shut down, but I still advise against going to it. It is used here because it makes an easy to understand example.
 

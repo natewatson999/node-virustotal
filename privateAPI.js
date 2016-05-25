@@ -636,6 +636,18 @@ var privateAPI = function(){
     if (queryObject.AtMostChildPositives != null) {
       queryComponents[queryComponents.length] = "children_positives%3A" + queryObject.AtMostChildPositives + "-";
     }
+    if (queryObject.AtLeastSubmissions != null) {
+      queryComponents[queryComponents.length] = "submissions%3A" + queryObject.AtLeastSubmissions + "%2B";
+    }
+    if (queryObject.AtMostSubmissions != null) {
+      queryComponents[queryComponents.length] = "submissions%3A" + queryObject.AtMostSubmissions + "-";
+    }
+    if (queryObject.AtLeastSources != null) {
+      queryComponents[queryComponents.length] = "sources%3A" + queryObject.AtLeastSources + "%2B";
+    }
+    if (queryObject.AtMostSources != null) {
+      queryComponents[queryComponents.length] = "sources%3A" + queryObject.AtMostSources + "-";
+    }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;
