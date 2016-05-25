@@ -10,6 +10,9 @@ var leftPad = function(raw, length, padPhrase) {
   }
   return workingString;
 };
+var dateToString = function(input){
+  return (input.getFullYear() + "-" + leftPad(input.getMonth() + 1, 2, "0") + "-" + leftPad(input.getDate(), 2, "0") + "T" + leftPad(input.getHours(), 2, "0") + ":" + leftPad(input.getMinutes(), 2, "0") + ":" + leftPad(input.getSeconds(), 2, "0"));
+};
 var rescan = function(resource, key){
   var dateString = null;
   var period = null;
@@ -608,6 +611,18 @@ var privateAPI = function(){
     }
     if (queryObject.tag != null) {
       queryComponents[queryComponents.length] = "tag%3A" + queryObject.tag;
+    }
+    if (queryObject.firstSubmittedBefore) {
+      queryComponents[queryComponents.length] = "fs%3A" + dateToString(queryObject.firstSubmittedBefore) + "-";
+    }
+    if (queryObject.firstSubmittedAfter) {
+      queryComponents[queryComponents.length] = "fs%3A" + dateToString(queryObject.firstSubmittedAfter) + "+";
+    }
+    if (queryObject.lastSubmittedBefore) {
+      queryComponents[queryComponents.length] = "ls%3A" + dateToString(queryObject.lastSubmittedBefore) + "-";
+    }
+    if (queryObject.lastSubmittedAfter) {
+      queryComponents[queryComponents.length] = "ls%3A" + dateToString(queryObject.lastSubmittedAfter) + "+";
     }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {

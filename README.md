@@ -361,6 +361,10 @@ The query object can have the following member variables. It must have at least 
 * lowerSize : this asks Virustotal "only give results whose filesize is at least this size in kilobytes". Must be an integer.
 * upperSize : this asks Virustotal "only give results whose filesize is at most this size in kilobytes". Must be an integer.
 * tag : this reduces the results to only files which have been tagged with certain characteristics. https://www.virustotal.com/intelligence/help/file-search/#search-modifiers includes a list of valid tags.
+* firstSubmittedBefore : A Date object which specifies that the file was first submitted before a certain point in time.
+* firstSubmittedAfter : A Date object which specifies that the file was first submitted after a certain point in time.
+* lastSubmittedBefore : A Date object which specifies that the file was last submitted before a certain point in time.
+* lastSubmittedAfter : A Date object which specifies that the file was last submitted after a certain point in time.
 
 ### makePrivateConnection example
 ```
