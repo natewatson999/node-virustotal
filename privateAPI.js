@@ -660,6 +660,18 @@ var privateAPI = function(){
     if (queryObject.metadataLiteral != null) {
       queryComponents[queryComponents.length] = "metadata%3A" + queryObject.metadataLiteral;
     }
+    if (queryObject.containsAndroguardResult != null) {
+      queryComponents[queryComponents.length] = "androguard%3A\"" + encodeURIComponent(queryObject.containsAndroguardResult) + "\"";
+    }
+    if (queryObject.containsLanguage != null) {
+      queryComponents[queryComponents.length] = "lang%3A\"" + encodeURIComponent(queryObject.containsAndroguardResult) + "\"";
+    }
+    if (queryObject.containsSignatureString != null) {
+      queryComponents[queryComponents.length] = "signature%3A\"" + encodeURIComponent(queryObject.containsSignatureString) + "\"";
+    }
+    if (queryObject.compilationDatetime != null) {
+      queryComponents[queryComponents.length] = "signature%3A\"" + dateToString(queryObject.compilationDatetime) + "\"";
+    }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;
