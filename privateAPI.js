@@ -723,7 +723,20 @@ var privateAPI = function(){
     if (queryObject.structurallySimilarTo != null) {
       queryComponents[queryComponents.length] = "similar-to%3A" + queryObject.structurallySimilarTo;
     }
-
+    if (queryObject.similarTo != null) {
+      if ((queryObject.similarTo.score != null) && (queryObject.similarTo.hash != null)) {
+        queryComponents[queryComponents.length] = "ssdeep%3A" + queryObject.similarTo.hash + "-" + queryObject.similarTo.score;
+      }
+    }
+    if (queryObject.importHash != null) {
+      queryComponents[queryComponents.length] = "imphash%3A" + queryObject.importHash;
+    }
+    if (queryObject.containsString) {
+      queryComponents[queryComponents.length] = "content%3A\"" + encodeURIComponent(queryObject.containsString) + "\"";
+    }
+    if (queryObject.containsHexSequence) {
+      queryComponents[queryComponents.length] = "content%3A" + queryObject.containsHexSequence;
+    }
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
       queryURL = queryURL + "&offset=" + queryObject.offset;
