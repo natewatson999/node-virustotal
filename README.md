@@ -382,6 +382,10 @@ The query object can have the following member variables. It must have at least 
 * containsSignatureString : Filter the files returned according to sigcheck fields. Finds all those files that have some sigcheck/codesign (PE signature, Apple code signing) field containing the literal(s) provided. Example: "google inc"
 * compilationDatetimeMin : A Date object which asks Virustotal to only return results whose compilation datetime was after the datetime specified.
 * compilationDatetimeMax : A Date object which asks Virustotal to only return results whose compilation datetime was before the datetime specified.
+* compilationSubmissionDifferenceMin : An integer which asks Virustotal to only return results who were first submitted at least this many seconds after compilation.
+* compilationSubmissionDifferenceMax : An integer which asks Virustotal to only return results who were first submitted at most this many seconds after compilation.
+* containsSectionLabel : A string which asks Virustotal to only return results which contain a particular section label.
+* containsMD5SectionLabel : An MD5 hash string which asks Virustotal to only return results which contain a section which can be identified by the hash.
 
 ### makePrivateConnection example
 ```
