@@ -703,13 +703,25 @@ var privateAPI = function(){
       queryComponents[queryComponents.length] = "resource%3A\"" + encodeURIComponent(queryObject.containsResourceType) + "\"";
     }
     if (queryObject.containsHashedResource != null) {
-      queryComponents[queryComponents.length] = "resource%3A\"" + encodeURIComponent(queryObject.containsHashedResource) + "\"";
+      queryComponents[queryComponents.length] = "resource%3A\"" + queryObject.containsHashedResource + "\"";
     }
     if (queryObject.generatesSnortAlertString != null) {
       queryComponents[queryComponents.length] = "snort%3A\"" + encodeURIComponent(queryObject.generatesSnortAlertString) + "\"";
     }
     if (queryObject.generatesSnortAlertID != null) {
-      queryComponents[queryComponents.length] = "snort%3A" + encodeURIComponent(queryObject.generatesSnortAlertID);
+      queryComponents[queryComponents.length] = "snort%3A" + queryObject.generatesSnortAlertID;
+    }
+    if (queryObject.generatesSuricataAlertString != null) {
+      queryComponents[queryComponents.length] = "suricata%3A\"" + encodeURIComponent(queryObject.generatesSuricataAlertString) + "\"";
+    }
+    if (queryObject.generatesSuricataAlertID != null) {
+      queryComponents[queryComponents.length] = "suricata%3A" + queryObject.generatesSuricataAlertID;
+    }
+    if (queryObject.hasTrafficWith != null) {
+      queryComponents[queryComponents.length] = "traffic%3A\"" + encodeURIComponent(queryObject.hasTrafficWith) + "\"";
+    }
+    if (queryObject.structurallySimilarTo != null) {
+      queryComponents[queryComponents.length] = "similar-to%3A" + queryObject.structurallySimilarTo;
     }
 
     queryURL = queryURL + queryComponents.join(" ");
