@@ -393,7 +393,11 @@ The query object can have the following member variables. It must have at least 
 * containsResourceType : A string which asks Virustotal to only return results which are portable executables which contain a file with this type such as "MS Windows PE.
 * containsHashedResource : A string which asks Virustotal to only return results which contain a resource whose SHA256 hash value is equal to the string provided.
 * generatesSnortAlertString : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this string.
-* generatesSnortAlertID : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged. 
+* generatesSnortAlertID : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged.
+* generatesSuricataAlertString : A string which asks Virustotal to only return results whose Suricata analysis of their packet activity contains this string.
+* generatesSuricataAlertID : A string which asks Virustotal to only return results whose Suricata analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged.
+* hasTrafficWith : A URL, domain, or IP address which can be used to filter packet captures.
+* structurallySimilarTo : An MD5, SHA256, or SHA1 identifier of another file in the Virustotal database which asks Virustotal to only return results which are structurally similar to said file.
 
 ### makePrivateConnection example
 ```
