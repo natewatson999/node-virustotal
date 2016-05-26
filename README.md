@@ -386,6 +386,10 @@ The query object can have the following member variables. It must have at least 
 * compilationSubmissionDifferenceMax : An integer which asks Virustotal to only return results who were first submitted at most this many seconds after compilation.
 * containsSectionLabel : A string which asks Virustotal to only return results which contain a particular section label.
 * containsMD5SectionLabel : An MD5 hash string which asks Virustotal to only return results which contain a section which can be identified by the hash.
+* containsSegmentLabel : A string which asks Virustotal to only return results which have a segment with this name.
+* importsLibrary : A string which asks Virustotal to only return results that import a library with this filename.
+* exportsFunction : A string which asks Virustotal to only return results that export a function named this.
+* containsPhraseInBehaviorReport : A string which asks Virustotal to only return results that have this phrase in the behavior report.
 
 ### makePrivateConnection example
 ```
