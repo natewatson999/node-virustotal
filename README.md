@@ -398,6 +398,10 @@ The query object can have the following member variables. It must have at least 
 * generatesSuricataAlertID : A string which asks Virustotal to only return results whose Suricata analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged.
 * hasTrafficWith : A URL, domain, or IP address which can be used to filter packet captures.
 * structurallySimilarTo : An MD5, SHA256, or SHA1 identifier of another file in the Virustotal database which asks Virustotal to only return results which are structurally similar to said file.
+* similarTo : An object with two member variables: score and hash. score is an int, and hash is an identier string. It basically states "find files that are similar to this one, with at least this degree of similarity.".
+* importHash : An MD5 hash which restricts the results to files whose imports, when hashed with MD5, match the given hash.
+* containsString : A string which restricts the results to files whose content contains a given string.
+* containsHexSequence : A string which restricts the results to files whose bytecode contains a given hexadecimal sequence.
 
 ### makePrivateConnection example
 ```
