@@ -390,6 +390,10 @@ The query object can have the following member variables. It must have at least 
 * importsLibrary : A string which asks Virustotal to only return results that import a library with this filename.
 * exportsFunction : A string which asks Virustotal to only return results that export a function named this.
 * containsPhraseInBehaviorReport : A string which asks Virustotal to only return results that have this phrase in the behavior report.
+* containsResourceType : A string which asks Virustotal to only return results which are portable executables which contain a file with this type such as "MS Windows PE.
+* containsHashedResource : A string which asks Virustotal to only return results which contain a resource whose SHA256 hash value is equal to the string provided.
+* generatesSnortAlertString : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this string.
+* generatesSnortAlertID : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged. 
 
 ### makePrivateConnection example
 ```
