@@ -699,6 +699,18 @@ var privateAPI = function(){
     if (queryObject.containsPhraseInBehaviorReport != null) {
       queryComponents[queryComponents.length] = "behavior%3A\"" + encodeURIComponent(queryObject.containsPhraseInBehaviorReport) + "\"";
     }
+    if (queryObject.containsResourceType != null) {
+      queryComponents[queryComponents.length] = "resource%3A\"" + encodeURIComponent(queryObject.containsResourceType) + "\"";
+    }
+    if (queryObject.containsHashedResource != null) {
+      queryComponents[queryComponents.length] = "resource%3A\"" + encodeURIComponent(queryObject.containsHashedResource) + "\"";
+    }
+    if (queryObject.generatesSnortAlertString != null) {
+      queryComponents[queryComponents.length] = "snort%3A\"" + encodeURIComponent(queryObject.generatesSnortAlertString) + "\"";
+    }
+    if (queryObject.generatesSnortAlertID != null) {
+      queryComponents[queryComponents.length] = "snort%3A" + encodeURIComponent(queryObject.generatesSnortAlertID);
+    }
 
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
