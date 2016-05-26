@@ -687,6 +687,18 @@ var privateAPI = function(){
     if (queryObject.containsMD5SectionLabel != null) {
       queryComponents[queryComponents.length] = "section%3A" + queryObject.containsMD5SectionLabel;
     }
+    if (queryObject.containsSegmentLabel != null) {
+      queryComponents[queryComponents.length] = "segment%3A\"" + encodeURIComponent(queryObject.containsSegmentLabel) + "\"";
+    }
+    if (queryObject.importsLibrary != null) {
+      queryComponents[queryComponents.length] = "imports%3A\"" + encodeURIComponent(queryObject.importsLibrary) + "\"";
+    }
+    if (queryObject.exportsFunction != null) {
+      queryComponents[queryComponents.length] = "exports%3A\"" + encodeURIComponent(queryObject.exportsFunction) + "\"";
+    }
+    if (queryObject.containsPhraseInBehaviorReport != null) {
+      queryComponents[queryComponents.length] = "behavior%3A\"" + encodeURIComponent(queryObject.containsPhraseInBehaviorReport) + "\"";
+    }
 
     queryURL = queryURL + queryComponents.join(" ");
     if ((queryObject.offset != null)&&(queryObject.offset!="")) {
