@@ -42,8 +42,12 @@ var intelAPI = function(){
     });
     return;
   };
-  var deleteNotifications = function(notifications, resultProc, errProc){
+  var deleteNotifications = function(notifications, resultProc, errProc, intermediates){
     if (notifications.length == 0) {
+      if (intermediates != null) {
+        resultProc(intermediates);
+        return;
+      }
       resultProc({
         deleted: 0,
         received: 0,
@@ -75,6 +79,11 @@ var intelAPI = function(){
           switch(data.result){
             case 1:
             case 0:
+              if (intermediates != null) {
+                intermediates[intermediates.length] = data;
+                resultProc(intermediates);
+                return;
+              }
               resultProc(data);
               return;
             case -1:
@@ -92,7 +101,46 @@ var intelAPI = function(){
     }
     var segment = notifications.slice(0, 100);
     var remainder = notifications.slice(100);
-    
+    request({
+      uri: queryURL,
+      body: JSON.stringify(segment),
+      method: "POST",
+      headers: [{
+        name: "content-type",
+        value: "application/json"
+      }]
+    }, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(response.statusCode);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch(data.result){
+          case 1:
+          case 0:
+            if (intermediates == null) {
+              intermediates = [];
+            }
+            intermediates[intermediates.length] = data;
+            deleteNotifications(notifications, resultProc, errProc, intermediates);
+            return;
+          case -1:
+          case -2:
+          default:
+            errProc(data);
+            return;
+        }
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+    return;
   };
   this.deleteNotifications = deleteNotifications;
   this.exportRuleset = exportRuleset;

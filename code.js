@@ -4,6 +4,7 @@ var speedconcat = require("speedconcat");
 var request = require("request");
 var emailAPI = require("./emailAPI.js");
 var privateAPI = require("./privateAPI.js");
+var intelAPI = require("./intelligenceAPI.js");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
 var PublicConnection = function(enablePrivateFeatures){
 	var key = apiKey;
