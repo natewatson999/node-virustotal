@@ -142,6 +142,21 @@ var intelAPI = function(){
     });
     return;
   };
+  this.getFile = function(hashValue, resultProc, errProc) {
+    var deadlyURL = "https://www.virustotal.com/intelligence/download/?hash=" + hashValue + "&apikey=" + apiKey ;
+    request(deadlyURL, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode > 399) {
+        errProc(response.statusCode);
+        return;
+      }
+      resultProc(body);
+      return;
+    });
+  };
   this.deleteNotifications = deleteNotifications;
   this.exportRuleset = exportRuleset;
   return;
