@@ -616,6 +616,15 @@ workingEmail.startCheckingForResponses();
 workingEmail.submitFileForAnalysis(fs.readFileSync("./obvious_virus.svg"), "obvious_virus.svg", "text/svg");
 ```
 
+## makeIapiConnection()
+This function makes an instance of the intelligenceAPI, which is more research-oriented than the private API, which is more oriented to commercial stuff.
+
+### makeIapiConnection.setKey()
+This function takes a hexadecimal string, and attempts to use said string as the API key for tasks in the queue. It returns the connection object.
+
+### makeIapiConnection.getKey()
+This function returns the key that the connection is currently using.
+
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
