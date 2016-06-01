@@ -625,6 +625,12 @@ This function takes a hexadecimal string, and attempts to use said string as the
 ### makeIapiConnection.getKey()
 This function returns the key that the connection is currently using.
 
+### makeIapiConnection.getFile()
+This function is extremely dangerous. Do not use this on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. It is recommended that this function not be used, since it downloads malware. getFile downloads a piece of suspected malware from Virustotal. It takes 3 parameters: a hashcode and two callback functions. The hashcode is an MD5, SHA1, or SHA256 identifier of the file being requested. MD5 and SHA1 are heavily discouraged for this due to real and suspected collisions. SHA256 is discouraged for security reasons. The other two parameters are the response and error callback functions.
+
+### makeIapiConnection.exportRuleset
+This function asks Virustotal to take a ruleset identifier, and return the information about the latest files submitted which fit said rule. It takes 3 parameters, a ruleset, and the usual response and error callback functions. The ruleset can be a string which identifies a particular ruleset, or it can be null or an empty string. If it's null, an empty string, or "\*"; then it asks Virustotal for results for all of the rules associated with the API key in question, rather than a specific ruleset.  
+
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 
