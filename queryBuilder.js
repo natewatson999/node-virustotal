@@ -137,4 +137,58 @@ features.submissionAtLeast = function(basis){
 features.submissionAtMost = function(basis){
   return "submissions:" + basis + "-";
 };
+features.tag = function(basis){
+  return "tag:" + basis;
+};
+features.name = function(basis){
+  return "name:" + basis;
+};
+features.childPositives = function(basis){
+  return "children_positives:" + basis;
+};
+features.childPositivesAtLeast = function(basis){
+  return "children_positives:" + basis + "%2B";
+};
+features.childPositivesAtMost = function(basis){
+  return "children_positives:" + basis + "-";
+};
+features.positives = function(basis){
+  return "positives:" + basis;
+};
+features.positivesAtLeast = function(basis){
+  return "positives:" + basis + "%2B";
+};
+features.positivesAtMost = function(basis){
+  return "positives:" + basis + "-";
+};
+features.lastAnalyzedBefore = function(basis) {
+  return "la:" + dateToString(basis) + "-";
+};
+features.lastAnalyzedAfter = function(basis) {
+  return "la:" + dateToString(basis) + "%2B";
+};
+features.lastSubmittedBefore = function(basis) {
+  return "ls:" + dateToString(basis) + "-";
+};
+features.lastSubmittedAfter = function(basis) {
+  return "ls:" + dateToString(basis) + "%2B";
+};
+features.firstSubmittedBefore = function(basis) {
+  return "fs:" + dateToString(basis) + "-";
+};
+features.firstSubmittedAfter = function(basis) {
+  return "fs:" + dateToString(basis) + "%2B";
+};
+features.type = function(basis){
+  return "type:" + basis;
+};
+features.size = function(basis){
+  return "size:" + basis;
+};
+features.sizeAtLeast = function(basis){
+  return "size:" + basis + "%2B";
+};
+features.sizeAtMost = function(basis){
+  return "size:" + basis + "-";
+};
 module.exports = exports = features;
