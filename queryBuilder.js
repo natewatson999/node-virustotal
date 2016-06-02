@@ -21,7 +21,7 @@ features.EQ = functionfunction(basis1, basis2) {
   );
 };
 features.XOR = function(basis1, basis2) {
-  return features.NOT(features.EQ(basis1, basis2))
+  return features.NOT(features.EQ(basis1, basis2));
 };
 features.IMP = function(basis1, basis2) {
   return features.OR(
@@ -40,5 +40,11 @@ features.stringSig = function(basis) {
 };
 features.imphash = function(basis){
   return "imphash:" + basis;
+};
+features.ssdeep = function(src, score){
+  return "ssdeep:\"" + src + ":" + score + "\"";
+};
+features.similarTo = function(basis){
+  return "similar-to:" + basis;
 };
 module.exports = exports = features;
