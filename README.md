@@ -660,11 +660,35 @@ This function asks Virustotal to take a ruleset identifier, and return the infor
 ### makeIapiConnection.deleteNotifications
 This function has virustotal delete an arbitrary number of notifications from the queue. This takes 3 parameters: an array of notification IDs, a response callback function, and an error callback function. The response callback will have one parameter, which is either an array or an object. The error callback shall have a parameter.
 
+### makeIapiConnection.search
+This searches the Virustotal database based on signature information. It takes 3 parameters: a query string, a response callback, and an error callback.
+
+The error callback's only parameter is an error which is either a string or an object. the response callback's only parameter is an Object whose members are response_code, offset, and hashes. response_code will be a 1 or 0, depending on if there were any results. hashes is an array of SHA256 signatures of files that meet the search query. offset is the most complex one. Search only returns the results in blocks of 300 or less. So if there's more than 300 valid results, another query is needed. In this API, the secondary query can be performed by using search again, but with the query object including the member variable 'offset', with the offset as its value. This will return another block of 300 or less. If there's less than 300 results remaining for a query, the offset will be an empty string. The query string is made by queryBuilder
+
 ### makeIapiConnection example
 ```
 var con = require("node-virustotal").makeIapiConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
+var QB = vt.queryBuilder;
+var searchQuery = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1)); ;
+var page = null;
+var searchProc = function(){
+  con.search(searchQuery, page, function(results){
+    for (var index = 0; index < results.hashes.length; index++) {
+      console.log(results.hashes[index]);
+    }
+    if (results.offset != "") {
+      searchQuery.offset = results.offset;
+      searchProc();
+    }
+    return;
+  },function(error){
+    console.log(error);
+    return;
+  });
+};
+searchProc();
 con.deleteNotifications([5278074110738432, 6402641302650880], function(result){
   if (!(Array.isArray(result))) {
     console.dir(result);
