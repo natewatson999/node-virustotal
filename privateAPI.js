@@ -11,7 +11,7 @@ var leftPad = function(raw, length, padPhrase) {
   return workingString;
 };
 var dateToString = function(input){
-  return (input.getFullYear() + "-" + leftPad(input.getMonth() + 1, 2, "0") + "-" + leftPad(input.getDate(), 2, "0") + "T" + leftPad(input.getHours(), 2, "0") + ":" + leftPad(input.getMinutes(), 2, "0") + ":" + leftPad(input.getSeconds(), 2, "0"));
+  return ((((input.getFullYear() + "-") + (leftPad(input.getMonth() + 1, 2, "0") + "-" )) + ((leftPad(input.getDate(), 2, "0") + "T" ) + (leftPad(input.getHours(), 2, "0") + ":" ))) + ((leftPad(input.getMinutes(), 2, "0") + ":") + leftPad(input.getSeconds(), 2, "0")));
 };
 var rescan = function(resource, key){
   var dateString = null;

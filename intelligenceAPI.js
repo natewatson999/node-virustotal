@@ -17,7 +17,7 @@ var intelAPI = function(){
       exportRuleset("*", responseProc, errProc);
       return;
     }
-    var queryURL = "https://www.virustotal.com/intelligence/hunting/export-ruleset/?output=json&ruleset=" + ruleset + "&key=" + apiKey;
+    var queryURL = ("https://www.virustotal.com/intelligence/hunting/export-ruleset/?output=json&ruleset=" + ruleset) + ("&key=" + apiKey);
     request(queryURL, function(error, response, body){
       if (error) {
         errProc(error);

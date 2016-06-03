@@ -88,11 +88,15 @@ var PublicConnection = function(enablePrivateFeatures){
 	};
 	var PostWithoutBody = function(rawURL, mode) {
 		return function(resource, responseProc, errProc){
-			var fullURL = rawURL + encodeURIComponent(resource) + "&apikey=" + key;
+			var fullURL = (rawURL+encodeURIComponent(resource)) + ("&apikey="+key);
 			var jobProc = function(){
 				request({
 					method: "POST",
-					url: fullURL
+					url: fullURL,
+		      gzip: true,
+			    headers: {
+				    "User-Agent": "gzip"
+			    }
 				},function(error, response, body){
 					if (error) {
 						errProc(error);
@@ -142,7 +146,7 @@ var PublicConnection = function(enablePrivateFeatures){
 		}
 		var workingURL = "https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource) + "&comment=" + encodeURIComponent(comment) + "&apikey=" + key ;
 		var workingJob = function(){
-			request({url:workingURL, method:"POST"}, function(error, response, body){
+			request({url:workingURL, method:"POST", gzip: true, headers: {"User-Agent": "gzip"}}, function(error, response, body){
 				if (error) {
 					errProc(error);
 					return;
@@ -178,7 +182,11 @@ var PublicConnection = function(enablePrivateFeatures){
 						filetype: filetype
 					}
 				}
-			}
+			},
+      gzip: true,
+	    headers: {
+		    "User-Agent": "gzip"
+	    }
 		};
 		var sendFileProc = function(){
 			request.post(sendOptions, function(error, response, body){
@@ -210,7 +218,11 @@ var PublicConnection = function(enablePrivateFeatures){
 	var rescanFile = function(resourceID, responseProc, errProc) {
 		var workingURL = "https://www.virustotal.com/vtapi/v2/file/rescan?resource=" +resourceID + "&apikey=" + key;
 		var rescanFileProc = function(){
-			request({url:workingURL, method:"POST"}, function(error, response, body){
+			request({url:workingURL, method:"POST",
+      gzip: true,
+	    headers: {
+		    "User-Agent": "gzip"
+	    }}, function(error, response, body){
 				if (error) {
 					errProc(error);
 					return;
@@ -239,7 +251,11 @@ var PublicConnection = function(enablePrivateFeatures){
 	var getFileReport = function(scanID, responseProc, errProc) {
 		var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key + "&resource=" + scanID;
 		var retrieveProc = function(){
-			request({url: fileResourceURL, method: "POST"}, function(error, response, body){
+			request({url: fileResourceURL, method: "POST",
+      gzip: true,
+	    headers: {
+		    "User-Agent": "gzip"
+	    }}, function(error, response, body){
 				if (error) {
 					errProc(error);
 					return;
