@@ -1,5 +1,3 @@
-var https = require("https");
-var yellowStream = require("yellow-stream");
 var speedconcat = require("speedconcat");
 var request = require("request");
 var emailAPI = require("./emailAPI.js");
