@@ -60,28 +60,40 @@ var PublicConnection = function(enablePrivateFeatures){
 		return function(addr, responseProc, errProc){
 			var checkURL = URL + addr + "&apikey=" + key;
 			var checkProc = function(){
-				https.get(checkURL, function(raw){
-					var stream = new yellowStream.consolidator(raw);
-					stream.on("error", function(e){
-						errProc(e);
-					});
-					stream.on("end", function(data){
-						var response = JSON.parse(data);
-						switch(response.response_code) {
-							case -2:
-								addJob(checkProc);
-								return;
-							case 0:
-							case 1:
-								responseProc(data);
-								return;
-							case -1:
-							default:
-								errProc(data);
-								return;
+				request({
+					url:checkURL,
+					gzip: true,
+					headers: {
+						"User-Agent": "gzip"
+					}}, function(error, response, body) {
+						if (error) {
+							errProc(error);
+							return;
+						}
+						if(response.statusCode > 399) {
+							errProc(response.statusCode + "");
+							return;
+						}
+						try {
+							var data = JSON.parse(body);
+							switch (data.response_code) {
+								case -2:
+									addJob(checkProc);
+									return;
+								case 0:
+								case 1:
+									responseProc(data);
+									return;
+								case -1:
+								default:
+									errProc(data);
+									return;
+							}
+						} catch (e) {
+							errProc(e);
+							return;
 						}
 					});
-				});
 			};
 			addJob(checkProc);
 		};
