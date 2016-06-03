@@ -284,6 +284,26 @@ These each take a date object, and return a valid query.
 * firstSubmittedBefore : first submitted before the date given.
 * firstSubmittedAfter : first submitted after the date given.
 
+### Stuff that takes a number as the parameter:
+These take a number as the parameter, and return a valid query.
+* size : file size in kilobytes
+* sizeAtLeast : lower file size in kilobytes
+* sizeAtMost : upper file size in kilobytes
+* positivesAtMost : upper positive results
+* positivesAtLeast : lower positive results
+* positives : positive results
+* childPositivesAtMost : upper number of child positives
+* childPositivesAtLeast : lower number of child positives
+* childPositives : number of child positives
+* submissionAtMost : upper submission count
+* submissionAtLeast : lower submission count
+* submissionCount : submission count
+* sourceAtMost : upper source count
+* sourceAtLeast : lower source count
+* sourceCount : source count
+* atLeastSubspan : lower difference between compilation datetime and submission datetime
+* atMostSubspan : upper difference between compilation datetime and submission datetime
+
 ## makePrivateConnection
 This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
 
