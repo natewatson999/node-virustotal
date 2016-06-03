@@ -333,6 +333,15 @@ These take a string as the parameter, and return a valid query.
 * name : file name
 * type : filetype
 
+### ssdeep
+This takes 2 parameters, a signature and a number. The signature is of a piece of known malware in the database. The number is a score.
+
+### queryBuilder example
+```
+var QB = require("node-virustotal").queryBuilder;
+var query = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1);
+```
+
 ## makePrivateConnection
 This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
 
