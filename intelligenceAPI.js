@@ -182,7 +182,7 @@ var intelAPI = function(){
             responseProc(data);
             return;
           case -1:
-          case -2;
+          case -2:
           default:
             errProc(data);
             return;

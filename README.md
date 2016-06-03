@@ -631,6 +631,23 @@ This function is extremely dangerous. Do not use this on any mission critical sy
 ### makeIapiConnection.exportRuleset
 This function asks Virustotal to take a ruleset identifier, and return the information about the latest files submitted which fit said rule. It takes 3 parameters, a ruleset, and the usual response and error callback functions. The ruleset can be a string which identifies a particular ruleset, or it can be null or an empty string. If it's null, an empty string, or "\*"; then it asks Virustotal for results for all of the rules associated with the API key in question, rather than a specific ruleset.  
 
+### makeIapiConnection example
+```
+var con = require("node-virustotal").makeIapiConnection();
+con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
+console.log(con.getKey());
+con.getFile("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c", function(malware){
+    SendToEvilPeople(malware,"crosswindsyouth.org");
+}, function(error){
+    console.log(error);
+});
+con.exportRuleset("*",function(result){
+  console.dir(result);
+}, function(e){
+  console.log(e);
+});
+```
+
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
 

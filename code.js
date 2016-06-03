@@ -302,6 +302,7 @@ features.MakeHoneypot2Connection = function(){
 	workingConnection.setDelay(1000);
 	return workingConnection;
 };
+features.makeIapiConnection = intelAPI.makeIapiConnection();
 features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.makeEmailConnection = emailAPI.makeEmailConnection;
