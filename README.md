@@ -339,7 +339,7 @@ This takes 2 parameters, a signature and a number. The signature is of a piece o
 ### queryBuilder example
 ```
 var QB = require("node-virustotal").queryBuilder;
-var query = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1);
+var query = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1));
 ```
 
 ## makePrivateConnection
@@ -426,73 +426,21 @@ This function asks Virustotal for an array of all of the analysis information of
 ### makePrivateConnection.getNextFalsePositive
 This asks Virustotal for the next false positive in the queue of false positives. The Virustotal documentation does a better job explaining what the false positives are for, than I can explain it: https://www.virustotal.com/en/documentation/private-api/#file-false-positives . This asks Virustotal with a limit of 1. It takes 2 parameters: The usual response and error callbacks. The error's only parameter will be a string or object of some kind. The response's parameter will be a false positive Object, or an empty object, depending on if there was anything in the queue. The second one is unlikely, but should still be accounted for.
 
-### makePrivateConnection.search
-This searches the Virustotal database based on signature information. It takes 3 parameters: a query object, a response callback, and an error callback.
+### makePrivateConnection.search2
+This searches the Virustotal database based on signature information. It takes 3 parameters: a query string, a response callback, and an error callback.
 
-The error callback's only parameter is an error which is either a string or an object. the response callback's only parameter is an Object whose members are response_code, offset, and hashes. response_code will be a 1 or 0, depending on if there were any results. hashes is an array of SHA256 signatures of files that meet the search query. offset is the most complex one. Search only returns the results in blocks of 300 or less. So if there's more than 300 valid results, another query is needed. In this API, the secondary query can be performed by using search again, but with the query object including the member variable 'offset', with the offset as its value. This will return another block of 300 or less. If there's less than 300 results remaining for a query, the offset will be an empty string.
-
-The query object can have the following member variables. It must have at least one valid member variable that is not offset. Virustotal supports many more parameters, but these are the only ones supported by the API at this time. They will be updated.
-
-* type : this one is the file type, in the form of file extension such as 'exe' or 'pdf'.
-* name : this is the file's known name in the wild.
-* offset : this specifies offset, as defined in the second paragraph of the search documentation.
-* lowerSize : this asks Virustotal "only give results whose filesize is at least this size in kilobytes". Must be an integer.
-* upperSize : this asks Virustotal "only give results whose filesize is at most this size in kilobytes". Must be an integer.
-* tag : this reduces the results to only files which have been tagged with certain characteristics. https://www.virustotal.com/intelligence/help/file-search/#search-modifiers includes a list of valid tags.
-* firstSubmittedBefore : A Date object which specifies that the file was first submitted before a certain point in time.
-* firstSubmittedAfter : A Date object which specifies that the file was first submitted after a certain point in time.
-* lastSubmittedBefore : A Date object which specifies that the file was last submitted before a certain point in time.
-* lastSubmittedAfter : A Date object which specifies that the file was last submitted after a certain point in time.
-* AtLeastPositives : An integer which asks Virustotal to only return files which have at least this many malware services flagging this as malware.
-* AtMostPositives : An integer which asks Virustotal to only return files which have at most this many malware services flagging this as malware.
-* AtLeastChildPositives : An integer which asks Virustotal to only return files which have at least this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
-* AtMostChildPositives : An integer which asks Virustotal to only return files which have at most this many malware services flagging the sub-files as malware. Sub-files are things like files in tarballs, files in ISO files, and JAR files.
-* AtLeastSubmissions : An integer which asks Virustotal to only return files which have been submitted at least this number of times.
-* AtMostSubmissions : An integer which asks Virustotal to only return files which have been submitted at most this number of times.
-* AtLeastSources : An integer which asks Virustotal to only return files which have been submitted from at least this many sources.
-* AtMostSources : An integer which asks Virustotal to only return files which have been submitted from at most this many sources.
-* RegionOfFirstSubmitter : A string which asks Virustotal to only return files which were first allegedly submitted from the country with this ISO 3166-1-alpha-2 code, such as "CN" for the People's Republic of China. I advise against using this feature for several reasons. The main reason being that it's ineffective; due to VPNs, GeoIP bypasses, the existence of TOR, general fraud, etc.
-* itw : Return only the files that have been downloaded from a URL containing the literal provided.
-* metadataString : A string which asks Virustotal to only return files that contain the multi-word string in the metadata.
-* metadataLiteral : A string which asks Virustotal to only return files that contain the single-word string in the metadata.
-* containsAndroguardResult : A string which asks Virustotal to only return results whose Androguard results included the string.
-* containsLanguage : A string which asks Virustotal to only return results which contain the specified language. The virustotal documentation lists supported formats and languages. https://www.virustotal.com/intelligence/help/file-search/#search-modifiers
-* containsSignatureString : Filter the files returned according to sigcheck fields. Finds all those files that have some sigcheck/codesign (PE signature, Apple code signing) field containing the literal(s) provided. Example: "google inc"
-* compilationDatetimeMin : A Date object which asks Virustotal to only return results whose compilation datetime was after the datetime specified.
-* compilationDatetimeMax : A Date object which asks Virustotal to only return results whose compilation datetime was before the datetime specified.
-* compilationSubmissionDifferenceMin : An integer which asks Virustotal to only return results who were first submitted at least this many seconds after compilation.
-* compilationSubmissionDifferenceMax : An integer which asks Virustotal to only return results who were first submitted at most this many seconds after compilation.
-* containsSectionLabel : A string which asks Virustotal to only return results which contain a particular section label.
-* containsMD5SectionLabel : An MD5 hash string which asks Virustotal to only return results which contain a section which can be identified by the hash.
-* containsSegmentLabel : A string which asks Virustotal to only return results which have a segment with this name.
-* importsLibrary : A string which asks Virustotal to only return results that import a library with this filename.
-* exportsFunction : A string which asks Virustotal to only return results that export a function named this.
-* containsPhraseInBehaviorReport : A string which asks Virustotal to only return results that have this phrase in the behavior report.
-* containsResourceType : A string which asks Virustotal to only return results which are portable executables which contain a file with this type such as "MS Windows PE.
-* containsHashedResource : A string which asks Virustotal to only return results which contain a resource whose SHA256 hash value is equal to the string provided.
-* generatesSnortAlertString : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this string.
-* generatesSnortAlertID : A string which asks Virustotal to only return results whose Snort analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged.
-* generatesSuricataAlertString : A string which asks Virustotal to only return results whose Suricata analysis of their packet activity contains this string.
-* generatesSuricataAlertID : A string which asks Virustotal to only return results whose Suricata analysis of their packet activity contains this snort ID number. It can also be an integer, but this is discouraged.
-* hasTrafficWith : A URL, domain, or IP address which can be used to filter packet captures.
-* structurallySimilarTo : An MD5, SHA256, or SHA1 identifier of another file in the Virustotal database which asks Virustotal to only return results which are structurally similar to said file.
-* similarTo : An object with two member variables: score and hash. score is an int, and hash is an identier string. It basically states "find files that are similar to this one, with at least this degree of similarity.".
-* importHash : An MD5 hash which restricts the results to files whose imports, when hashed with MD5, match the given hash.
-* containsString : A string which restricts the results to files whose content contains a given string.
-* containsHexSequence : A string which restricts the results to files whose bytecode contains a given hexadecimal sequence.
+The error callback's only parameter is an error which is either a string or an object. the response callback's only parameter is an Object whose members are response_code, offset, and hashes. response_code will be a 1 or 0, depending on if there were any results. hashes is an array of SHA256 signatures of files that meet the search query. offset is the most complex one. Search only returns the results in blocks of 300 or less. So if there's more than 300 valid results, another query is needed. In this API, the secondary query can be performed by using search again, but with the query object including the member variable 'offset', with the offset as its value. This will return another block of 300 or less. If there's less than 300 results remaining for a query, the offset will be an empty string. The query string is made by queryBuilder
 
 ### makePrivateConnection example
 ```
 var con = vt.makePrivateConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
-
-var searchQuery ={
-  type:"svg",
-  name:"obviousVirus.svg"
-};
+var QB = vt.queryBuilder;
+var searchQuery = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1)); ;
+var page = null;
 var searchProc = function(){
-  con.search(searchQuery, function(results){
+  con.search2(searchQuery, page, function(results){
     for (var index = 0; index < results.hashes.length; index++) {
       console.log(results.hashes[index]);
     }
