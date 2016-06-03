@@ -304,6 +304,35 @@ These take a number as the parameter, and return a valid query.
 * atLeastSubspan : lower difference between compilation datetime and submission datetime
 * atMostSubspan : upper difference between compilation datetime and submission datetime
 
+### stuff that takes a string
+These take a string as the parameter, and return a valid query.
+* hexSig : contains this hex-stream in the file
+* stringSig : contains this string in the file
+* imphash : an import hash
+* similarTo : a SHA256 signature that the stuff may be similar to
+* traffic : an IPv4 address or URL that the file interacts with
+* suricataString : a string in the suricata report
+* suricataID : an ID string in the suricata report
+* snortString : a string in the snort report
+* snortID : an ID string in the snort report
+* behavior : contains this string in the behavior report
+* resourceID : contains a resource with this sha256 signature
+* resourceType : contains a resource with this type
+* exports : exports this function
+* imports : imports this library
+* segment : contains a segment with this label
+* sectionHash : contains a section with this hashvalue
+* sectionLabel : contains a section with this label
+* sigcheck : a code signer
+* lang : contains a resource in this language
+* androguard : contains this string in androguard
+* metadata : a string in the metadata
+* fromURL : downloaded from the given URL
+* submitterRegion : first allegedly submitted from the country with this ISO 3166-1-alpha-2 code, such as "CN" for the People's Republic of China. I advise against using this feature for several reasons. The main reason being that it's ineffective; due to VPNs, GeoIP bypasses, the existence of TOR, general fraud, etc.
+* tag : a tag in the file
+* name : file name
+* type : filetype
+
 ## makePrivateConnection
 This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
 
