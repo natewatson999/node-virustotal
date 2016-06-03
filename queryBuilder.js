@@ -20,7 +20,7 @@ features.NOR = function(basis1, basis2) {
 features.EQ = function(basis1, basis2) {
   return features.OR(
     features.AND(basis1, basis2),
-    features.AND(features.NOT(basis2), features.NOT(basis1))
+    features.NOR(basis1, basis2)
   );
 };
 features.XOR = function(basis1, basis2) {

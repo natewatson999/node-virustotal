@@ -264,6 +264,26 @@ con.FileEvaluation("obvious_virus.svg", "text/svg", fs.readFileSync("./obvious_v
 /*Sidenote: That's a real phishing site. It was shut down, but I still advise against going to it.*/
 ```
 
+## queryBuilder
+This is a set of functions, each of which yields a valid search query; used in the search features in the Private API and the Intelligence API.
+
+### NOT
+This takes a valid query, and returns a query with the opposite resultset.
+
+### AND, OR, NAND, NOR, EQ, XOR, IMP, CIM
+These each take 2 valid queries, and return a valid query that is the boolean operation of said queries. They are the operations: and, or, nand, nor, equality, exclusive or, implication, and the opposite of implication.
+
+### Stuff that takes a date object as the parameter:
+These each take a date object, and return a valid query.
+* compilationBefore : compiled before the date given.
+* compilationAfter : compiled after the date given.
+* lastAnalyzedBefore : last analyzed before the date given.
+* lastAnalyzedAfter : last analyzed after the date given.
+* lastSubmittedBefore : last submitted before the date given.
+* lastSubmittedAfter : last submitted after the date given.
+* firstSubmittedBefore : first submitted before the date given.
+* firstSubmittedAfter : first submitted after the date given.
+
 ## makePrivateConnection
 This returns a new privateConnection object, using private API version 2. I was not able to get permissions for the private key, so only about half of the features in this section are tested. A good rule of thumb is that if you can't find a function in the public and honeypot APIs that does the same thing as the function you're reading about; then the function you're reading about probably isn't tested. Unlike the public and honeypot connections, this lacks any kind of task spooling, instead it simply executes everything as soon as possible.
 
@@ -631,11 +651,25 @@ This function is extremely dangerous. Do not use this on any mission critical sy
 ### makeIapiConnection.exportRuleset
 This function asks Virustotal to take a ruleset identifier, and return the information about the latest files submitted which fit said rule. It takes 3 parameters, a ruleset, and the usual response and error callback functions. The ruleset can be a string which identifies a particular ruleset, or it can be null or an empty string. If it's null, an empty string, or "\*"; then it asks Virustotal for results for all of the rules associated with the API key in question, rather than a specific ruleset.  
 
+### makeIapiConnection.deleteNotifications
+This function has virustotal delete an arbitrary number of notifications from the queue. This takes 3 parameters: an array of notification IDs, a response callback function, and an error callback function. The response callback will have one parameter, which is either an array or an object. The error callback shall have a parameter.
+
 ### makeIapiConnection example
 ```
 var con = require("node-virustotal").makeIapiConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
+con.deleteNotifications([5278074110738432, 6402641302650880], function(result){
+  if (!(Array.isArray(result))) {
+    console.dir(result);
+    return;
+  }
+  for(var index = 0; index < result.length; index++) {
+    console.dir(result[index]);
+  }
+}, function(e){
+  console.log(e);
+});
 con.getFile("52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c", function(malware){
     SendToEvilPeople(malware,"crosswindsyouth.org");
 }, function(error){
