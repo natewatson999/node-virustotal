@@ -157,6 +157,43 @@ var intelAPI = function(){
       return;
     });
   };
+  this.search = function(query, page, responseProc, errProc){
+    var queryURL = "https://www.virustotal.com/intelligence/search/programmatic/?apikey=" + apiKey;
+    if (page != null) {
+      if (page != "") {
+        queryURL = queryURL + ("&page=" + page);
+      }
+    }
+    queryURL = queryURL + ("&query=" + query);
+    request(queryURL, function(error, response, body){
+      if (error) {
+        errProc(error);
+        return;
+      }
+      if (response.statusCode) {
+        errProc(response.statusCode);
+        return;
+      }
+      try {
+        var data = JSON.parse(body);
+        switch (data.response_code) {
+          case 1:
+          case 0:
+            responseProc(data);
+            return;
+          case -1:
+          case -2;
+          default:
+            errProc(data);
+            return;
+        }
+        return;
+      } catch (e) {
+        errProc(e);
+        return;
+      }
+    });
+  };
   this.deleteNotifications = deleteNotifications;
   this.exportRuleset = exportRuleset;
   return;
