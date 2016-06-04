@@ -4,6 +4,7 @@ var emailAPI = require("./emailAPI.js");
 var privateAPI = require("./privateAPI.js");
 var intelAPI = require("./intelligenceAPI.js");
 var QB = require("./queryBuilder.js");
+var commentSender = require("./commentSender.js");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
 var PublicConnection = function(enablePrivateFeatures){
 	var key = apiKey;
@@ -154,31 +155,8 @@ var PublicConnection = function(enablePrivateFeatures){
 				return;
 			}
 		}
-		var workingURL = ("https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource)) + (("&comment=" + encodeURIComponent(comment)) + ("&apikey=" + key)) ;
-		var workingJob = function(){
-			request({url:workingURL, method:"POST", gzip: true, headers: {"User-Agent": "gzip"}}, function(error, response, body){
-				if (error) {
-					errProc(error);
-					return;
-				}
-				try {
-					var result = JSON.parse(body);
-					switch (result.response_code) {
-						case 1:
-							resultProc(result);
-							return;
-						case 0:
-						default:
-							errProc(result);
-							return;
-					}
-				} catch (e) {
-					errProc(e);
-					return;
-				}
-			});
-		};
-		addJob(workingJob);
+		var workingSender = new commentSender(resource, comment, key, resultProc, errProc);
+		addJob(workingSender.attempt);
 		return;
 	};
 	var sendFile = function(filename, filetype, filecontent, responseProc, errProc){
@@ -333,3 +311,4 @@ features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.makeEmailConnection = emailAPI.makeEmailConnection;
 module.exports = exports = features;
+/*Still need to add a feature to make Yara files, and upload them.*/

@@ -2,6 +2,7 @@ var request = require("request");
 var compressjs = require("compressjs");
 var stream = require("stream");
 var tar = require("tar");
+var commentSender = require("./commentSender.js");
 var features = {};
 var leftPad = function(raw, length, padPhrase) {
   var workingString = "" + raw;
@@ -180,32 +181,8 @@ var privateAPI = function(){
 				return;
 			}
 		}
-		var workingURL = "https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource) + "&comment=" + encodeURIComponent(comment) + "&apikey=" + key ;
-		request({url:workingURL, method:"POST"}, function(error, response, body){
-			if (error) {
-				errProc(error);
-				return;
-			}
-      if (response.statusCode > 399) {
-        errProc(body);
-        return;
-      }
-			try {
-				var result = JSON.parse(body);
-				switch (result.response_code) {
-			    case 1:
-						resultProc(result);
-						return;
-					case 0:
-					default:
-						errProc(result);
-						return;
-				}
-			} catch (e) {
-				errProc(e);
-				return;
-			}
-		});
+		var workingSender = new commentSender(resource, comment, key, resultProc, errProc);
+		workingSender.attempt();
 		return;
 	};
   var getReport = function(queryURL, responseProc, errProc) {
