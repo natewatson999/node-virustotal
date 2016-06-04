@@ -26,7 +26,7 @@ var rescan = function(resource, key){
     hour = leftPad("" + hour, 2, "0");
     minute = leftPad("" + minute, 2, "0");
     second = leftPad("" + second, 2, "0");
-    dateString = year + month + day + hour + minute + second;
+    dateString = (year + month) + (day + hour) + (minute + second);
     return this;
   };
   this.setPeriod = function(input){
@@ -59,20 +59,20 @@ var rescan = function(resource, key){
     return this;
   };
   this.sendRequest = function(responseProc, errProc){
-    var formattedRequest = "https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + key + "&resource=" + resource;
+    var formattedRequest = ("https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + key) + ("&resource=" + resource);
     if (dateString != null) {
-      formattedRequest = formattedRequest + "&date=" + dateString;
+      formattedRequest = formattedRequest + ("&date=" + dateString);
     }
     if (period != null) {
-      formattedRequest = formattedRequest + "&period=" + period;
+      formattedRequest = formattedRequest + ("&period=" + period);
     }
     if (repeatCount != null) {
-      formattedRequest = formattedRequest + "&repeat=" + repeatCount;
+      formattedRequest = formattedRequest + ("&repeat=" + repeatCount);
     }
     if (notifyURL != null) {
-      formattedRequest = formattedRequest + "&notify_url=" + notifyURL + "&notify_changes_only" + changesOnly;
+      formattedRequest = formattedRequest + (("&notify_url=" + notifyURL) + ("&notify_changes_only" + changesOnly));
     }
-    request.post(formattedRequest, function(error, response, body){
+    request({url: formattedRequest, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
       if (error) {
         errProc(error);
         return;
@@ -102,7 +102,8 @@ var rescan = function(resource, key){
     return this;
   };
   this.cancel = function(responseProc, errProc) {
-    request.post("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + key + "&resource=" + resource, function(error, response, body){
+    var cancelUrl = ("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + key) + ("&resource=" + resource);
+    request({url: cancelUrl, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
       if (error) {
         errProc(error);
         return;
