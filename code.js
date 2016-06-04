@@ -56,7 +56,7 @@ var PublicConnection = function(enablePrivateFeatures){
 	};
 	var makeGet = function (URL) {
 		return function(addr, responseProc, errProc){
-			var checkURL = URL + addr + "&apikey=" + key;
+			var checkURL = (URL + addr) + ("&apikey=" + key);
 			var checkProc = function(){
 				request({
 					url:checkURL,
@@ -154,7 +154,7 @@ var PublicConnection = function(enablePrivateFeatures){
 				return;
 			}
 		}
-		var workingURL = "https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource) + "&comment=" + encodeURIComponent(comment) + "&apikey=" + key ;
+		var workingURL = ("https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource)) + (("&comment=" + encodeURIComponent(comment)) + ("&apikey=" + key)) ;
 		var workingJob = function(){
 			request({url:workingURL, method:"POST", gzip: true, headers: {"User-Agent": "gzip"}}, function(error, response, body){
 				if (error) {
@@ -226,7 +226,7 @@ var PublicConnection = function(enablePrivateFeatures){
 		addJob(sendFileProc);
 	};
 	var rescanFile = function(resourceID, responseProc, errProc) {
-		var workingURL = "https://www.virustotal.com/vtapi/v2/file/rescan?resource=" +resourceID + "&apikey=" + key;
+		var workingURL = ("https://www.virustotal.com/vtapi/v2/file/rescan?resource=" +resourceID) + ("&apikey=" + key);
 		var rescanFileProc = function(){
 			request({url:workingURL, method:"POST",
       gzip: true,
@@ -259,7 +259,7 @@ var PublicConnection = function(enablePrivateFeatures){
 		addJob(rescanFileProc);
 	};
 	var getFileReport = function(scanID, responseProc, errProc) {
-		var fileResourceURL = "https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key + "&resource=" + scanID;
+		var fileResourceURL = ("https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key) + ("&resource=" + scanID);
 		var retrieveProc = function(){
 			request({url: fileResourceURL, method: "POST",
       gzip: true,
