@@ -6,11 +6,14 @@ var intelAPI = require("./intelligenceAPI.js");
 var QB = require("./queryBuilder.js");
 var commentSender = require("./commentSender.js");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
-var PublicConnection = function(enablePrivateFeatures){
+var PublicConnection = function(){
 	var key = apiKey;
 	var jobDelay = 15000;
+	var internalPrivateAPI = privateAPI.makePrivateAPI();
+	internalPrivateAPI.setKey(key);
 	this.setKey = function(replacement){
 		key = replacement;
+		internalPrivateAPI.setKey(key);
 		return;
 	};
 	this.getKey = function() {
@@ -204,37 +207,13 @@ var PublicConnection = function(enablePrivateFeatures){
 		addJob(sendFileProc);
 	};
 	var rescanFile = function(resourceID, responseProc, errProc) {
-		var workingURL = ("https://www.virustotal.com/vtapi/v2/file/rescan?resource=" +resourceID) + ("&apikey=" + key);
-		var rescanFileProc = function(){
-			request({url:workingURL, method:"POST",
-      gzip: true,
-	    headers: {
-		    "User-Agent": "gzip"
-	    }}, function(error, response, body){
-				if (error) {
-					errProc(error);
-					return;
-				}
-				try {
-					var data = JSON.parse(body);
-					switch (data.response_code){
-						case 1:
-							responseProc(data);
-							return;
-						case 0:
-						case -1:
-						case -2:
-						default:
-							errProc(data);
-							return;
-					}
-				} catch (e) {
-					errProc(e);
-					return;
-				}
-			});
+		var rescanObject = internalPrivateAPI.makeRescan(resourceID);
+		var pending = function(){
+			rescanObject.sendRequest(responseProc, errProc);
+			return;
 		};
-		addJob(rescanFileProc);
+		addJob(pending);
+		return;
 	};
 	var getFileReport = function(scanID, responseProc, errProc) {
 		var fileResourceURL = ("https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key) + ("&resource=" + scanID);
@@ -306,7 +285,7 @@ features.MakeHoneypot2Connection = function(){
 	workingConnection.setDelay(1000);
 	return workingConnection;
 };
-features.makeIapiConnection = intelAPI.makeIapiConnection();
+features.makeIapiConnection = intelAPI.makeIapiConnection;
 features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.makeEmailConnection = emailAPI.makeEmailConnection;
