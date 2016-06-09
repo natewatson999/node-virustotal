@@ -31,7 +31,8 @@
 		"compressjs": "^1.0.3",
     "tar": "^2.2.1",
     "emailjs": "^1.0.4",
-    "mail-notifier": "^0.3.0"
+    "mail-notifier": "^0.3.0",
+    "shelljs": "^0.7.0"
   },
   "homepage": "https://github.com/natewatson999/node-virustotal#readme"
 }
