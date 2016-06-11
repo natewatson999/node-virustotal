@@ -8,6 +8,7 @@ var sendPrompt = function(){
   rl.setPrompt(">");
   rl.prompt();
 };
+var workingDirectory = process.cwd();
 var mode = "public";
 var defaultKeystore = {
   public: ["e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d"],
@@ -16,12 +17,17 @@ var defaultKeystore = {
   private: []
 };
 var workingKeystore = defaultKeystore;
-
 rl.on("line", function(input){
   rl.pause();
   var segments = input.split(" ");
   var initial = segments[0];
   switch(initial) {
+    case "pwd":
+      console.log("\n"+ workingDirectory);
+      sendPrompt();
+      return;
+
+    case "cd":
     case "printKeyring":
     case "saveKeyring":
     case "loadKeyring":
@@ -55,10 +61,11 @@ rl.on("line", function(input){
     case "search":
     case "exportRuleset":
     case "deleteNotifications":
-    
+
     default:
       console.log("feature not yet implemented");
       sendPrompt();
       return;
   }
 });
+sendPrompt();
