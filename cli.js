@@ -17,6 +17,8 @@ var defaultKeystore = {
 };
 var mode = "public";
 var workingKeystore = defaultKeystore;
+var workingConnection = publicAPI.MakePublicConnection();
+workingConnection.setKey(workingKeystore.public[0]);
 rl.on("line", function(input){
   rl.pause();
   var segments = input.split(" ");
@@ -62,10 +64,73 @@ rl.on("line", function(input){
       console.log(mode);
       sendPrompt();
       return;
-    case "setMode":
-    case "setKey":
     case "addKey":
+      if (segments.length > 2){
+        addKeySwitch:
+        switch(segments[1]) {
+          case "public":
+            workingKeystore.public[workingKeystore.public.length] = segments[2];
+            break addKeySwitch;
+          case "private":
+            workingKeystore.private[workingKeystore.private.length] = segments[2];
+            break addKeySwitch;
+          case "intel":
+            workingKeystore.intel[workingKeystore.intel.length] = segments[2];
+            break addKeySwitch;
+          case "honey":
+            workingKeystore.honey[workingKeystore.honey.length] = segments[2];
+            break addKeySwitch;
+          default:
+            break addKeySwitch;
+        }
+      }
+      sendPrompt();
+      return;
     case "deleteKey":
+      if (segments.length > 2){
+        deleteKeySwitch:
+        switch(segments[1]) {
+          case "public":
+            workingKeystore.public = workingKeystore.public.splice(segments[2], 1);
+            break deleteKeySwitch;
+          case "private":
+            workingKeystore.private = workingKeystore.private.splice(segments[2], 1);
+            break deleteKeySwitch;
+          case "intel":
+            workingKeystore.intel = workingKeystore.intel.splice(segments[2], 1);
+            break deleteKeySwitch;
+          case "honey":
+          workingKeystore.honey = workingKeystore.honey.splice(segments[2], 1);
+            break deleteKeySwitch;
+          default:
+            break deleteKeySwitch;
+        }
+      }
+      sendPrompt();
+      return;
+    case "setKey":
+      if (segments.length > 2) {
+        setKeySwitch:
+        switch(segments[1]) {
+          case "public":
+            workingKeystore.public = workingKeystore.public.splice(segments[2], 1);
+            break setKeySwitch;
+          case "private":
+            workingKeystore.private = workingKeystore.private.splice(segments[2], 1);
+            break setKeySwitch;
+          case "intel":
+            workingKeystore.intel = workingKeystore.intel.splice(segments[2], 1);
+            break setKeySwitch;
+          case "honey":
+          workingKeystore.honey = workingKeystore.honey.splice(segments[2], 1);
+            break setKeySwitch;
+          default:
+            break setKeySwitch;
+        }
+      }
+      sendPrompt();
+      return;
+    case "help":
     case "getDelay":
     case "setDelay":
     case "IPv4Report":
