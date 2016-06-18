@@ -91,16 +91,16 @@ rl.on("line", function(input){
         deleteKeySwitch:
         switch(segments[1]) {
           case "public":
-            workingKeystore.public = workingKeystore.public.splice(segments[2], 1);
+            workingKeystore.public = workingKeystore.public.splice(parseInt(segments[2]), 1);
             break deleteKeySwitch;
           case "private":
-            workingKeystore.private = workingKeystore.private.splice(segments[2], 1);
+            workingKeystore.private = workingKeystore.private.splice(parseInt(segments[2]), 1);
             break deleteKeySwitch;
           case "intel":
-            workingKeystore.intel = workingKeystore.intel.splice(segments[2], 1);
+            workingKeystore.intel = workingKeystore.intel.splice(parseInt(segments[2]), 1);
             break deleteKeySwitch;
           case "honey":
-          workingKeystore.honey = workingKeystore.honey.splice(segments[2], 1);
+          workingKeystore.honey = workingKeystore.honey.splice(parseInt(segments[2]), 1);
             break deleteKeySwitch;
           default:
             break deleteKeySwitch;
@@ -113,16 +113,24 @@ rl.on("line", function(input){
         setKeySwitch:
         switch(segments[1]) {
           case "public":
-            workingKeystore.public = workingKeystore.public.splice(segments[2], 1);
+            mode = segments[1];
+            workingConnection = publicAPI.MakePublicConnection();
+            workingConnection.setKey(workingKeystore.public[parseInt(segments[2])]);
             break setKeySwitch;
           case "private":
-            workingKeystore.private = workingKeystore.private.splice(segments[2], 1);
+            mode = segments[1];
+            workingConnection = publicAPI.makePrivateConnection();
+            workingConnection.setKey(workingKeystore.private[parseInt(segments[2])]);
             break setKeySwitch;
           case "intel":
-            workingKeystore.intel = workingKeystore.intel.splice(segments[2], 1);
+            mode = segments[1];
+            workingConnection = publicAPI.makeIapiConnection();
+            workingConnection.setKey(workingKeystore.intel[parseInt(segments[2])]);
             break setKeySwitch;
           case "honey":
-          workingKeystore.honey = workingKeystore.honey.splice(segments[2], 1);
+            mode = segments[1];
+            workingConnection = publicAPI.MakeHoneypot2Connection();
+            workingConnection.setKey(workingKeystore.honey[parseInt(segments[2])]);
             break setKeySwitch;
           default:
             break setKeySwitch;
@@ -130,11 +138,66 @@ rl.on("line", function(input){
       }
       sendPrompt();
       return;
-    case "help":
     case "getDelay":
+      if ((mode=="public") || (mode=="honey")) {
+        console.log(workingConnection.getDelay());
+      } else {
+        console.log(0);
+      }
+      sendPrompt();
+      return;
     case "setDelay":
+      if (segments.length > 1) {
+        if ((mode=="public") || (mode=="honey")) {
+          workingConnection.setDelay(parseInt(segments[1]));
+        }
+      }
+      sendPrompt();
+      return;
+    case "help":
+      console.log("CLI documentation can be found in \"insert directory of node-virustotal here\"/README.md .");
+      sendPrompt();
+      return;
     case "IPv4Report":
+      if ("mode" != "intel") {
+        if (segments.length > 1) {
+          workingConnection.getIP4Report(segments[1], function(response){
+            console.dir(response);
+            sendPrompt();
+            return;
+          }, function(err){
+            console.log(err);
+            sendPrompt();
+            return;
+          });
+          return;
+        }
+        sendPrompt();
+        return;
+      }
+      console.log("error: feature not usable in Intel API");
+      sendPrompt();
+      return;
     case "DomainReport":
+      if ("mode" != "intel") {
+        if (segments.length > 1) {
+          workingConnection.getDomainReport(segments[1], function(response){
+            console.dir(response);
+            sendPrompt();
+            return;
+          }, function(err){
+            console.log(err);
+            sendPrompt();
+            return;
+          });
+          return;
+        }
+        sendPrompt();
+        return;
+      }
+      console.log("error: feature not usable in Intel API");
+      sendPrompt();
+      return;
     case "submitURL":
     case "getUrlReport":
     case "publishUrlComment":
