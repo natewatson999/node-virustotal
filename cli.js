@@ -199,6 +199,20 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "submitURL":
+      if (segments.length > 1) {
+        workingConnection.submitUrlForScanning(segments[1], function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "getUrlReport":
     case "publishUrlComment":
     case "publishFileComment":
