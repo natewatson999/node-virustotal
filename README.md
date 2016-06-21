@@ -30,6 +30,8 @@ This API provides factory methods which make connection objects, which act as jo
 
 If you would like to subsidize the development of this module, please consider donating on patreon: https://www.patreon.com/user?u=3336787&ty=h
 
+node-virustotal also provides a command line interface. By default, this is installed as "nvt". The command line interface provides most of the same features as the API, but is designed for users rather than developers.
+
 ## MakePublicConnection
 This function makes a new public connection object, using public API version 2.
 
@@ -713,6 +715,21 @@ con.exportRuleset("*",function(result){
   console.log(e);
 });
 ```
+
+## Command Line Interface
+node-virustotal provides a command line interface for interacting with virustotal. It can be invoked with "nvt", if installed globally. There is an issue where sometimes the script won't run correctly on Windows machines. If this happens, the CLI can be used by going to the installation directory, and using this command:
+```
+node cli
+```
+
+The command line interface uses a keyring object to hold the API keys. The keyring object has 4 members: public, honey, intel, and private. Each is an array of authorized API keys. The default keys consist of a single one in the public API, which is the default for the public API; and empty arrays for everything else. This key is the default key used for everything, unless changed.
+
+The currently available and documented commands are the following:
+* "exit" : no parameters. Ends the process.
+* "pwd" : no parameters. Prints the working directory.
+* "cd" : 1 parameter: a directory name. Changes the working directory as specified.
+* "printKeyring" no parameters. This uses console.dir on the working keyring.
+
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
