@@ -214,8 +214,50 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "getUrlReport":
+      if (segments.length > 1) {
+        workingConnection.retrieveUrlAnalysis(segments[1], function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "publishUrlComment":
+      if (segments.length > 2) {
+        workingConnection.publishUrlComment(segments[1], segments.slice(2, segments.length).join(" "), function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "publishFileComment":
+      if (segments.length > 2) {
+        workingConnection.publishFileComment(segments[1], segments.slice(2, segments.length).join(" "), function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "sendFile":
     case "rescanFile":
     case "getFileReport":
