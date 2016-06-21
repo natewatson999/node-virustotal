@@ -737,6 +737,10 @@ The currently available and documented commands are the following:
 * "setKey" : the same parameters as deleteKey. This takes a particular key in the keyring, and sets the working key to the key in question, and the mode of the working connection to the specified keytype.
 * "getDelay" : no parameters. If the current mode is "public" or "honey", then this prints the delay between tasks. Does nothing otherwise.
 * "setDelay" : 1 parameter: an integer which is a number of milliseconds. If the current mode is "public" or "honey", then this sets the delay between tasks. Does nothing otherwise.
+* "help" : no parameters. Tells the user to read the README.md file.
+* "IPv4Report" : 1 parameter: an IPv4 address which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the address in question.
+* "DomainReport" : 1 parameter: an domain which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the domain in question.
+* "submitURL" : 1 parameter: a valid URL. Takes the URL in question, and submits it to Virustotal for analysis.
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
