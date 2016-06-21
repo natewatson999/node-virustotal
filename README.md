@@ -728,7 +728,11 @@ The currently available and documented commands are the following:
 * "exit" : no parameters. Ends the process.
 * "pwd" : no parameters. Prints the working directory.
 * "cd" : 1 parameter: a directory name. Changes the working directory as specified.
-* "printKeyring" no parameters. This uses console.dir on the working keyring.
+* "printKeyring" : no parameters. This uses console.dir on the working keyring.
+* "saveKeyring" : 1 parameter: a filename. This takes the working keyring, and saves it to a specified file.
+* "loadKeyring" : 1 parameter: a filename. This loads a keyring from a specified file.
+* "printMode" : no parameters. This prints either "public", "private", "honey", or "intel"; depending on the mode of the key in use.
+* "addKey" : 2 parameters, a keytype and a key. The keytype is either  "public", "private", "honey", or "intel"; depending on type. The key is a valid Virustotal API key. This adds a key to the working keyring.
 
 
 ## Security And Legal Notes
