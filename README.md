@@ -732,8 +732,11 @@ The currently available and documented commands are the following:
 * "saveKeyring" : 1 parameter: a filename. This takes the working keyring, and saves it to a specified file.
 * "loadKeyring" : 1 parameter: a filename. This loads a keyring from a specified file.
 * "printMode" : no parameters. This prints either "public", "private", "honey", or "intel"; depending on the mode of the key in use.
-* "addKey" : 2 parameters, a keytype and a key. The keytype is either  "public", "private", "honey", or "intel"; depending on type. The key is a valid Virustotal API key. This adds a key to the working keyring.
-
+* "addKey" : 2 parameters: a keytype and a key. The keytype is either  "public", "private", "honey", or "intel"; depending on type. The key is a valid Virustotal API key. This adds a key to the working keyring.
+* "deleteKey" : 2 parameters: a keytype, and an index. This takes a specified member of the keyring, and deletes the key at the specified index.
+* "setKey" : the same parameters as deleteKey. This takes a particular key in the keyring, and sets the working key to the key in question, and the mode of the working connection to the specified keytype.
+* "getDelay" : no parameters. If the current mode is "public" or "honey", then this prints the delay between tasks. Does nothing otherwise.
+* "setDelay" : 1 parameter: an integer which is a number of milliseconds. If the current mode is "public" or "honey", then this sets the delay between tasks. Does nothing otherwise.
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
