@@ -259,7 +259,39 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "sendFile":
+      if (segments.length > 2) {
+        workingConnection.publishFileComment(segments[1], segments[2], fs.readFileSync(segments[3]), function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "rescanFile":
+      if (mode=="intel" || (mode=="private")) {
+        sendPrompt();
+        return;
+      }
+      if (segments.length > 1) {
+        workingConnection.rescanFile(segments[1], function(result){
+          console.dir(result);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+        return;
+      }
+      sendPrompt();
+      return;
     case "getFileReport":
     case "getUrlComments":
     case "getFileComments":
