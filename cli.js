@@ -161,7 +161,7 @@ rl.on("line", function(input){
     case "IPv4Report":
       if ("mode" != "intel") {
         if (segments.length > 1) {
-          workingConnection.getIP4Report(segments[1], function(response){
+          workingConnection.getIPv4Report(segments[1], function(response){
             console.dir(response);
             sendPrompt();
             return;

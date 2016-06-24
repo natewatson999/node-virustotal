@@ -741,6 +741,9 @@ The currently available and documented commands are the following:
 * "IPv4Report" : 1 parameter: an IPv4 address which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the address in question.
 * "DomainReport" : 1 parameter: an domain which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the domain in question.
 * "submitURL" : 1 parameter: a valid URL. Takes the URL in question, and submits it to Virustotal for analysis.
+* "publishUrlComment" : at least 2 parameters. Takes a URL as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
+* "publishFileComment" : at least 2 parameters. Takes a SHA256 filehash as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
+* "rescanFile" : takes a SHA256 filehash and asks Virustotal to rescan it.
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
