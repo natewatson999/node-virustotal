@@ -1,6 +1,6 @@
 {
   "name": "node-virustotal",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "An implementation of the Virustotal API for Node.js",
   "main": "code.js",
   "scripts": {
@@ -18,7 +18,10 @@
     "file",
     "IPv4",
     "scan",
-    "domain"
+    "domain",
+    "commandLineInterface",
+    "cli",
+    "nvt"
   ],
   "author": "Nate Watson <natewatson999@gmail.com>",
   "license": "MIT",

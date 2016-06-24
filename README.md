@@ -754,6 +754,15 @@ The currently available and documented commands are the following:
 /example
 >help
 CLI documentation can be found in "insert directory of node-virustotal here"/README.md .
+>rescanFile 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c
+...Massive blob of JSON...
+>getFileReport 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724
+...Massive blob of JSON...
+>IPv4Report 90.156.201.27
+...Massive blob of JSON...
+>getDelay
+15000
+>setDelay 20000
 >exit
 ```
 

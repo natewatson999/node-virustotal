@@ -295,7 +295,7 @@ rl.on("line", function(input){
     case "getFileReport":
       if (segments.length > 1) {
         workingConnection.getFileReport(segments[1], function(response){
-          console.log(response);
+          console.dir(response);
           sendPrompt();
           return;
         }, function(err){
