@@ -161,7 +161,7 @@ rl.on("line", function(input){
     case "IPv4Report":
       if ("mode" != "intel") {
         if (segments.length > 1) {
-          workingConnection.getIPv4Report(segments[1], function(response){
+          workingConnection.checkIPv4(segments[1], function(response){
             console.dir(response);
             sendPrompt();
             return;
@@ -293,6 +293,19 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "getFileReport":
+      if (segments.length > 1) {
+        workingConnection.getFileReport(segments[1], function(response){
+          console.log(response);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+      }
+      sendPrompt();
+      return;
     case "getUrlComments":
     case "getFileComments":
     case "getFile":

@@ -724,6 +724,7 @@ node cli
 
 The command line interface uses a keyring object to hold the API keys. The keyring object has 4 members: public, honey, intel, and private. Each is an array of authorized API keys. The default keys consist of a single one in the public API, which is the default for the public API; and empty arrays for everything else. This key is the default key used for everything, unless changed.
 
+### List of commands
 The currently available and documented commands are the following:
 * "exit" : no parameters. Ends the process.
 * "pwd" : no parameters. Prints the working directory.
@@ -744,6 +745,17 @@ The currently available and documented commands are the following:
 * "publishUrlComment" : at least 2 parameters. Takes a URL as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "publishFileComment" : at least 2 parameters. Takes a SHA256 filehash as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "rescanFile" : takes a SHA256 filehash and asks Virustotal to rescan it.
+* "getFileReport" : takes a scan_id, and asks Virustotal for the results of said scan.
+
+### Example
+```
+>cd /example
+>pwd
+/example
+>help
+CLI documentation can be found in "insert directory of node-virustotal here"/README.md .
+>exit
+```
 
 ## Security And Legal Notes
 The Virustotal API supports both HTTP and HTTPS. This API only uses HTTPS.
