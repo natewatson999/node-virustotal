@@ -307,8 +307,63 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "getUrlComments":
+      if (mode != "private") {
+        console.log("Feature only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length > 1) {
+        workingConnection.getUrlComments(segments[1], function(data){
+          console.dir(data);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+      }
+      sendPrompt();
+      return;
     case "getFileComments":
+      if (mode != "private") {
+        console.log("Feature only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length > 1) {
+        workingConnection.getFileComments(segments[1], function(data){
+          console.dir(data);
+          sendPrompt();
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+      }
+      sendPrompt();
+      return;
     case "getFile":
+      if (mode != "private") {
+        console.log("Feature only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length > 2) {
+        workingConnection.getFile(segments[1], function(data){
+          console.log("Warning: downloading known or suspected malware to " + segments[2] + " .");
+          fs.writeFileSync(segments[2], data);
+          sendPrompt()
+          return;
+        }, function(err){
+          console.log(err);
+          sendPrompt();
+          return;
+        });
+      }
+      sendPrompt();
+      return;
     case "fileRescan":
     case "getFileBehavior":
     case "getFileNetworkActivity":
