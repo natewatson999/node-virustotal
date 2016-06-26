@@ -729,6 +729,7 @@ The currently available and documented commands are the following:
 * "exit" : no parameters. Ends the process.
 * "pwd" : no parameters. Prints the working directory.
 * "cd" : 1 parameter: a directory name. Changes the working directory as specified.
+
 * "printKeyring" : no parameters. This uses console.dir on the working keyring.
 * "saveKeyring" : 1 parameter: a filename. This takes the working keyring, and saves it to a specified file.
 * "loadKeyring" : 1 parameter: a filename. This loads a keyring from a specified file.
@@ -736,12 +737,15 @@ The currently available and documented commands are the following:
 * "addKey" : 2 parameters: a keytype and a key. The keytype is either  "public", "private", "honey", or "intel"; depending on type. The key is a valid Virustotal API key. This adds a key to the working keyring.
 * "deleteKey" : 2 parameters: a keytype, and an index. This takes a specified member of the keyring, and deletes the key at the specified index.
 * "setKey" : the same parameters as deleteKey. This takes a particular key in the keyring, and sets the working key to the key in question, and the mode of the working connection to the specified keytype.
+
 * "getDelay" : no parameters. If the current mode is "public" or "honey", then this prints the delay between tasks. Does nothing otherwise.
 * "setDelay" : 1 parameter: an integer which is a number of milliseconds. If the current mode is "public" or "honey", then this sets the delay between tasks. Does nothing otherwise.
 * "help" : no parameters. Tells the user to read the README.md file.
 * "IPv4Report" : 1 parameter: an IPv4 address which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the address in question.
 * "DomainReport" : 1 parameter: an domain which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the domain in question.
+* "getUrlReport" : 1 parameter: a valid URL which isn't an internal address. If the current mode is not "intel", this asks Virustotal for a report on the URL in question.
 * "submitURL" : 1 parameter: a valid URL. Takes the URL in question, and submits it to Virustotal for analysis.
+
 * "publishUrlComment" : at least 2 parameters. Takes a URL as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "publishFileComment" : at least 2 parameters. Takes a SHA256 filehash as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "rescanFile" : takes a SHA256 filehash and asks Virustotal to rescan it.
@@ -765,7 +769,17 @@ CLI documentation can be found in "insert directory of node-virustotal here"/REA
 ...Massive blob of JSON...
 >getFileReport 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724
 ...Massive blob of JSON...
+>getFileBehavior 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724
+...Massive blob of JSON...
+>getFileNetworkActivity 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724
+...Massive blob of JSON...
 >IPv4Report 90.156.201.27
+...Massive blob of JSON...
+>DomainReport wikionemore.com
+...Massive blob of JSON...
+>getUrlReport http://www.wikionemore.com
+...Massive blob of JSON...
+>submitURL http://www.wikionemore.com
 ...Massive blob of JSON...
 >getDelay
 15000
