@@ -41,7 +41,16 @@ var PublicConnection = function(){
 		}
 		return;
 	};
+	var fireNow = true;
 	var addJob = function(proc) {
+		if ((fireNow == true)&&(jobQueue == null)) {
+			fireNow = false;
+			setTimeout(function(){
+				fireNow = true;
+			}, jobDelay);
+			proc();
+			return;
+		}
 		if (jobQueue == null) {
 			jobQueue = {
 				proc: proc,

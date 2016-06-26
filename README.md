@@ -749,6 +749,8 @@ The currently available and documented commands are the following:
 * "getUrlComments" : takes a URL, and asks Virustotal for the comments about that URL. Private API only.
 * "getFileComments" : takes a filehash, and asks Virustotal for the comments about that file. Private API only.
 * "getFile" : takes a filehash and a filename, asks Virustotal for said file, and saves the contents of the file to a file with the filename.
+* "fileRescan" : takes a SHA256 filehash and asks Virustotal to rescan the file with that hash.
+* "cancelRescan" : takes a SHA256 filehash and asks Virustotal to cancel the rescan of the file with that hash.
 
 ### Example
 ```
@@ -766,6 +768,8 @@ CLI documentation can be found in "insert directory of node-virustotal here"/REA
 >getDelay
 15000
 >setDelay 20000
+>IPv4Report 90.156.201.27
+...Massive blob of JSON...
 >exit
 ```
 

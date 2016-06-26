@@ -392,6 +392,28 @@ rl.on("line", function(input){
       });
       return;
     case "cancelRescan":
+      if (mode != "private") {
+        console.log("Only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need resource specified.");
+        sendPrompt();
+        return;
+      }
+      var cancelURL = ("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
+      request({url: cancelURL, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
+        if (error) {
+          console.log(error);
+          sendPrompt();
+          return;
+        }
+        console.log(body);
+        sendPrompt();
+        return;
+      });
+      return;
     case "getFileBehavior":
     case "getFileNetworkActivity":
     case "getClusters":
