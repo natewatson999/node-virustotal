@@ -746,6 +746,9 @@ The currently available and documented commands are the following:
 * "publishFileComment" : at least 2 parameters. Takes a SHA256 filehash as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "rescanFile" : takes a SHA256 filehash and asks Virustotal to rescan it.
 * "getFileReport" : takes a scan_id, and asks Virustotal for the results of said scan.
+* "getUrlComments" : takes a URL, and asks Virustotal for the comments about that URL. Private API only.
+* "getFileComments" : takes a filehash, and asks Virustotal for the comments about that file. Private API only.
+* "getFile" : takes a filehash and a filename, asks Virustotal for said file, and saves the contents of the file to a file with the filename.
 
 ### Example
 ```

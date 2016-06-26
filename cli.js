@@ -1,6 +1,7 @@
 var fs = require("fs");
 var shelljs = require("shelljs");
 var readline = require("readline");
+var request = require("request");
 var publicAPI = require("./code.js");
 var rl = readline.createInterface(process.stdin, /*process.stdout*/ null);
 var sendPrompt = function(){
@@ -112,6 +113,9 @@ rl.on("line", function(input){
       if (segments.length > 2) {
         setKeySwitch:
         switch(segments[1]) {
+          case "":
+            sendPrompt();
+            return;
           case "public":
             mode = segments[1];
             workingConnection = publicAPI.MakePublicConnection();
@@ -365,6 +369,29 @@ rl.on("line", function(input){
       sendPrompt();
       return;
     case "fileRescan":
+      if (mode != "private") {
+        console.log("Only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need resource specified.");
+        sendPrompt();
+        return;
+      }
+      var rescanURL = ("https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
+      request({url: rescanURL, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
+        if (error) {
+          console.log(error);
+          sendPrompt();
+          return;
+        }
+        console.log(body);
+        sendPrompt();
+        return;
+      });
+      return;
+    case "cancelRescan":
     case "getFileBehavior":
     case "getFileNetworkActivity":
     case "getClusters":
