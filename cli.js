@@ -415,7 +415,47 @@ rl.on("line", function(input){
       });
       return;
     case "getFileBehavior":
+      if (mode != "private") {
+        console.log("Only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need resource specified.");
+        sendPrompt();
+        return;
+      }
+      workingConnection.getFileBehavior(segments[1], function(response){
+        console.dir(response);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "getFileNetworkActivity":
+      if (mode != "private") {
+        console.log("Only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need resource specified.");
+        sendPrompt();
+        return;
+      }
+      workingConnection.getFileNetworkActivity(segments[1], function(response){
+        console.dir(response);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "getClusters":
     case "getFileFeed":
     case "getUrlFeed":

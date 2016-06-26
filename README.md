@@ -751,6 +751,8 @@ The currently available and documented commands are the following:
 * "getFile" : takes a filehash and a filename, asks Virustotal for said file, and saves the contents of the file to a file with the filename.
 * "fileRescan" : takes a SHA256 filehash and asks Virustotal to rescan the file with that hash.
 * "cancelRescan" : takes a SHA256 filehash and asks Virustotal to cancel the rescan of the file with that hash.
+* "getFileBehavior" : takes a SHA256 filehash and asks Virustotal for the behavior information of the file with that hash.
+* "getFileNetworkActivity" : takes a SHA256 filehash and asks Virustotal for the network information of the file with that hash.
 
 ### Example
 ```
