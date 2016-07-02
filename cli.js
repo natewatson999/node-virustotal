@@ -457,6 +457,26 @@ rl.on("line", function(input){
       });
       return;
     case "getClusters":
+      if (mode != "private") {
+        console.log("Only usable in private mode.");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 4) {
+        console.log("Need year, month, and date specified.");
+        sendPrompt();
+        return;
+      }
+      workingConnection.getClusters(segments[1], segments[2], segments[3], function(response){
+        console.dir(response);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "getFileFeed":
     case "getUrlFeed":
     case "getNextFalsePositive":

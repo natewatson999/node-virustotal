@@ -726,6 +726,7 @@ The command line interface uses a keyring object to hold the API keys. The keyri
 
 ### List of commands
 The currently available and documented commands are the following:
+
 * "exit" : no parameters. Ends the process.
 * "pwd" : no parameters. Prints the working directory.
 * "cd" : 1 parameter: a directory name. Changes the working directory as specified.
