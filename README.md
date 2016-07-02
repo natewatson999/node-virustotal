@@ -758,6 +758,7 @@ The currently available and documented commands are the following:
 * "cancelRescan" : takes a SHA256 filehash and asks Virustotal to cancel the rescan of the file with that hash.
 * "getFileBehavior" : takes a SHA256 filehash and asks Virustotal for the behavior information of the file with that hash.
 * "getFileNetworkActivity" : takes a SHA256 filehash and asks Virustotal for the network information of the file with that hash.
+* "getClusters" : takes a year, month, and date; and asks Virustotal for the cluster analysis of that data.
 
 ### Example
 ```
@@ -786,6 +787,8 @@ CLI documentation can be found in "insert directory of node-virustotal here"/REA
 15000
 >setDelay 20000
 >IPv4Report 90.156.201.27
+...Massive blob of JSON...
+>getClusters 2015 12 31
 ...Massive blob of JSON...
 >exit
 ```
