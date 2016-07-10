@@ -479,6 +479,27 @@ rl.on("line", function(input){
       return;
     case "getFileFeed":
     case "getUrlFeed":
+      if (segments.length < 6) {
+        console.log("Need resource specified.");
+        sendPrompt();
+        return;
+      }
+      var jobName = {};
+      if (initial=="getFileFeed") {
+        jobName = workingConnection.getFileFeed;
+      } else {
+        jobName = workingConnection.getUrlFeed;
+      }
+      jobName(segments[1],segments[2],segments[3],segments[4],segments[5],function(resp){
+        console.dir(resp);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "getNextFalsePositive":
     case "search":
     case "exportRuleset":
