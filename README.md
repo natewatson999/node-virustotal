@@ -746,7 +746,6 @@ The currently available and documented commands are the following:
 * "DomainReport" : 1 parameter: an domain which isn't a technical address. If the current mode is not "intel", this asks Virustotal for a report on the domain in question.
 * "getUrlReport" : 1 parameter: a valid URL which isn't an internal address. If the current mode is not "intel", this asks Virustotal for a report on the URL in question.
 * "submitURL" : 1 parameter: a valid URL. Takes the URL in question, and submits it to Virustotal for analysis.
-
 * "publishUrlComment" : at least 2 parameters. Takes a URL as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "publishFileComment" : at least 2 parameters. Takes a SHA256 filehash as the first parameter, and the other parameters a space broken comment, and submits them to Virustotal.
 * "rescanFile" : takes a SHA256 filehash and asks Virustotal to rescan it.
@@ -759,7 +758,11 @@ The currently available and documented commands are the following:
 * "getFileBehavior" : takes a SHA256 filehash and asks Virustotal for the behavior information of the file with that hash.
 * "getFileNetworkActivity" : takes a SHA256 filehash and asks Virustotal for the network information of the file with that hash.
 * "getClusters" : takes a year, month, and date; and asks Virustotal for the cluster analysis of that data.
-* "getFileFeed" / "getUrlFeed": takes a year, month, date, hour, and minute; and asks Virustotal for the information from said minute. 
+* "getFileFeed" / "getUrlFeed": takes a year, month, date, hour, and minute; and asks Virustotal for the information from said minute.
+* "getNextFalsePositive" : gets the next false positive.
+* "deleteNotification" : Takes a notification ID and deletes it.
+* "search" : Takes a complex query, sends it to Virustotal, and prints the response.
+* "exportRuleset" : takes a ruleset ID, and asks Virustotal for the latest results for stuff that meets this ruleset.
 
 ### Example
 ```
