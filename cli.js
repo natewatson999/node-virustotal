@@ -538,9 +538,48 @@ rl.on("line", function(input){
       });
       return;
     case "search":
-      
+      if (mode != "private") {
+        console.log("Mode Error");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need Query.");
+        sendPrompt();
+        return;
+      }
+      var actualQuery = segments.splice(0, 1).join(" ");
+      workingConnection.search2(actualQuery, function(resp){
+        console.dir(resp);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "exportRuleset":
-
+      if (mode != "private") {
+        console.log("Mode Error");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need RulesetID.");
+        sendPrompt();
+        return;
+      }
+      workingConnection.exportRuleset(segments[1], function(resp){
+        console.dir(resp);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     default:
       console.log("feature not yet implemented");
       sendPrompt();
