@@ -516,9 +516,31 @@ rl.on("line", function(input){
         return;
       );
       return;
+    case "deleteNotification":
+      if (mode != "private") {
+        console.log("Mode Error");
+        sendPrompt();
+        return;
+      }
+      if (segments.length < 2) {
+        console.log("Need Notification ID.");
+        sendPrompt();
+        return;
+      }
+      workingConnection.deleteNotifications(segments[1], function(resp){
+        console.dir(resp);
+        sendPrompt();
+        return;
+      }, function(err){
+        console.log(err);
+        sendPrompt();
+        return;
+      });
+      return;
     case "search":
+      
     case "exportRuleset":
-    case "deleteNotifications":
+
     default:
       console.log("feature not yet implemented");
       sendPrompt();
