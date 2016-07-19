@@ -759,6 +759,7 @@ The currently available and documented commands are the following:
 * "getFileBehavior" : takes a SHA256 filehash and asks Virustotal for the behavior information of the file with that hash.
 * "getFileNetworkActivity" : takes a SHA256 filehash and asks Virustotal for the network information of the file with that hash.
 * "getClusters" : takes a year, month, and date; and asks Virustotal for the cluster analysis of that data.
+* "getFileFeed" / "getUrlFeed": takes a year, month, date, hour, and minute; and asks Virustotal for the information from said minute. 
 
 ### Example
 ```

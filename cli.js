@@ -501,6 +501,21 @@ rl.on("line", function(input){
       });
       return;
     case "getNextFalsePositive":
+      if (mode != "private") {
+        console.log("Mode Error");
+        sendPrompt();
+        return;
+      }
+      workingConnection.getNextFalsePositive(function(resp){
+        console.dir(resp);
+        sendPrompt();
+        return;
+      }, function(err){}
+        console.log(err);
+        sendPrompt();
+        return;
+      );
+      return;
     case "search":
     case "exportRuleset":
     case "deleteNotifications":
