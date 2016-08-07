@@ -510,11 +510,11 @@ rl.on("line", function(input){
         console.dir(resp);
         sendPrompt();
         return;
-      }, function(err){}
+      }, function(err){
         console.log(err);
         sendPrompt();
         return;
-      );
+      });
       return;
     case "deleteNotification":
       if (mode != "private") {
