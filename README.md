@@ -802,11 +802,11 @@ Most APIs that take non-promise code and convert it into a format prefered by th
 
 formatConverter is a function to address this problem. formatConverter takes a function which uses node-virustotal's dual callback system and returns a function in the single-callback format that scripts like bluebird.js prefer.
 
-Do not use formatConverter on any function with optional callbacks, since it is not designed to handle this. More critically, formatConverter uses eval internally. Do not use formatConverter on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. Do not combine formatConverter with any of the getFile functions. 
+Do not use formatConverter on any function with optional callbacks, since it is not designed to handle this. More critically, formatConverter uses eval internally. Do not use formatConverter on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. Do not combine formatConverter with any of the getFile functions.
 
 ### example
 ```
-var vt = require("./code.js");
+var vt = require("node-virustotal");
 var fs = require("fs");
 var con = vt.MakePublicConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
