@@ -2,6 +2,7 @@ var speedconcat = require("speedconcat");
 var request = require("request");
 var emailAPI = require("./emailAPI.js");
 var privateAPI = require("./privateAPI.js");
+var formatConverter = require("./formatConverter.js");
 var intelAPI = require("./intelligenceAPI.js");
 var QB = require("./queryBuilder.js");
 var commentSender = require("./commentSender.js");
@@ -298,5 +299,6 @@ features.makeIapiConnection = intelAPI.makeIapiConnection;
 features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.makeEmailConnection = emailAPI.makeEmailConnection;
+features.formatConverter = formatConverter;
 module.exports = exports = features;
 /*Still need to add a feature to make Yara files, and upload them.*/
