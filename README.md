@@ -26,7 +26,7 @@ Virustotal is a service provided by Google which provides supplemental malware a
 
 Fair warning, this documentation is extremely long, so if you need to pee or need coffee; do so/ brew it before you start reading this.
 
-This API provides factory methods which make connection objects, which act as job queues. There are 4 kinds of connections: with the public API, public API with honeypot permissions, private API, and email API.
+This API provides factory methods which make connection objects, which act as job queues. There are 5 kinds of connections: with the public API, public API with honeypot permissions, private API, email API, Intel API.
 
 If you would like to subsidize the development of this module, please consider donating on patreon: https://www.patreon.com/user?u=3336787&ty=h
 
@@ -795,6 +795,32 @@ CLI documentation can be found in "insert directory of node-virustotal here"/REA
 >getClusters 2015 12 31
 ...Massive blob of JSON...
 >exit
+```
+
+## formatConverter
+Most APIs that take non-promise code and convert it into a format prefered by the promises fanpeople prefer a particular format for callback functions. These APIs prefer that there be a single callback function with two parameters: the possibility of an error, and the data. node-virustotal does not do this. node-virustotal uses a dual-callback system where the first function is for data, and the second for errors.
+
+formatConverter is a function to address this problem. formatConverter takes a function which uses node-virustotal's dual callback system and returns a function in the single-callback format that scripts like bluebird.js prefer.
+
+Do not use formatConverter on any function with optional callbacks, since it is not designed to handle this. More critically, formatConverter uses eval internally. Do not use formatConverter on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. Do not combine formatConverter with any of the getFile functions. 
+
+### example
+```
+var vt = require("./code.js");
+var fs = require("fs");
+var con = vt.MakePublicConnection();
+con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
+var converted = vt.formatConverter(con.checkIPv4);
+converted("1.1.1.1", function(err, data) {
+  if(err!= null) {
+    console.log("err:");
+    console.dir(err);
+    return;
+  }
+  console.log("data");
+  console.dir(data);
+  return;
+});
 ```
 
 ## Security And Legal Notes
