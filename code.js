@@ -1,16 +1,17 @@
-var speedconcat = require("speedconcat");
-var request = require("request");
-var emailAPI = require("./emailAPI.js");
-var privateAPI = require("./privateAPI.js");
-var formatConverter = require("./formatConverter.js");
-var intelAPI = require("./intelligenceAPI.js");
-var QB = require("./queryBuilder.js");
-var commentSender = require("./commentSender.js");
+"use strict";
+const speedconcat = require("speedconcat");
+const request = require("request");
+const emailAPI = require("./emailAPI.js");
+const privateAPI = require("./privateAPI.js");
+const formatConverter = require("./formatConverter.js");
+const intelAPI = require("./intelligenceAPI.js");
+const QB = require("./queryBuilder.js");
+const commentSender = require("./commentSender.js");
 var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
-var PublicConnection = function(){
+const PublicConnection = function(){
 	var key = apiKey;
 	var jobDelay = 15000;
-	var internalPrivateAPI = privateAPI.makePrivateAPI();
+	const internalPrivateAPI = privateAPI.makePrivateAPI();
 	internalPrivateAPI.setKey(key);
 	this.setKey = function(replacement){
 		key = replacement;
@@ -29,9 +30,9 @@ var PublicConnection = function(){
 	};
 	var jobQueue = null;
 	var tail = null;
-	var performNextJob = function(){
+	const performNextJob = function(){
 		if (jobQueue != null) {
-			var workingJob = jobQueue;
+			const workingJob = jobQueue;
 			jobQueue = jobQueue.next;
 			if (jobQueue == null) {
 				tail = null;
@@ -43,7 +44,7 @@ var PublicConnection = function(){
 		return;
 	};
 	var fireNow = true;
-	var addJob = function(proc) {
+	const addJob = function(proc) {
 		if ((fireNow == true)&&(jobQueue == null)) {
 			fireNow = false;
 			setTimeout(function(){
@@ -68,10 +69,10 @@ var PublicConnection = function(){
 		}
 		return;
 	};
-	var makeGet = function (URL) {
+	const makeGet = function (URL) {
 		return function(addr, responseProc, errProc){
-			var checkURL = (URL + addr) + ("&apikey=" + key);
-			var checkProc = function(){
+			const checkURL = (URL + addr) + ("&apikey=" + key);
+			const checkProc = function(){
 				request({
 					url:checkURL,
 					gzip: true,
@@ -87,7 +88,7 @@ var PublicConnection = function(){
 							return;
 						}
 						try {
-							var data = JSON.parse(body);
+							const data = JSON.parse(body);
 							switch (data.response_code) {
 								case -2:
 									addJob(checkProc);
@@ -110,10 +111,10 @@ var PublicConnection = function(){
 			addJob(checkProc);
 		};
 	};
-	var PostWithoutBody = function(rawURL, mode) {
+	const PostWithoutBody = function(rawURL, mode) {
 		return function(resource, responseProc, errProc){
-			var fullURL = (rawURL+encodeURIComponent(resource)) + ("&apikey="+key);
-			var jobProc = function(){
+			const fullURL = (rawURL+encodeURIComponent(resource)) + ("&apikey="+key);
+			const jobProc = function(){
 				request({
 					method: "POST",
 					url: fullURL,
@@ -127,7 +128,7 @@ var PublicConnection = function(){
 						return;
 					}
 					try{
-						var result = JSON.parse(body);
+						const result = JSON.parse(body);
 						switch (result.response_code) {
 							case -2:
 								if (-2==mode) {
@@ -161,19 +162,19 @@ var PublicConnection = function(){
 			addJob(jobProc);
 		};
 	};
-	var publishUrlComment = function(resource, comment, resultProc, errProc){
+	const publishUrlComment = function(resource, comment, resultProc, errProc){
 		if (errProc==null) {
 			errProc = function(e) {
 				publishUrlComment(resource, comment, resultProc, null);
 				return;
 			}
 		}
-		var workingSender = new commentSender(resource, comment, key, resultProc, errProc);
+		const workingSender = new commentSender(resource, comment, key, resultProc, errProc);
 		addJob(workingSender.attempt);
 		return;
 	};
-	var sendFile = function(filename, filetype, filecontent, responseProc, errProc){
-		var sendOptions = {
+	const sendFile = function(filename, filetype, filecontent, responseProc, errProc){
+		const sendOptions = {
 			url: "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key,
 			formData: {
 				file: {
@@ -189,14 +190,14 @@ var PublicConnection = function(){
 		    "User-Agent": "gzip"
 	    }
 		};
-		var sendFileProc = function(){
+		const sendFileProc = function(){
 			request.post(sendOptions, function(error, response, body){
 				if (error) {
 					errProc(error);
 					return;
 				}
 				try{
-					var data = JSON.parse(body);
+					const data = JSON.parse(body);
 					switch (data.response_code) {
 						case 1:
 							responseProc(data);
@@ -216,18 +217,18 @@ var PublicConnection = function(){
 		};
 		addJob(sendFileProc);
 	};
-	var rescanFile = function(resourceID, responseProc, errProc) {
-		var rescanObject = internalPrivateAPI.makeRescan(resourceID);
-		var pending = function(){
+	const rescanFile = function(resourceID, responseProc, errProc) {
+		const rescanObject = internalPrivateAPI.makeRescan(resourceID);
+		const pending = function(){
 			rescanObject.sendRequest(responseProc, errProc);
 			return;
 		};
 		addJob(pending);
 		return;
 	};
-	var getFileReport = function(scanID, responseProc, errProc) {
-		var fileResourceURL = ("https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key) + ("&resource=" + scanID);
-		var retrieveProc = function(){
+	const getFileReport = function(scanID, responseProc, errProc) {
+		const fileResourceURL = ("https://www.virustotal.com/vtapi/v2/file/report?apikey=" + key) + ("&resource=" + scanID);
+		const retrieveProc = function(){
 			request({url: fileResourceURL, method: "POST",
       gzip: true,
 	    headers: {
@@ -238,7 +239,7 @@ var PublicConnection = function(){
 					return;
 				}
 				try {
-					var data = JSON.parse(body);
+					const data = JSON.parse(body);
 					switch (data.response_code){
 						case 1:
 							responseProc(data);
@@ -271,14 +272,14 @@ var PublicConnection = function(){
 	this.checkIPv4 = makeGet("https://www.virustotal.com/vtapi/v2/ip-address/report?ip=");
 	this.getDomainReport = makeGet("https://www.virustotal.com/vtapi/v2/domain/report?domain=");
 
-	var self = this;
-	var UrlEvaluation = function(target, resultProc, errProc){
+	const self = this;
+	const UrlEvaluation = function(target, resultProc, errProc){
 		self.submitUrlForScanning(target, function(data){
 			self.retrieveUrlAnalysis(target, resultProc, errProc);
 		}, errProc);
 	};
 	this.UrlEvaluation = UrlEvaluation;
-	var FileEvaluation = function(filename, filetype, filecontent, responseProc, errProc){
+	const FileEvaluation = function(filename, filetype, filecontent, responseProc, errProc){
 		self.submitFileForAnalysis(filename, filetype, filecontent, function(responseData){
 			self.getFileReport(responseData.scan_id, responseProc, errProc);
 		}, errProc);
@@ -291,7 +292,7 @@ features.MakePublicConnection = function(){
 	return new PublicConnection();
 };
 features.MakeHoneypot2Connection = function(){
-	var workingConnection = new PublicConnection();
+	const workingConnection = new PublicConnection();
 	workingConnection.setDelay(1000);
 	return workingConnection;
 };

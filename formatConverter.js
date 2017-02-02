@@ -1,10 +1,11 @@
+"use strict";
 module.exports = exports = function(src) {
   return function(){
-    var cb = arguments[arguments.length-1];
-    var dataProc = function(data){
+    const cb = arguments[arguments.length-1];
+    const dataProc = function(data){
       cb(null, data);
     };
-    var errProc = function(err) {
+    const errProc = function(err) {
       cb(err, null);
     };
     var evalString = "src(";

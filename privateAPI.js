@@ -1,17 +1,17 @@
-var request = require("request");
-var compressjs = require("compressjs");
-var stream = require("stream");
-var tar = require("tar");
-var commentSender = require("./commentSender.js");
+const request = require("request");
+const compressjs = require("compressjs");
+const stream = require("stream");
+const tar = require("tar");
+const commentSender = require("./commentSender.js");
 var features = {};
-var leftPad = function(raw, length, padPhrase) {
+const leftPad = function(raw, length, padPhrase) {
   var workingString = "" + raw;
   while (workingString.length < length) {
     workingString = padPhrase + workingString;
   }
   return workingString;
 };
-var dateToString = function(input){
+const dateToString = function(input){
   return ((((input.getFullYear() + "-") + (leftPad(input.getMonth() + 1, 2, "0") + "-" )) + ((leftPad(input.getDate(), 2, "0") + "T" ) + (leftPad(input.getHours(), 2, "0") + ":" ))) + ((leftPad(input.getMinutes(), 2, "0") + ":") + leftPad(input.getSeconds(), 2, "0")));
 };
 var rescan = function(resource, key){

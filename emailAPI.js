@@ -1,8 +1,8 @@
-var emailjs = require("emailjs");
-var events = require("events");
-var mailNotifier = require("mail-notifier");
-
-var spaceReduce = function(raw){
+"use strict";
+const emailjs = require("emailjs");
+const events = require("events");
+const mailNotifier = require("mail-notifier");
+const spaceReduce = function(raw){
   while(raw.indexOf("\t")>-1) {
     raw = raw.replace("\t"," ");
   }
@@ -14,8 +14,8 @@ var spaceReduce = function(raw){
   }
   return raw;
 };
-var rawToObject = function(raw){
-  var lines = raw.split("\n");
+const rawToObject = function(raw){
+  const lines = raw.split("\n");
   /*insert narcotic substance joke here*/
   var result = {};
   result.verbose = lines[0];
@@ -41,15 +41,17 @@ var rawToObject = function(raw){
   }
   return result;
 };
-var emailFeatures = function(config){
-  var self = this, imapConnection = {};
-  var internalEmitter = new events.EventEmitter();
+
+const emailFeatures = function(config){
+  const self = this;
+  const internalEmitter = new events.EventEmitter();
+  var imapConnection = {};
   this.on = function(condition, callback){
     internalEmitter.on(condition, callback);
     return self;
   };
   this.startCheckingForResponses = function(){
-    var inboxConfig = {
+    const inboxConfig = {
       username: config.IMAP.username,
       password: config.IMAP.password,
       host: config.IMAP.host,
@@ -93,9 +95,8 @@ var emailFeatures = function(config){
     }
     return self;
   };
-
   this.submitFileForAnalysis = function(fileContent, fileName, type){
-    var smtpConnection = emailjs.server.connect(config.SMTP);
+    const smtpConnection = emailjs.server.connect(config.SMTP);
     smtpConnection.send({
       text: " ",
       from: config.sender,
@@ -118,9 +119,11 @@ var emailFeatures = function(config){
   };
   return this;
 };
-var makeEmailConnection = function(config) {
+
+const makeEmailConnection = function(config) {
   return new emailFeatures(config);
 };
-var features = {};
-features.makeEmailConnection = makeEmailConnection;
+const features = {
+  makeEmailConnection: makeEmailConnection
+};
 module.exports = exports = features;

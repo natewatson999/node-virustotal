@@ -1,5 +1,6 @@
-var request = require("request");
-var intelAPI = function(){
+"use strict";
+const request = require("request");
+const intelAPI = function(){
   var apiKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
   this.setKey = function(replacement){
     apiKey = replacement;
@@ -8,7 +9,7 @@ var intelAPI = function(){
   this.getKey = function(){
     return apiKey;
   };
-  var exportRuleset = function(ruleset, responseProc, errProc){
+  const exportRuleset = function(ruleset, responseProc, errProc){
     if (ruleset==null) {
       exportRuleset("*", responseProc, errProc);
       return;
@@ -32,8 +33,7 @@ var intelAPI = function(){
           responseProc([]);
           return;
         }
-        data = JSON.parse(body);
-        responseProc(data);
+        responseProc(JSON.parse(body));
         return;
       } catch (e) {
         errProc(e);
@@ -42,7 +42,7 @@ var intelAPI = function(){
     });
     return;
   };
-  var deleteNotifications = function(notifications, resultProc, errProc, intermediates){
+  const deleteNotifications = function(notifications, resultProc, errProc, intermediates){
     if (notifications.length == 0) {
       if (intermediates != null) {
         resultProc(intermediates);
@@ -75,7 +75,7 @@ var intelAPI = function(){
           return;
         }
         try {
-          var data = JSON.parse(body);
+          const data = JSON.parse(body);
           switch(data.result){
             case 1:
             case 0:
@@ -119,7 +119,7 @@ var intelAPI = function(){
         return;
       }
       try {
-        var data = JSON.parse(body);
+        const data = JSON.parse(body);
         switch(data.result){
           case 1:
           case 0:
@@ -143,7 +143,7 @@ var intelAPI = function(){
     return;
   };
   this.getFile = function(hashValue, resultProc, errProc) {
-    var deadlyURL = "https://www.virustotal.com/intelligence/download/?hash=" + hashValue + "&apikey=" + apiKey ;
+    const deadlyURL = ("https://www.virustotal.com/intelligence/download/?hash=" + hashValue) + ("&apikey=" + apiKey) ;
     request(deadlyURL, function(error, response, body){
       if (error) {
         errProc(error);
@@ -157,7 +157,6 @@ var intelAPI = function(){
       return;
     });
   };
-  this.search = function(query, page, responseProc, errProc){
     var queryURL = "https://www.virustotal.com/intelligence/search/programmatic/?apikey=" + apiKey;
     if (page != null) {
       if (page != "") {
@@ -175,7 +174,7 @@ var intelAPI = function(){
         return;
       }
       try {
-        var data = JSON.parse(body);
+        const data = JSON.parse(body);
         switch (data.response_code) {
           case 1:
           case 0:

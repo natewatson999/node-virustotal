@@ -1,10 +1,10 @@
-var fs = require("fs");
-var shelljs = require("shelljs");
-var readline = require("readline");
-var request = require("request");
-var publicAPI = require("./code.js");
-var rl = readline.createInterface(process.stdin, /*process.stdout*/ null);
-var sendPrompt = function(){
+const fs = require("fs");
+const shelljs = require("shelljs");
+const readline = require("readline");
+const request = require("request");
+const publicAPI = require("./code.js");
+const rl = readline.createInterface(process.stdin, /*process.stdout*/ null);
+const sendPrompt = function(){
   rl.resume();
   process.stdout.write(">");
   return;
