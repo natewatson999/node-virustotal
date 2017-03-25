@@ -52,8 +52,8 @@ rl.on("line", function(input){
     case "loadKeyring":
       if (segments.length > 1) {
         try {
-          var raw = fs.readFileSync(segments[1]);
-          var parsed = JSON.parse(raw);
+          const raw = fs.readFileSync(segments[1]);
+          const parsed = JSON.parse(raw);
           workingKeystore = parsed;
         } catch (e) {
           console.log(e);
@@ -379,7 +379,7 @@ rl.on("line", function(input){
         sendPrompt();
         return;
       }
-      var rescanURL = ("https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
+      const rescanURL = ("https://www.virustotal.com/vtapi/v2/file/rescan?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
       request({url: rescanURL, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
         if (error) {
           console.log(error);
@@ -402,7 +402,7 @@ rl.on("line", function(input){
         sendPrompt();
         return;
       }
-      var cancelURL = ("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
+      const cancelURL = ("https://www.virustotal.com/vtapi/v2/file/rescan/delete?apikey=" + workingConnection.getKey()) + ("&resource=" + segments[1]);
       request({url: cancelURL, method: "POST", gzip: true, headers: { "User-Agent": "gzip"}}, function(error, response, body){
         if (error) {
           console.log(error);

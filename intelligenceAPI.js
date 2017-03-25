@@ -18,7 +18,7 @@ const intelAPI = function(){
       exportRuleset("*", responseProc, errProc);
       return;
     }
-    var queryURL = ("https://www.virustotal.com/intelligence/hunting/export-ruleset/?output=json&ruleset=" + ruleset) + ("&key=" + apiKey);
+    const queryURL = ("https://www.virustotal.com/intelligence/hunting/export-ruleset/?output=json&ruleset=" + ruleset) + ("&key=" + apiKey);
     request({url: queryURL, gzip: true, headers: { "User-Agent": "gzip" }}, function(error, response, body){
       if (error) {
         errProc(error);
@@ -55,7 +55,7 @@ const intelAPI = function(){
       });
       return;
     }
-    var queryURL = "https://www.virustotal.com/intelligence/hunting/delete-notifications/programmatic/?key=" + apiKey;
+    const queryURL = "https://www.virustotal.com/intelligence/hunting/delete-notifications/programmatic/?key=" + apiKey;
     if (notifications.length < 101) {
       request({
         uri: queryURL,
@@ -99,8 +99,8 @@ const intelAPI = function(){
       });
       return;
     }
-    var segment = notifications.slice(0, 100);
-    var remainder = notifications.slice(100);
+    const segment = notifications.slice(0, 100);
+    const remainder = notifications.slice(100);
     request({
       uri: queryURL,
       body: JSON.stringify(segment),
@@ -157,6 +157,7 @@ const intelAPI = function(){
       return;
     });
   };
+  this.search = function(query, page, responseProc, errProc){
     var queryURL = "https://www.virustotal.com/intelligence/search/programmatic/?apikey=" + apiKey;
     if (page != null) {
       if (page != "") {
