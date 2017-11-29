@@ -1,7 +1,6 @@
 const request = require("browser-request");
 const compressjs = require("compressjs");
 const stream = require("stream");
-const tar = require("tar");
 const commentSender = require("./commentSender.js");
 var features = {};
 const leftPad = function(raw, length, padPhrase) {
@@ -500,47 +499,6 @@ var privateAPI = function(){
     });
     return;
   };
-  var makeFeedFunction = function(location) {
-    return function(year, month, day, hour, minute, resultProc, errProc){
-      var queryString = location + key + "&package=" + leftPad(year, 4, "20") + leftPad(month, 2, "0") + leftPad(day, 2, "0") + "T" + leftPad(hour, 2, "0") + leftPad(minute, 2, "0");
-      request(queryString, function(error, response, body){
-        if (error) {
-          errProc(error);
-          return;
-        }
-        if (response.statusCode > 399) {
-          errProc(body);
-          return;
-        }
-        var bufferString = "";
-        var tarBall = compressjs.bzip2.decompressFile(new Buffer(body, "utf8"));
-        var streamFromString = stream.PassThrough();
-        streamFromString.write(tarBall);
-        streamFromString.end();
-        streamFromString.pipe(tar.Parse()).on("entry", function(entry) {
-          bufferString = bufferString + entry;
-          return;
-        }).on("error", function(e){
-          errProc(e);
-          return;
-        }).on("end", function(){
-          var strings = String.split(bufferString, "\n");
-          var result = [];
-          try {
-            for (var index = 0; index < strings.length; index++) {
-              result[index] = JSON.parse(strings[index]);
-            }
-            resultProc(result);
-            return;
-          } catch (e) {
-            errProc(e);
-            return;
-          }
-        });
-      });
-      return;
-    };
-  };
   var getNextFalsePositive = function(resultProc, errProc){
     request({
 	    url: "https://www.virustotal.com/vtapi/v2/file/false-positives?limit=1&apikey=" + key,
@@ -796,8 +754,6 @@ var privateAPI = function(){
   this.search2 = search2;
   this.search = search;
   this.getNextFalsePositive = getNextFalsePositive;
-  this.getUrlFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/url/feed?key=");
-  this.getFileFeed = makeFeedFunction("https://www.virustotal.com/vtapi/v2/file/feed?key=");
   this.getClusters = getClusters;
   this.getFileNetworkActivity = getFileNetworkActivity;
   this.getFileBehavior = getFileBehavior;
