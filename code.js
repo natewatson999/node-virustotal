@@ -1,6 +1,6 @@
 "use strict";
 const speedconcat = require("speedconcat");
-const request = require("request");
+const request = require("browser-request");
 const emailAPI = require("./emailAPI.js");
 const privateAPI = require("./privateAPI.js");
 const formatConverter = require("./formatConverter.js");

@@ -1,4 +1,4 @@
-const request = require("request");
+const request = require("browser-request");
 const compressjs = require("compressjs");
 const stream = require("stream");
 const tar = require("tar");
