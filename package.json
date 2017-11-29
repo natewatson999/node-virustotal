@@ -1,14 +1,14 @@
 {
-  "name": "node-virustotal",
+  "name": "browser-node-virustotal",
   "version": "2.4.2",
-  "description": "An implementation of the Virustotal API for Node.js",
+  "description": "An implementation of the Virustotal API for js",
   "main": "code.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natewatson999/node-virustotal.git"
+    "url": "git+https://github.com/erinithma/node-virustotal"
   },
   "keywords": [
     "Virustotal",
@@ -23,16 +23,11 @@
     "cli",
     "nvt"
   ],
-  "author": "Nate Watson <natewatson999@gmail.com>",
+  "author": "Ivan <erinithma@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/natewatson999/node-virustotal/issues"
-  },
   "dependencies": {
     "browser-request": "^0.3.3",
     "compressjs": "^1.0.3",
-    "emailjs": "^1.0.8",
-    "mail-notifier": "^0.3.0",
     "moment": "^2.17.1",
     "shelljs": "^0.7.0",
     "speedconcat": "^1.0.2",
