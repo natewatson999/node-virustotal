@@ -1,7 +1,6 @@
 "use strict";
 const speedconcat = require("speedconcat");
 const request = require("browser-request");
-const emailAPI = require("./emailAPI.js");
 const privateAPI = require("./privateAPI.js");
 const formatConverter = require("./formatConverter.js");
 const intelAPI = require("./intelligenceAPI.js");
@@ -299,7 +298,6 @@ features.MakeHoneypot2Connection = function(){
 features.makeIapiConnection = intelAPI.makeIapiConnection;
 features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
-features.makeEmailConnection = emailAPI.makeEmailConnection;
 features.formatConverter = formatConverter;
 module.exports = exports = features;
 /*Still need to add a feature to make Yara files, and upload them.*/
