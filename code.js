@@ -299,5 +299,7 @@ features.makeIapiConnection = intelAPI.makeIapiConnection;
 features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.formatConverter = formatConverter;
-module.exports = features;
+module.exports = function(){
+	return features;
+};
 /*Still need to add a feature to make Yara files, and upload them.*/
