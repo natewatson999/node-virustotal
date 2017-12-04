@@ -1,5 +1,4 @@
 const request = require("browser-request");
-const compressjs = require("compressjs");
 const stream = require("stream");
 const commentSender = require("./commentSender.js");
 var features = {};
