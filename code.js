@@ -153,7 +153,11 @@ const PublicConnection = function(){
 								return;
 						}
 					} catch (e) {
-						errProc(e);
+						if(response.statusCode == 204){
+							errProc(204);
+						}
+						else
+							errProc(e);
 						return;
 					}
 				});
@@ -209,7 +213,11 @@ const PublicConnection = function(){
 							return;
 					}
 				} catch (e) {
-					errProc(e);
+					if(response.statusCode == 204){
+						errProc(204);
+					}
+					else
+						errProc(e);
 					return;
 				}
 			});
