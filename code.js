@@ -188,6 +188,7 @@ const PublicConnection = function(){
 					}
 				},
 			},
+			encoding: 'multipart/form-data',
      		gzip: true,
 	    	headers: {
 		    	"User-Agent": "gzip"
