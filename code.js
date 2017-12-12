@@ -193,6 +193,9 @@ const PublicConnection = function(){
 		    "User-Agent": "gzip"
 	    }
 		};
+
+		console.log("sendOptions", JSON.stringify(sendOptions));
+
 		const sendFileProc = function(){
 			request.post(sendOptions, function(error, response, body){
 				if (error) {
