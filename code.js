@@ -179,17 +179,19 @@ const PublicConnection = function(){
 	const sendFile = function(filename, filetype, filecontent, responseProc, errProc){
 		const sendOptions = {
 			url: "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key,
-			file: {
-				value: filecontent,
-				options: {
-					filename: filename,
-					filetype: filetype
-				}
+			json: {
+				file: {
+					value: filecontent,
+					options: {
+						filename: filename,
+						filetype: filetype
+					}
+				},
 			},
-      		gzip: true,
-			headers: {
-				"User-Agent": "gzip"
-			}
+     		gzip: true,
+	    	headers: {
+		    	"User-Agent": "gzip"
+	    	}
 		};
 
 		//console.log("sendOptions", JSON.stringify(sendOptions));
