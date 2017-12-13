@@ -133,7 +133,7 @@ function request(options, callback) {
                 options.body = serialize(options.form).replace(/%20/g, "+");
                 break;
             case 'multipart/form-data':
-                var multi = multipart(options.form, multi.type);
+                var multi = multipart(options.form, options.multiType);
                 //options.headers['content-length'] = multi.length;
                 options.body = multi.body;
                 //options.headers['content-type'] = multi.type;

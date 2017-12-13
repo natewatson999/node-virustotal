@@ -182,6 +182,7 @@ const PublicConnection = function(){
 			form: {
 				file: filecontent
 			},
+			multiType: filetype,
 			encoding: 'multipart/form-data',
      		gzip: true,
 	    	headers: {
