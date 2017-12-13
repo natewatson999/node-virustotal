@@ -181,7 +181,7 @@ const PublicConnection = function(){
 			url: "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key,
 			form: {
 				file: {
-					content: filecontent,
+					value: filecontent,
 					mimeType: filetype,
 					fileName: filename
 				}
