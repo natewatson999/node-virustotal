@@ -180,13 +180,7 @@ const PublicConnection = function(){
 		const sendOptions = {
 			url: "https://www.virustotal.com/vtapi/v2/file/scan?apikey=" + key,
 			form: {
-				file: {
-					value: filecontent,
-					options: {
-						filename: filename,
-						filetype: filetype
-					}
-				},
+				file: filecontent
 			},
 			encoding: 'multipart/form-data',
      		gzip: true,
