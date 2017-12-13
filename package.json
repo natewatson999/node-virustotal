@@ -1,6 +1,6 @@
 {
   "name": "browser-node-virustotal",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "description": "An implementation of the Virustotal API for js",
   "main": "code.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "author": "Ivan <erinithma@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "browser-request-fix": "^1.0.1",
+    "browser-request-fix": "^1.0.2",
     "moment": "^2.17.1",
     "shelljs": "^0.7.0",
     "speedconcat": "^1.0.2",

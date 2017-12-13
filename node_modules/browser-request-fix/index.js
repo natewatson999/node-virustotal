@@ -100,7 +100,7 @@ function request(options, callback) {
   //END QS Hack
   
   //BEGIN FORM Hack
-  var multipart = function(obj, contentType) {
+  var multipart = function(obj) {
     //todo: support file type (useful?)
     var result = {};
     result.boundry = '-------------------------------'+Math.floor(Math.random()*1000000000);
@@ -109,10 +109,10 @@ function request(options, callback) {
         if (obj.hasOwnProperty(p)) {
             lines.push(
                 '--'+result.boundry+"\n"+
-                'Content-Disposition: form-data; name="'+p+'"'+"\n"+
-                'Content-Type: '+ (contentType || '') +"\n"+
+                `Content-Disposition: form-data; name="${p}"${obj[p].fileName ? '; filename="' + obj[p].fileName + '"' : ''}\n`+
+                'Content-Type: '+ (obj[p].mimeType || '') +"\n"+
                 "\n"+
-                obj[p]+"\n"
+                (obj[p].value || obj[p])+"\n"
             );
         }
     }
@@ -133,7 +133,7 @@ function request(options, callback) {
                 options.body = serialize(options.form).replace(/%20/g, "+");
                 break;
             case 'multipart/form-data':
-                var multi = multipart(options.form, options.multiType);
+                var multi = multipart(options.form);
                 //options.headers['content-length'] = multi.length;
                 options.body = multi.body;
                 //options.headers['content-type'] = multi.type;
