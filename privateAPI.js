@@ -1,4 +1,4 @@
-const request = require("browser-request");
+const request = require("browser-request-fix");
 const stream = require("stream");
 const commentSender = require("./commentSender.js");
 var features = {};

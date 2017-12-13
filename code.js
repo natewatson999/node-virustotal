@@ -1,6 +1,6 @@
 "use strict";
 const speedconcat = require("speedconcat");
-const request = require("browser-request");
+const request = require("browser-request-fix");
 const privateAPI = require("./privateAPI.js");
 const formatConverter = require("./formatConverter.js");
 const intelAPI = require("./intelligenceAPI.js");

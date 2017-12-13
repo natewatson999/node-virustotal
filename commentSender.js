@@ -1,5 +1,5 @@
 "use strict";
-const request = require("browser-request");
+const request = require("browser-request-fix");
 const sender = function(resource, comment, APIkey, responseProc, errProc){
   const submissionURL = ("https://www.virustotal.com/vtapi/v2/comments/put?resource=" + encodeURIComponent(resource)) + (("&comment=" + encodeURIComponent(comment)) + ("&apikey=" + APIkey));
   this.attempt = function(){
