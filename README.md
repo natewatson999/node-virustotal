@@ -1,4 +1,4 @@
-# browser-browser-node-virustotal
+# browser-node-virustotal
 VirusTotal API for browsers. I can use it in extensions for browsers or any client programs.
 
 ## Install Instructions
