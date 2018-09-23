@@ -1,5 +1,5 @@
-# node-virustotal
-VirusTotal API for Node JS
+# browser-browser-node-virustotal
+VirusTotal API for browsers. I can use it in extensions for browsers or any client programs.
 
 ## Install Instructions
 Note: for reasons involving future features, it is recommended that you use the global installation. Both procedures work though.
@@ -9,7 +9,7 @@ Note: for reasons involving future features, it is recommended that you use the 
 In the directory in question, run this command:
 
 ```
-npm install node-virustotal
+npm install browser-node-virustotal
 ```
 
 ### Global
@@ -17,7 +17,7 @@ npm install node-virustotal
 Assuming you have the rights to do so, run this command:
 
 ```
-npm install -g node-virustotal
+npm install -g browser-node-virustotal
 ```
 
 ## Background Information
@@ -30,7 +30,7 @@ This API provides factory methods which make connection objects, which act as jo
 
 If you would like to subsidize the development of this module, please consider donating on patreon: https://www.patreon.com/user?u=3336787&ty=h
 
-node-virustotal also provides a command line interface. By default, this is installed as "nvt". The command line interface provides most of the same features as the API, but is designed for users rather than developers.
+browser-node-virustotal also provides a command line interface. By default, this is installed as "nvt". The command line interface provides most of the same features as the API, but is designed for users rather than developers.
 
 ## MakePublicConnection
 This function makes a new public connection object, using public API version 2.
@@ -86,7 +86,7 @@ This is a convenience function which combines submitFileForAnalysis and getFileR
 ### PublicConnection example
 
 ```
-var vt = require("node-virustotal");
+var vt = require("browser-node-virustotal");
 var con = vt.MakePublicConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
@@ -204,7 +204,7 @@ This is a convenience function which combines submitFileForAnalysis and getFileR
 ### Honeypot2Connection example
 
 ```
-var vt = require("node-virustotal");
+var vt = require("browser-node-virustotal");
 var con = vt.MakeHoneypot2Connection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
@@ -342,7 +342,7 @@ This takes 2 parameters, a signature and a number. The signature is of a piece o
 
 ### queryBuilder example
 ```
-var QB = require("node-virustotal").queryBuilder;
+var QB = require("browser-node-virustotal").queryBuilder;
 var query = QB.AND(QB.name("obvious_virus.svg"), QB.positivesAtLeast(1));
 ```
 
@@ -616,7 +616,7 @@ This is fired when an analysis of a file is recieved. The only parameter is an a
 
 ### makeEmailConnection example
 ```
-var virustotal = require("node-virustotal");
+var virustotal = require("browser-node-virustotal");
 var fs = require("fs");
 var workingEmail = virustotal.makeEmailConnection({
 	IMAP: {
@@ -671,7 +671,7 @@ The error callback's only parameter is an error which is either a string or an o
 
 ### makeIapiConnection example
 ```
-var con = require("node-virustotal").makeIapiConnection();
+var con = require("browser-node-virustotal").makeIapiConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");
 console.log(con.getKey());
 var QB = vt.queryBuilder;
@@ -717,7 +717,7 @@ con.exportRuleset("*",function(result){
 ```
 
 ## Command Line Interface
-node-virustotal provides a command line interface for interacting with virustotal. It can be invoked with "nvt", if installed globally. There is an issue where sometimes the script won't run correctly on Windows machines. If this happens, the CLI can be used by going to the installation directory, and using this command:
+browser-node-virustotal provides a command line interface for interacting with virustotal. It can be invoked with "nvt", if installed globally. There is an issue where sometimes the script won't run correctly on Windows machines. If this happens, the CLI can be used by going to the installation directory, and using this command:
 ```
 node cli
 ```
@@ -770,7 +770,7 @@ The currently available and documented commands are the following:
 >pwd
 /example
 >help
-CLI documentation can be found in "insert directory of node-virustotal here"/README.md .
+CLI documentation can be found in "insert directory of browser-node-virustotal here"/README.md .
 >rescanFile 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c
 ...Massive blob of JSON...
 >getFileReport 52d3df0ed60c46f336c131bf2ca454f73bafdc4b04dfa2aea80746f5ba9e6d1c-1273894724
@@ -798,15 +798,15 @@ CLI documentation can be found in "insert directory of node-virustotal here"/REA
 ```
 
 ## formatConverter
-Most APIs that take non-promise code and convert it into a format prefered by the promises fanpeople prefer a particular format for callback functions. These APIs prefer that there be a single callback function with two parameters: the possibility of an error, and the data. node-virustotal does not do this. node-virustotal uses a dual-callback system where the first function is for data, and the second for errors.
+Most APIs that take non-promise code and convert it into a format prefered by the promises fanpeople prefer a particular format for callback functions. These APIs prefer that there be a single callback function with two parameters: the possibility of an error, and the data. browser-node-virustotal does not do this. browser-node-virustotal uses a dual-callback system where the first function is for data, and the second for errors.
 
-formatConverter is a function to address this problem. formatConverter takes a function which uses node-virustotal's dual callback system and returns a function in the single-callback format that scripts like bluebird.js prefer.
+formatConverter is a function to address this problem. formatConverter takes a function which uses browser-node-virustotal's dual callback system and returns a function in the single-callback format that scripts like bluebird.js prefer.
 
 Do not use formatConverter on any function with optional callbacks, since it is not designed to handle this. More critically, formatConverter uses eval internally. Do not use formatConverter on any mission critical system, any system with medical data, any system with personal or authentication related information, any system with financial information, or any system which could result in a person's harm or death if compromised. Do not combine formatConverter with any of the getFile functions.
 
 ### example
 ```
-var vt = require("node-virustotal");
+var vt = require("browser-node-virustotal");
 var fs = require("fs");
 var con = vt.MakePublicConnection();
 con.setKey("e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d");

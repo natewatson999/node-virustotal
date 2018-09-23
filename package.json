@@ -1,7 +1,7 @@
 {
   "name": "browser-node-virustotal",
-  "version": "2.6.4",
-  "description": "An implementation of the Virustotal API for js",
+  "version": "2.6.8",
+  "description": "An implementation of the Virustotal API for client js",
   "main": "code.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,7 +26,7 @@
   "author": "Ivan <erinithma@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "browser-request-fix": "^1.0.2",
+    "browser-request-fix": "^1.0.5",
     "moment": "^2.17.1",
     "shelljs": "^0.7.0",
     "speedconcat": "^1.0.2",
@@ -35,5 +35,5 @@
   "bin": {
     "nvt": "cliLauncher.js"
   },
-  "homepage": "https://github.com/natewatson999/node-virustotal#readme"
+  "homepage": "https://github.com/erinithma/node-virustotal#readme"
 }
