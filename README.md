@@ -1,5 +1,5 @@
 # browser-node-virustotal
-VirusTotal API for browsers. I can use it in extensions for browsers or any client programs.
+VirusTotal API for browsers. You can use it inside extensions for browsers or any client programs.
 
 ## Install Instructions
 Note: for reasons involving future features, it is recommended that you use the global installation. Both procedures work though.
