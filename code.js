@@ -301,5 +301,6 @@ features.queryBuilder = QB;
 features.makePrivateConnection = privateAPI.makePrivateAPI;
 features.makeEmailConnection = emailAPI.makeEmailConnection;
 features.formatConverter = formatConverter;
+
 module.exports = exports = features;
 /*Still need to add a feature to make Yara files, and upload them.*/
