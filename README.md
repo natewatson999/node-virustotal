@@ -45,6 +45,12 @@ const oldVT = require('node-virustotal').legacyEdition();
 var oldVT = require('node-virustotal');
 ```
 
+## nvt.harmless
+This is a string with a value of "harmless".
+
+## nvt.malicious
+This is a string with a value of "malicious".
+
 ## nvt.makeAPI()
 
 This optionally takes an integer which is a number of milliseconds, and returns a V3 object. A V3 object is how most standard interaction with VirusTotal occurs. By default, this includes a working free-use API key. It is encouraged that the key be changed to a personal one. As of this writing, not all of the VirusTotal API is currently supported due to the rewrite. What is supported can be accessed in this method. 
@@ -139,7 +145,64 @@ This takes an IPv4 address and a standard callback. The comments regarding the I
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.ipLookup('8.8.8.8', function(err, res){
+const theSameObject = defaultTimedInstance.ipCommentLookup('8.8.8.8', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.ipVotesLookup()
+This takes an IPv4 address and a standard callback. The votes regarding the IPv4 address are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.ipVotesLookup('8.8.8.8', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.postIPcomment()
+This takes an IPv4 address, a string comment, and a standard callback. The comment regarding the IPv4 address is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8',"This address is safe. I'm just testing an API", function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.sendIPvote()
+This takes an IPv4 address, a vote, and a standard callback. The vote regarding the IPv4 address is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8',"This address is safe. I'm just testing an API", function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);

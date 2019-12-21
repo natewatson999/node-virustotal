@@ -3,6 +3,8 @@ const output = {};
 output.legacyEdition = function(){
 	return require('code.js');
 };
+output.malicious = "malicious";
+output.harmless = "harmless";
 const getString = "GET";
 const postString = "POST";
 const request = require('request');
@@ -127,9 +129,38 @@ const v3 = function(delay){
 			return self;
 		};
 	};
+	const makePostTransform = function(initialFunction, bodyModification){
+		return function(id, content, callback){
+			const modded = bodyModification(content);
+			return initialFunction(id, modded, callback);
+		};
+	};
+	const commentToObject = function(input){
+		return {
+			"data": {
+				"type": "comment",
+				"attributes": {
+					"text": input
+				}
+			}
+		};
+	};
+	const makeVoteObject = function(input){
+		return {
+			"data": {
+				"type": "vote", 
+				"attributes": {
+					"verdict": input
+				}
+			}
+		};
+	};
 
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
 	this.ipCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments");
+	this.ipVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes");
+	this.postIPcomment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments"), commentToObject);
+	this.sendIPvote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes"), makeVoteObject);
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
