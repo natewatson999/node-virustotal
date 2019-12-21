@@ -237,7 +237,7 @@ This takes an IPv4 address, a relationship, and a standard callback. The relatio
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.getIPrelationships('8.8.8.8', nvt.relationships.urls, function(err, res){
+const theSameObject = defaultTimedInstance.getIPrelationships('8.8.8.8', nvt.relationships.graphs, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -256,7 +256,26 @@ This takes a domain, a relationship, and a standard callback. The relationships 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.getDomainRelationships('wikionemore.com', nvt.relationships.urls, function(err, res){
+const theSameObject = defaultTimedInstance.getDomainRelationships('wikionemore.com', nvt.relationships.graphs, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.getURLRelationships()
+This takes a URL, a relationship, and a standard callback. The relationships regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.getURLRelationships('http://wikionemore.com', nvt.relationships.graphs, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -295,6 +314,25 @@ This takes a domain and a standard callback. The votes regarding the domain are 
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.domainVotesLookup('wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.urlVotesLookup()
+This takes a URL and a standard callback. The votes regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.urlVotesLookup('http://wikionemore.com', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -382,7 +420,7 @@ const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8', nvt.maliciou
 ```
 
 ## v3.sendDomainVote()
-This takes a domain address, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+This takes a domain, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
 
 ### Example
 
@@ -390,6 +428,25 @@ This takes a domain address, a vote, and a standard callback. The vote regarding
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.sendDomainVote('wikionemore.com', nvt.malicious, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.sendURLVote()
+This takes a URL, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.sendURLVote('http://wikionemore.com', nvt.malicious, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);

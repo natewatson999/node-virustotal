@@ -22,7 +22,11 @@ output.relationships = {
 	urls: 'urls',
 	siblings: 'siblings',
 	referrer_files: 'referrer_files',
-	historical_whois: 'historical_whois'
+	historical_whois: 'historical_whois',
+	analyses: 'analyses',
+	last_serving_ip_address: 'last_serving_ip_address',
+	redirecting_urls: 'redirecting_urls',
+	submissions: 'submissions'
 };
 const v3 = function(delay){
 	if (delay==null) {
@@ -186,13 +190,16 @@ const v3 = function(delay){
 	this.urlCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/comments");
 	this.ipVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes");
 	this.domainVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/votes");
+	this.urlVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/votes");
 	this.postIPcomment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments"), commentToObject);
 	this.postDomainComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/domains/","/comments"), commentToObject);
 	this.postURLComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendIPvote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes"), makeVoteObject);
 	this.sendDomainVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/domains/","/votes"), makeVoteObject);
+	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","/comments");
 	this.getDomainRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/domains/","/","/comments");
+	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
