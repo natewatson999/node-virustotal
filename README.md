@@ -191,6 +191,25 @@ const theSameObject = defaultTimedInstance.domainCommentLookup('wikionemore.com'
 });
 ```
 
+## v3.urlCommentLookup()
+This takes a URL and a standard callback. The comments regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.urlCommentLookup('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.ipCommentLookup()
 This takes an IPv4 address and a standard callback. The comments regarding the IPv4 address are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -313,7 +332,26 @@ This takes a domain, a string comment, and a standard callback. The comment rega
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.postDomainComment('wikionemore.com',"This address is safe. I'm just testing an API", function(err, res){
+const theSameObject = defaultTimedInstance.postDomainComment('wikionemore.com',"This domain is malicious. I'm just testing an API", function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.postURLComment()
+This takes a URL, a string comment, and a standard callback. The comment regarding the URL is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.postURLComment('http://wikionemore.com',"This URL is malicious. I'm just testing an API", function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -332,7 +370,26 @@ This takes an IPv4 address, a vote, and a standard callback. The vote regarding 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8',"This address is safe. I'm just testing an API", function(err, res){
+const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8', nvt.malicious, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.sendDomainVote()
+This takes a domain address, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.sendDomainVote('wikionemore.com', nvt.malicious, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
