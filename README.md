@@ -229,6 +229,25 @@ const theSameObject = defaultTimedInstance.getIPrelationships('8.8.8.8', nvt.rel
 });
 ```
 
+## v3.getDomainRelationships()
+This takes a domain, a relationship, and a standard callback. The relationships regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.getDomainRelationships('wikionemore.com', nvt.relationships.urls, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.ipVotesLookup()
 This takes an IPv4 address and a standard callback. The votes regarding the IPv4 address are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -248,6 +267,25 @@ const theSameObject = defaultTimedInstance.ipVotesLookup('8.8.8.8', function(err
 });
 ```
 
+## v3.domainVotesLookup()
+This takes a domain and a standard callback. The votes regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.domainVotesLookup('wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.postIPcomment()
 This takes an IPv4 address, a string comment, and a standard callback. The comment regarding the IPv4 address is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
 
@@ -257,6 +295,25 @@ This takes an IPv4 address, a string comment, and a standard callback. The comme
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.postIPcomment('8.8.8.8',"This address is safe. I'm just testing an API", function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.postDomainComment()
+This takes a domain, a string comment, and a standard callback. The comment regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.postDomainComment('wikionemore.com',"This address is safe. I'm just testing an API", function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
