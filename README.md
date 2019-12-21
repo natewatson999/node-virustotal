@@ -51,6 +51,22 @@ This is a string with a value of "harmless".
 ## nvt.malicious
 This is a string with a value of "malicious".
 
+## nvt.relationships
+This is an object to the following specification: 
+
+```
+{
+	comments: 'comments',
+	communicating_files: 'communicating_files',
+	downloaded_files: 'downloaded_files',
+	graphs: 'graphs',
+	historical_whois: 'historical_whois',
+	referrer_files: 'referrer_files',
+	resolutions: 'resolutions',
+	urls: 'urls'
+}
+```
+
 ## nvt.makeAPI()
 
 This optionally takes an integer which is a number of milliseconds, and returns a V3 object. A V3 object is how most standard interaction with VirusTotal occurs. By default, this includes a working free-use API key. It is encouraged that the key be changed to a personal one. As of this writing, not all of the VirusTotal API is currently supported due to the rewrite. What is supported can be accessed in this method. 
@@ -118,6 +134,25 @@ const defaultTimedInstance = nvt.makeAPI();
 const theSameKey = defaultTimedInstance.setDelay(15000);
 ```
 
+## v3.domainLookup()
+This takes a domain and a standard callback. The domain is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.domainLookup('wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.ipLookup()
 This takes an IPv4 address and a standard callback. The IPv4 address is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -137,6 +172,25 @@ const theSameObject = defaultTimedInstance.ipLookup('8.8.8.8', function(err, res
 });
 ```
 
+## v3.domainCommentLookup()
+This takes a domain and a standard callback. The comments regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.domainCommentLookup('wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.ipCommentLookup()
 This takes an IPv4 address and a standard callback. The comments regarding the IPv4 address are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -146,6 +200,25 @@ This takes an IPv4 address and a standard callback. The comments regarding the I
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.ipCommentLookup('8.8.8.8', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.getIPrelationships()
+This takes an IPv4 address, a relationship, and a standard callback. The relationships regarding the IPv4 address are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.getIPrelationships('8.8.8.8', nvt.relationships.urls, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);

@@ -11,6 +11,16 @@ const request = require('request');
 const millisecondsPerMinute = 60000;
 const defaultDelay = millisecondsPerMinute/4;
 const defaultKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
+output.relationships = {
+	comments: 'comments',
+	communicating_files: 'communicating_files',
+	downloaded_files: 'downloaded_files',
+	graphs: 'graphs',
+	historical_whois: 'historical_whois',
+	referrer_files: 'referrer_files',
+	resolutions: 'resolutions',
+	urls: 'urls'
+};
 const v3 = function(delay){
 	if (delay==null) {
 		delay=defaultDelay;
@@ -81,6 +91,19 @@ const v3 = function(delay){
 		return self;
 	};
 
+	const standardCallback = function(input){
+		const callback = input;
+		return function(err, res, body){
+			if (err) {
+				callback(err);
+				return;
+			}
+			if (res.statusCode > 399) {
+				callback(body);
+			}
+			callback(null, body);
+		};
+	};
 	const makeGetFunction = function(beforePath, afterPath){
 		return function(contentID, cb){
 			const id = contentID;
@@ -90,16 +113,22 @@ const v3 = function(delay){
 					url: beforePath + id + afterPath,
 					method: getString,
 					headers: {'x-apikey': self.getKey()}
-				}, function(err, res, body){
-					if (err) {
-						callback(err);
-						return;
-					}
-					if (res.statusCode > 399) {
-						callback(body);
-					}
-					callback(null, body);
-				});
+				}, standardCallback(callback));
+			});
+			return self;
+		};
+	};
+	const make3partGetFunction = (beforePath, middlePath, afterPath){
+		return function(contentID, secondID, cb){
+			const id = contentID;
+			const sid = secondID;
+			const callback = cb;
+			putInLine(function(){
+				request({
+					url: beforePath + id + middlePath + sid + afterPath,
+					method: getString,
+					headers: {'x-apikey': self.getKey()}
+				}, standardCallback(callback));
 			});
 			return self;
 		};
@@ -115,16 +144,7 @@ const v3 = function(delay){
 					method: postString,
 					headers: {'x-apikey': self.getKey()},
 					body: JSON.stringify(body)
-				}, function(err, res, body){
-					if (err) {
-						callback(err);
-						return;
-					}
-					if (res.statusCode > 399) {
-						callback(body);
-					}
-					callback(null, body);
-				});
+				}, standardCallback(callback));
 			});
 			return self;
 		};
@@ -157,10 +177,13 @@ const v3 = function(delay){
 	};
 
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
+	this.domainLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","");
 	this.ipCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments");
+	this.domainCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/comments");
 	this.ipVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes");
 	this.postIPcomment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments"), commentToObject);
 	this.sendIPvote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes"), makeVoteObject);
+	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","/comments");
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
