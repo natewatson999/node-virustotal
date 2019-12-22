@@ -105,8 +105,13 @@ const v3 = function(delay){
 				callback(err);
 				return;
 			}
+			if (body.error) {
+				callback(body);
+				return;
+			}
 			if (res.statusCode > 399) {
 				callback(body);
+				return;
 			}
 			callback(null, body);
 		};
@@ -156,6 +161,22 @@ const v3 = function(delay){
 			return self;
 		};
 	};
+	const makeRawPostFunction = function(beforePath, afterPath){
+		return function(contentID, contents, cb){
+			const body = contents;
+			const id = contentID;
+			const callback = cb;
+			putInLine(function(){
+				request({
+					url: beforePath + id + afterPath,
+					method: postString,
+					headers: {'x-apikey': self.getKey()},
+					body: body
+				}, standardCallback(callback));
+			});
+			return self;
+		};
+	};
 	const makePostTransform = function(initialFunction, bodyModification){
 		return function(id, content, callback){
 			const modded = bodyModification(content);
@@ -182,12 +203,35 @@ const v3 = function(delay){
 			}
 		};
 	};
+	const makeURLForm = function(input){
+		return {
+			url: input
+		};
+	};
+	const makeRawPostFormFunction = function(beforePath, modifier){
+		return function(input, cb){
+			const form = input;
+			const callback = cb;
+			putInLine(function(){
+				request({
+					url: beforePath,
+					method: postString,
+					headers: {'x-apikey': self.getKey()},
+					form: modifier(form)
+				}, standardCallback(callback));
+			});
+			return self;
+		};
+	};
 
+	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
 	this.domainLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","");
+	this.urlLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","");
 	this.ipCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments");
 	this.domainCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/comments");
 	this.urlCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/comments");
+	this.urlNetworkLocations = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/network_location");
 	this.ipVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes");
 	this.domainVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/votes");
 	this.urlVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/votes");
@@ -200,6 +244,7 @@ const v3 = function(delay){
 	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","/comments");
 	this.getDomainRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/domains/","/","/comments");
 	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
+	this.reAnalyzeURL = makePostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
 };
 output.makeAPI = function(delay){
 	return new v3(delay);

@@ -153,6 +153,25 @@ const theSameObject = defaultTimedInstance.domainLookup('wikionemore.com', funct
 });
 ```
 
+## v3.urlLookup()
+This takes a URL and a standard callback. The URL is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.urlLookup('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.ipLookup()
 This takes an IPv4 address and a standard callback. The IPv4 address is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -200,6 +219,63 @@ This takes a URL and a standard callback. The comments regarding the URL are loo
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.urlCommentLookup('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.urlNetworkLocations()
+This takes a URL and a standard callback. The network locations regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.urlNetworkLocations('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.initialScanURL()
+This takes a URL and a standard callback. This causes VirusTotal to initially analyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.initialScanURL('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.reAnalyzeURL()
+This takes a URL and a standard callback. This causes VirusTotal to reanalyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.urlNetworkLocations('http://wikionemore.com', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
