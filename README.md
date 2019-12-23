@@ -26,7 +26,7 @@ VirusTotal is a service provided by Google which provides supplemental malware a
 
 Fair warning, this documentation is extremely long, so if you need to pee or need coffee; do so or brew it before you start reading this.
 
-The VirusTotal API has 2 tiers: free and premium. The free API has a limit of 4 calls per minute, or one every 15000 milliseconds. Consequently, node-virustotal uses a task queue internally. 
+The VirusTotal API has 2 tiers: free and premium. The free API has a limit of 4 calls per minute, or one every 15000 milliseconds. Consequently, node-virustotal uses a task queue internally. If you have the premium API, this will still work, however the premium-specific features may be buggy due to the lack of possibility of testing, and you may wish to adjust the time between API calls. 
 
 ## Old Versions
 
@@ -132,6 +132,27 @@ This takes an integer which is indicates how many milliseconds to wait between A
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameKey = defaultTimedInstance.setDelay(15000);
+```
+
+
+## v3.uploadFile()
+This takes the contents of a potentially risky file in either string or Buffer form "Buffer is preferred" and a standard callback. The file is sent to VirusTotal for analysis, and the information regarding the pending analysis is returned in res. This returns this instance of the v3 object. Note that if your file's contents are at least 32 megabytes in size, this will take 2 uses of the internal task queue instead of the usual 1. This is because such files take 2 interactions with VirusTotal's interface.
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const aMaliciousFile = require('fs').readFileSync('./aMaliciousFile.exe');
+const theSameObject = defaultTimedInstance.uploadFile(aMaliciousFile, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
 ```
 
 ## v3.domainLookup()
@@ -305,6 +326,25 @@ const theSameObject = defaultTimedInstance.initialScanURL('http://wikionemore.co
 });
 ```
 
+## v3.reAnalyzeFile()
+This takes a file ID and a standard callback. This causes VirusTotal to reanalyze the file. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.reAnalyzeFile('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.reAnalyzeURL()
 This takes a URL and a standard callback. This causes VirusTotal to reanalyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
 
@@ -314,6 +354,25 @@ This takes a URL and a standard callback. This causes VirusTotal to reanalyze th
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.urlNetworkLocations('http://wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.fileBehaviours()
+This takes a sandbox ID and a standard callback. This ID can be obtained from getFileRelationships with the nvt.behaviors option. The PCAP regarding the sandbox is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.fileBehaviours('NjY0MjRlOTFjMDIyYTkyNWM0NjU2NWQzYWNlMzFmZmI6MTQ3NTA0ODI3NwaafdsJJK', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -457,6 +516,25 @@ const theSameObject = defaultTimedInstance.domainVotesLookup('wikionemore.com', 
 });
 ```
 
+## v3.fileVotesLookup()
+This takes a file ID and a standard callback. The votes regarding the file are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.fileVotesLookup('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.urlVotesLookup()
 This takes a URL and a standard callback. The votes regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -523,6 +601,25 @@ This takes a URL, a string comment, and a standard callback. The comment regardi
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.postURLComment('http://wikionemore.com',"This URL is malicious. I'm just testing an API", function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.postFileComment()
+This takes a file ID, a string comment, and a standard callback. The comment regarding the file is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.postFileComment('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85',"This URL is malicious. I'm just testing an API", function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);

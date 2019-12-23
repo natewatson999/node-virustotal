@@ -286,6 +286,7 @@ const v3 = function(delay){
 			form: makeFileForm(content)
 		}, standardCallback(callback));
 	};
+
 	this.uploadFile = function(input, callback){
 		const asBuffer = ensureBuffer(input);
 		putInLine(function(){
@@ -309,12 +310,10 @@ const v3 = function(delay){
 		});
 		return self;
 	};
+	this.fileBehaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
 	this.reAnalyzeFile = makePostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
-	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");
-	this.file_behaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
-
-
+	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
 	this.fileCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/comments");
 	this.fileLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","");
