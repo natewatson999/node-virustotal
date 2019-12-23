@@ -9,7 +9,88 @@ const getString = "GET";
 const postString = "POST";
 const request = require('request');
 const millisecondsPerMinute = 60000;
+const thirtyTwoMegabytes = 34359738368;
 const defaultDelay = millisecondsPerMinute/4;
+const commentString = "comment";
+const voteString = "vote";
+const ensureBuffer = function(input){
+	if (typeof input=="string"){
+		return Buffer.from(input, 'utf8');
+	}
+	if (Buffer.isBuffer(input)){
+		return input;
+	}
+	return ensureBuffer(JSON.stringify(input));
+};
+const maliciousObject = {
+	"data": {
+		"type": voteString, 
+		"attributes": {
+			"verdict": output.malicious
+		}
+	}
+};
+const harmlessObject = {
+	"data": {
+		"type": voteString, 
+		"attributes": {
+			"verdict": output.harmless
+		}
+	}
+};
+const commentToObject = function(input){
+	return {
+		"data": {
+			"type": commentString,
+			"attributes": {
+				"text": input
+			}
+		}
+	};
+};
+const makeURLForm = function(input){
+	return {url: input};
+};
+const makeFileForm = function(input){
+	return {file: input};
+};
+const makeVoteObject = function(input){
+	switch (input) {
+		case output.malicious:
+			return maliciousObject;
+		case output.harmless:
+			return harmlessObject;
+		default:
+	};
+	throw new Error(invalidVoteString);
+};
+const standardCallback = function(input){
+	const callback = input;
+	return function(err, res, body){
+		if (err) {
+			callback(err);
+			return;
+		}
+		if (res.statusCode > 399) {
+			callback(body);
+			return;
+		}
+		if (body.error) {
+			callback(body);
+			return;
+		}
+		callback(null, body);
+	};
+};
+const makePostTransform = function(initialFunction, bodyModification){
+	return function(id, content, callback){
+		const modded = bodyModification(content);
+		return initialFunction(id, modded, callback);
+	};
+};
+const invalidVoteString = "Invalid vote string";
+const filesLink = "https://www.virustotal.com/api/v3/files";
+const bigFileLink = "https://www.virustotal.com/api/v3/files/upload_url";
 const defaultKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
 output.relationships = {
 	comments: 'comments',
@@ -26,7 +107,29 @@ output.relationships = {
 	analyses: 'analyses',
 	last_serving_ip_address: 'last_serving_ip_address',
 	redirecting_urls: 'redirecting_urls',
-	submissions: 'submissions'
+	submissions: 'submissions',
+	analyses: 'analyses',
+	behaviours: 'behaviours',
+	bundled_files: 'bundled_files',
+	carbonblack_children: 'carbonblack_children',
+	carbonblack_parents: 'carbonblack_parents',
+	comments: 'comments',
+	compressed_parents: 'compressed_parents',
+	contacted_domains: 'contacted_domains',
+	contacted_ips: 'contacted_ips',
+	contacted_urls: 'contacted_urls',
+	email_parents: 'email_parents',
+	embedded_domains: 'embedded_domains',
+	embedded_ips: 'embedded_ips',
+	execution_parents: 'execution_parents',
+	itw_urls: 'itw_urls',
+	overlay_parents: 'overlay_parents',
+	pcap_parents: 'pcap_parents',
+	pe_resource_parents: 'pe_resource_parents',
+	similar_files: 'similar_files',
+	submissions: 'submissions',
+	screenshots: 'screenshots',
+	votes: 'votes'
 };
 const v3 = function(delay){
 	if (delay==null) {
@@ -98,24 +201,6 @@ const v3 = function(delay){
 		return self;
 	};
 
-	const standardCallback = function(input){
-		const callback = input;
-		return function(err, res, body){
-			if (err) {
-				callback(err);
-				return;
-			}
-			if (body.error) {
-				callback(body);
-				return;
-			}
-			if (res.statusCode > 399) {
-				callback(body);
-				return;
-			}
-			callback(null, body);
-		};
-	};
 	const makeGetFunction = function(beforePath, afterPath){
 		return function(contentID, cb){
 			const id = contentID;
@@ -130,7 +215,7 @@ const v3 = function(delay){
 			return self;
 		};
 	};
-	const make3partGetFunction = (beforePath, middlePath, afterPath){
+	const make3partGetFunction = function(beforePath, middlePath, afterPath){
 		return function(contentID, secondID, cb){
 			const id = contentID;
 			const sid = secondID;
@@ -177,37 +262,6 @@ const v3 = function(delay){
 			return self;
 		};
 	};
-	const makePostTransform = function(initialFunction, bodyModification){
-		return function(id, content, callback){
-			const modded = bodyModification(content);
-			return initialFunction(id, modded, callback);
-		};
-	};
-	const commentToObject = function(input){
-		return {
-			"data": {
-				"type": "comment",
-				"attributes": {
-					"text": input
-				}
-			}
-		};
-	};
-	const makeVoteObject = function(input){
-		return {
-			"data": {
-				"type": "vote", 
-				"attributes": {
-					"verdict": input
-				}
-			}
-		};
-	};
-	const makeURLForm = function(input){
-		return {
-			url: input
-		};
-	};
 	const makeRawPostFormFunction = function(beforePath, modifier){
 		return function(input, cb){
 			const form = input;
@@ -223,6 +277,46 @@ const v3 = function(delay){
 			return self;
 		};
 	};
+
+	const uploadFileToURL = function(content, location, callback){
+		request({
+			url: location,
+			method: postString,
+			headers: {'x-apikey': self.getKey()},
+			form: makeFileForm(content)
+		}, standardCallback(callback));
+	};
+	this.uploadFile = function(input, callback){
+		const asBuffer = ensureBuffer(input);
+		putInLine(function(){
+			if (asBuffer.length < thirtyTwoMegabytes) {
+				uploadFileToURL(asBuffer, filesLink,callback);
+				return;
+			}
+			request({
+				url: bigFileLink,
+				method: getString,
+				headers: {'x-apikey': self.getKey()}
+			}, standardCallback(function(err, res){
+				if (err){
+					callback(err);
+					return;
+				}
+				putInLine(function(){
+					uploadFileToURL(asBuffer, res.data, callback);
+				});
+			}));
+		});
+	};
+	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
+	this.reAnalyzeFile = makePostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
+	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
+	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
+	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");
+	this.file_behaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
+	this.fileCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/comments");
+	this.fileLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","");
+
 
 	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
