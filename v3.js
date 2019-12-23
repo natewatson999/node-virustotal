@@ -307,17 +307,18 @@ const v3 = function(delay){
 				});
 			}));
 		});
+		return self;
 	};
-	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
 	this.reAnalyzeFile = makePostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
-	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
 	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");
 	this.file_behaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
+
+
+	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
 	this.fileCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/comments");
 	this.fileLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","");
-
-
+	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
 	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
 	this.domainLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","");

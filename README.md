@@ -153,6 +153,25 @@ const theSameObject = defaultTimedInstance.domainLookup('wikionemore.com', funct
 });
 ```
 
+## v3.fileLookup()
+This takes a file ID and a standard callback. The file is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.fileLookup('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
 ## v3.urlLookup()
 This takes a URL and a standard callback. The URL is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
@@ -200,6 +219,25 @@ This takes a domain and a standard callback. The comments regarding the domain a
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.domainCommentLookup('wikionemore.com', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.fileCommentLookup()
+This takes a file ID and a standard callback. The comments regarding the file are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.fileCommentLookup('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -314,6 +352,25 @@ This takes an IPv4 address, a relationship, and a standard callback. The relatio
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.getIPrelationships('8.8.8.8', nvt.relationships.graphs, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.getFileRelationships()
+This takes a file hash ID, a relationship, and a standard callback. The relationships regarding the file are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.getFileRelationships('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', nvt.relationships.graphs, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -504,6 +561,25 @@ This takes a domain, a vote, and a standard callback. The vote regarding the dom
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const theSameObject = defaultTimedInstance.sendDomainVote('wikionemore.com', nvt.malicious, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.sendFileVote()
+This takes a file ID, a vote, and a standard callback. The vote regarding the file is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const theSameObject = defaultTimedInstance.sendFileVote('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', nvt.malicious, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
