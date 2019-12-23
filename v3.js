@@ -138,11 +138,12 @@ const v3 = function(delay){
 	this.time = delay; 
 	this.key = defaultKey;
 	const self = this;
+	const standardHeader = {'x-apikey': defaultKey};
 	this.getKey = function(){
-		return self.key;
+		return standardHeader['x-apikey'];
 	};
 	this.setKey = function(k){
-		self.key = k;
+		standardHeader['x-apikey'] = k;
 		return self;
 	};
 	this.getDelay = function(){
@@ -209,7 +210,7 @@ const v3 = function(delay){
 				request({
 					url: beforePath + id + afterPath,
 					method: getString,
-					headers: {'x-apikey': self.getKey()}
+					headers: standardHeader
 				}, standardCallback(callback));
 			});
 			return self;
@@ -224,7 +225,7 @@ const v3 = function(delay){
 				request({
 					url: beforePath + id + middlePath + sid + afterPath,
 					method: getString,
-					headers: {'x-apikey': self.getKey()}
+					headers: standardHeader
 				}, standardCallback(callback));
 			});
 			return self;
@@ -239,7 +240,7 @@ const v3 = function(delay){
 				request({
 					url: beforePath + id + afterPath,
 					method: postString,
-					headers: {'x-apikey': self.getKey()},
+					headers: standardHeader,
 					body: JSON.stringify(body)
 				}, standardCallback(callback));
 			});
@@ -255,7 +256,7 @@ const v3 = function(delay){
 				request({
 					url: beforePath + id + afterPath,
 					method: postString,
-					headers: {'x-apikey': self.getKey()},
+					headers: standardHeader,
 					body: body
 				}, standardCallback(callback));
 			});
@@ -270,7 +271,7 @@ const v3 = function(delay){
 				request({
 					url: beforePath,
 					method: postString,
-					headers: {'x-apikey': self.getKey()},
+					headers: standardHeader,
 					form: modifier(form)
 				}, standardCallback(callback));
 			});
@@ -282,7 +283,7 @@ const v3 = function(delay){
 		request({
 			url: location,
 			method: postString,
-			headers: {'x-apikey': self.getKey()},
+			headers: standardHeader,
 			form: makeFileForm(content)
 		}, standardCallback(callback));
 	};
@@ -297,7 +298,7 @@ const v3 = function(delay){
 			request({
 				url: bigFileLink,
 				method: getString,
-				headers: {'x-apikey': self.getKey()}
+				headers: standardHeader
 			}, standardCallback(function(err, res){
 				if (err){
 					callback(err);
@@ -310,6 +311,26 @@ const v3 = function(delay){
 		});
 		return self;
 	};
+	this.downloadMaliciousFile = function(contentID, cb){
+		const target = contentID;
+		const callback = cb;
+		request({
+			url: target,
+			method: getString
+		}, function(error, response, body){
+			if (err) {
+				callback(err);
+				return;
+			}
+			if (res.statusCode > 399) {
+				callback(body);
+				return;
+			}
+			callback(null, body);
+		});
+		return self;
+	};
+	this.getFileDownloadLink = makeGetFunction("https://www.virustotal.com/api/v3/files/","/download_url");
 	this.fileBehaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
 	this.reAnalyzeFile = makePostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
 	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");

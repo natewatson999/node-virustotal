@@ -706,6 +706,36 @@ const theSameObject = defaultTimedInstance.sendURLVote('http://wikionemore.com',
 });
 ```
 
+## v3.getFileDownloadLink() and v3.downloadMaliciousFile()
+v3.getFileDownloadLink() takes a file ID and a standard callback. It then asks VirusTotal for a link to download the corresponding file. Note that, due to hash collisions, MD5 and SHA1 IDs are HEAVILY discouraged for this method. If the request is processed properly and the API key is one with permission to download malware, then a link will be returned in a standard callback. This link is valid for 1 hour. 
+
+The file can be downloaded with v3.downloadMaliciousFile(). downloadMaliciousFile takes a link and a standard callback. It then asks for VirusTotal to send the contents of the file corresponding with the link. If the request is processed properly, then the file contents will be returned in a standard callback. Note that this method is extremely dangerous and should NEVER be used on a system which has confidential, secure, financial, or medical information.
+
+Both functions return this instance of a v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+const theSameObject = premiumAccess.getFileDownloadLink('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  const theActualFileLink = res.data;
+  premiumAccess.downloadMaliciousFile(theActualFileLink, function(err2, maliciousData){
+    if (err2) {
+      console.log('Well, crap.');
+      console.log(err2);
+      return;
+    }
+    //Do whatever you want that is legal with maliciousData.
+  });
+});
+```
+
 ## Security And Legal Notes
 This API only uses HTTPS.
 
@@ -713,6 +743,6 @@ The VirusTotal API supports 3 hash algorithms: MD5, SHA1, and SHA256 "A member o
 
 The site mentioned in the example code is a known phishing site. It was shut down, but I still advise against going to it. It is used here because it makes an easy to understand example. The IP addresses mentioned are all of a well known DNS server. 
 
-The author(s) of this API are not responsible for the contents of VirusTotal's information, third party information, third party comments, or malware. This API is not safe or intended for mission critical systems, nor is it safe or intended for safety critical systems.
+The author(s) of this API are not responsible for the contents or effects of VirusTotal's information, third party information, third party comments, or malware. This API is not safe or intended for mission critical systems, nor is it safe or intended for safety critical systems.
 
 All of this code is under the MIT license; with the possible exceptions of the modules, which are under their own licenses, which should be readable in their documentation. While this code is under the MIT license, the VirusTotal REST API is under a custom license which should be read separately, before attempting to use this API.
