@@ -338,7 +338,7 @@ const v3 = function(delay){
 	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
 	this.fileCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/comments");
 	this.fileLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","");
-	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
+	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
 	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
 	this.domainLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","");
@@ -356,10 +356,19 @@ const v3 = function(delay){
 	this.sendIPvote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes"), makeVoteObject);
 	this.sendDomainVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/domains/","/votes"), makeVoteObject);
 	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
-	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","/comments");
-	this.getDomainRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/domains/","/","/comments");
-	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","/comments");
+	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","");
+	this.getDomainRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/domains/","/","");
+	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
 	this.reAnalyzeURL = makePostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
+
+	this.getAnalysisInfo = makeGetFunction("https://www.virustotal.com/api/v3/analyses/","");
+
+
+	this.getUserInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","");
+	this.getUserUsageInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","/api_usage");
+	this.getGroupInfo = makeGetFunction("https://www.virustotal.com/api/v3/groups/","");
+	this.getGroupRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/groups/","/relationships/","");
+	this.getGroupAdministrators = makeGetFunction("https://www.virustotal.com/api/v3/groups/","/administrators");
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
