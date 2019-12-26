@@ -3,6 +3,16 @@ const output = {};
 output.legacyEdition = function(){
 	return require('code.js');
 };
+output.sha256 = (function(){
+	const sha256String = 'sha256';
+	const crypto = require('crypto');
+	const hexString = 'hex';
+	return function(input){
+		const hash = crypto.createHash(sha256String);
+		hash.update(input);
+		return (hash.digest(hexString));
+	};
+})();
 output.malicious = "malicious";
 output.harmless = "harmless";
 const getString = "GET";
@@ -339,25 +349,25 @@ const v3 = function(delay){
 	this.fileCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/comments");
 	this.fileLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","");
 	this.getFileRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
-	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
 	this.ipLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","");
 	this.domainLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","");
-	this.urlLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","");
 	this.ipCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments");
 	this.domainCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/comments");
-	this.urlCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/comments");
-	this.urlNetworkLocations = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/network_location");
 	this.ipVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes");
 	this.domainVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/domains/","/votes");
-	this.urlVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/votes");
 	this.postIPcomment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/comments"), commentToObject);
 	this.postDomainComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/domains/","/comments"), commentToObject);
-	this.postURLComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendIPvote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/ip_addresses/","/votes"), makeVoteObject);
 	this.sendDomainVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/domains/","/votes"), makeVoteObject);
-	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getIPrelationships = make3partGetFunction("https://www.virustotal.com/api/v3/ip_addresses/","/","");
 	this.getDomainRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/domains/","/","");
+	this.initialScanURL = makeRawPostFormFunction("https://www.virustotal.com/api/v3/urls",makeURLForm);
+	this.urlLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","");
+	this.urlCommentLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/comments");
+	this.urlNetworkLocations = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/network_location");
+	this.urlVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/urls/","/votes");
+	this.postURLComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
+	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
 	this.reAnalyzeURL = makePostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
 

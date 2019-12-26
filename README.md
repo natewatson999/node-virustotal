@@ -63,8 +63,45 @@ This is an object to the following specification:
 	historical_whois: 'historical_whois',
 	referrer_files: 'referrer_files',
 	resolutions: 'resolutions',
-	urls: 'urls'
+	urls: 'urls',
+	siblings: 'siblings',
+	referrer_files: 'referrer_files',
+	historical_whois: 'historical_whois',
+	analyses: 'analyses',
+	last_serving_ip_address: 'last_serving_ip_address',
+	redirecting_urls: 'redirecting_urls',
+	submissions: 'submissions',
+	analyses: 'analyses',
+	behaviours: 'behaviours',
+	bundled_files: 'bundled_files',
+	carbonblack_children: 'carbonblack_children',
+	carbonblack_parents: 'carbonblack_parents',
+	comments: 'comments',
+	compressed_parents: 'compressed_parents',
+	contacted_domains: 'contacted_domains',
+	contacted_ips: 'contacted_ips',
+	contacted_urls: 'contacted_urls',
+	email_parents: 'email_parents',
+	embedded_domains: 'embedded_domains',
+	embedded_ips: 'embedded_ips',
+	execution_parents: 'execution_parents',
+	itw_urls: 'itw_urls',
+	overlay_parents: 'overlay_parents',
+	pcap_parents: 'pcap_parents',
+	pe_resource_parents: 'pe_resource_parents',
+	similar_files: 'similar_files',
+	submissions: 'submissions',
+	screenshots: 'screenshots',
+	votes: 'votes'
 }
+```
+
+## nvt.sha256()
+
+This takes a string and returns a hexadecimal representation of the SHA256 hash of the string.
+```
+const hashed = require('node-virustotal').sha256('http://wikionemore.com/');
+console.log(hashed); //prints 6a106dcb91cc315397c96c39758ff724e53ea0329daf2eaeccbb65820b73c97e
 ```
 
 ## nvt.makeAPI()
@@ -194,14 +231,15 @@ const theSameObject = defaultTimedInstance.fileLookup('8739c76e681f900923b900c9d
 ```
 
 ## v3.urlLookup()
-This takes a URL and a standard callback. The URL is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+This takes a SHA256 hashed URL and a standard callback. The URL is looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.urlLookup('http://wikionemore.com', function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.urlLookup(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -270,14 +308,15 @@ const theSameObject = defaultTimedInstance.fileCommentLookup('8739c76e681f900923
 ```
 
 ## v3.urlCommentLookup()
-This takes a URL and a standard callback. The comments regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+This takes a SHA256 hashed URL and a standard callback. The comments regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.urlCommentLookup('http://wikionemore.com', function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.urlCommentLookup(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -289,14 +328,15 @@ const theSameObject = defaultTimedInstance.urlCommentLookup('http://wikionemore.
 ```
 
 ## v3.urlNetworkLocations()
-This takes a URL and a standard callback. The network locations regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+This takes a SHA256 hashed URL and a standard callback. The network locations regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.urlNetworkLocations('http://wikionemore.com', function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.urlNetworkLocations(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -346,14 +386,15 @@ const theSameObject = defaultTimedInstance.reAnalyzeFile('8739c76e681f900923b900
 ```
 
 ## v3.reAnalyzeURL()
-This takes a URL and a standard callback. This causes VirusTotal to reanalyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+This takes a SHA256 hashed URL and a standard callback. This causes VirusTotal to reanalyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.urlNetworkLocations('http://wikionemore.com', function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.reAnalyzeURL(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -460,14 +501,15 @@ const theSameObject = defaultTimedInstance.getDomainRelationships('wikionemore.c
 ```
 
 ## v3.getURLRelationships()
-This takes a URL, a relationship, and a standard callback. The relationships regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
+This takes a SHA256 hashed URL, a relationship, and a standard callback. The relationships regarding the domain are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. The relationship should be a member variable of nvt.relationships.
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.getURLRelationships('http://wikionemore.com', nvt.relationships.graphs, function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.getURLRelationships(hashed, nvt.relationships.graphs, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -535,15 +577,35 @@ const theSameObject = defaultTimedInstance.fileVotesLookup('8739c76e681f900923b9
 });
 ```
 
-## v3.urlVotesLookup()
-This takes a URL and a standard callback. The votes regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+## v3.getAnalysisInfo()
+This takes an analysis ID and a standard callback. The votes regarding the analysis are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.urlVotesLookup('http://wikionemore.com', function(err, res){
+const theSameObject = defaultTimedInstance.getAnalysisInfo('<string>', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+  console.log(JSON.stringify(res));
+  return;
+});
+```
+
+## v3.urlVotesLookup()
+This takes a SHA256 hashed URL and a standard callback. The votes regarding the URL are looked up in VirusTotal's database, and the information is returned in res. This returns this instance of the v3 object. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const defaultTimedInstance = nvt.makeAPI();
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.urlVotesLookup(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -593,14 +655,15 @@ const theSameObject = defaultTimedInstance.postDomainComment('wikionemore.com',"
 ```
 
 ## v3.postURLComment()
-This takes a URL, a string comment, and a standard callback. The comment regarding the URL is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
+This takes a SHA256 hashed URL, a string comment, and a standard callback. The comment regarding the URL is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.postURLComment('http://wikionemore.com',"This URL is malicious. I'm just testing an API", function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.postURLComment(hashed,"This URL is malicious. I'm just testing an API", function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -688,14 +751,15 @@ const theSameObject = defaultTimedInstance.sendFileVote('8739c76e681f900923b900c
 ```
 
 ## v3.sendURLVote()
-This takes a URL, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
+This takes a SHA256 hashed URL, a vote, and a standard callback. The vote regarding the domain is posted to VirusTotal's database, and the response is returned in res. This returns this instance of the v3 object. The vote must either be nvt.malicious or nvt.harmless. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.sendURLVote('http://wikionemore.com', nvt.malicious, function(err, res){
+const hashed = nvt.sha256('http://wikionemore.com/');
+const theSameObject = defaultTimedInstance.sendURLVote(hashed, nvt.malicious, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
