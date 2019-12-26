@@ -28,6 +28,8 @@ Fair warning, this documentation is extremely long, so if you need to pee or nee
 
 The VirusTotal API has 2 tiers: free and premium. The free API has a limit of 4 calls per minute, or one every 15000 milliseconds. Consequently, node-virustotal uses a task queue internally. If you have the premium API, this will still work, however the premium-specific features may be buggy due to the lack of possibility of testing, and you may wish to adjust the time between API calls. 
 
+All object schemas can be found in VirusTotal's developer documentation: https://developers.virustotal.com/v3.0/reference#groups . 
+
 ## Old Versions
 
 VirusTotal has made some incompatible changes with their APIs as of verison 3. For this reason, this API has also had to change. The 3.0+ versions of this API are incompatible with the pre-3.0 releases. To minimize breakage and issues, there is a section of the API to directly use the pre-3.0 versions. The pre-3.0 sections will no longer be maintained but will not be removed. The documentation for the pre-3.0 versions can be found in RepoLinkHere/oldREADME.md.
@@ -797,6 +799,95 @@ const theSameObject = premiumAccess.getFileDownloadLink('8739c76e681f900923b900c
     }
     //Do whatever you want that is legal with maliciousData.
   });
+});
+```
+
+## User Features
+
+Note: All features regarding users are VirusTotal Enterprise exclusive-features. The user can be retrieved either by user ID or by API key, but the latter only works if the requester is requesting their own information or the requester is an administrator of a group the user belongs to. 
+
+### v3.getUserInfo()
+
+This takes a User ID and a standard callback, asks VirusTotal to look up the information regarding the user, and returns the information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getUserInfo('AmeliaNitrate', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
+});
+```
+
+### v3.getUserUsageInfo()
+
+This takes a User ID and a standard callback, asks VirusTotal to look up the information regarding the user's usage of VirusTotal's services, and returns the information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getUserUsageInfo('AmeliaNitrate', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
+});
+```
+
+### v3.getGroupInfo()
+
+This takes a Group ID and a standard callback, asks VirusTotal to look up the information regarding the group, and returns the information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getGroupInfo('FabulousQueens', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
+});
+```
+
+### v3.getGroupAdministrators()
+
+This takes a Group ID and a standard callback, asks VirusTotal to look up the information regarding the administrators of the group, and returns the information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getGroupAdministrators('FabulousQueens', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
+});
+```
+
+### v3.getGroupRelationships()
+
+This takes a Group ID, a relationships type "which has to be nvt.relationships.graphs", and a standard callback; asks VirusTotal to look up the relationship information regarding the group; and returns the information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getGroupRelationships('FabulousQueens', nvt.relationships.graphs, function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
 });
 ```
 
