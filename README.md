@@ -891,6 +891,72 @@ premiumAccess.getGroupRelationships('FabulousQueens', nvt.relationships.graphs, 
 });
 ```
 
+## Zip Files
+
+Note that Zip file features are all VirusTotal Enterprise -exclusive features. 
+
+### v3.getZipFileInfo()
+This takes a Zip file ID and a callback, asks VirusTotal for the zip file information with said ID, and returns the file's information in the callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getZipFileInfo('4939392292', function(err, res){
+  if (err) {
+    console.log('Well, crap.');
+    console.log(err);
+    return;
+  }
+	console.log(JSON.stringify(res));
+```
+
+### v3.getZipFileDownloadLink() and v3.downloadZipFile()
+getZipFileDownloadLink takes a Zip file ID and a callback, asks VirusTotal for a link to download the zip file with said ID, and returns an object with the link in the callback. downloadZipFile takes the link and a callback, downloads the zip file, and has it available in a standard callback.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.getZipFileInfo('4939392292', function(err1, res){
+  if (err1) {
+    console.log('Well, crap.');
+    console.log(err1);
+    return;
+  }
+	premiumAccess.downloadZipFile(res.data, function(err2, contents){
+	  if (err2) {
+	    console.log('Well, crap.');
+	    console.log(err2);
+	    return;
+	  }
+		console.log(JSON.stringify(contents));
+	});
+```
+
+### v3.makePlainTextZipFile() and v3.makePasswordZipFile()
+
+These ask VirusTotal to make zip files. makePlainTextZipFile takes an array of file IDs and a standard callback. makePasswordZipFile takes a password, array of file IDs, and a standard callback. In each case, they request VirusTotal to make a zip file with the associated files. If makePasswordZipFile is used, the file will be encrypted with a provided password, but it will be plaintext if makePlainTextZipFile is used.
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+premiumAccess.makePlainTextZipFile(['549c0a11d2f01efee5dc09061ffe58730c1629d7763466369b8e3a5e0fa26706', '549c0a11d2f01efee5dc09061ffe58730c1629d7763466369b8e3a5e0fa26706'], function(err1, res){
+  if (err1) {
+    console.log('Well, crap.');
+    console.log(err1);
+    return;
+  }
+	console.log(JSON.stringify(res));
+}).makePasswordZipFile('The secret slime action is... having red hair.',['549c0a11d2f01efee5dc09061ffe58730c1629d7763466369b8e3a5e0fa26706', '549c0a11d2f01efee5dc09061ffe58730c1629d7763466369b8e3a5e0fa26706'], function(err1, res){
+  if (err1) {
+    console.log('Well, crap.');
+    console.log(err1);
+    return;
+  }
+	console.log(JSON.stringify(res));
+});
+
+```
+
 ## Security And Legal Notes
 This API only uses HTTPS.
 

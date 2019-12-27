@@ -15,6 +15,7 @@ output.sha256 = (function(){
 })();
 output.malicious = "malicious";
 output.harmless = "harmless";
+const makeZipFileLink = 'https://www.virustotal.com/api/v3/intelligence/zip_files';
 const getString = "GET";
 const postString = "POST";
 const request = require('request');
@@ -97,6 +98,17 @@ const makePostTransform = function(initialFunction, bodyModification){
 		const modded = bodyModification(content);
 		return initialFunction(id, modded, callback);
 	};
+};
+const makePlainZipFileObject = function(input){
+	return {data:{
+		hashes: input
+	}};
+};
+const makePasswordZipFileObject = function(password, files){
+	return {data:{
+		password: password, 
+		hashes: files
+	}};
 };
 const invalidVoteString = "Invalid vote string";
 const filesLink = "https://www.virustotal.com/api/v3/files";
@@ -370,15 +382,30 @@ const v3 = function(delay){
 	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
 	this.reAnalyzeURL = makePostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
-
 	this.getAnalysisInfo = makeGetFunction("https://www.virustotal.com/api/v3/analyses/","");
-
-
 	this.getUserInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","");
 	this.getUserUsageInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","/api_usage");
 	this.getGroupInfo = makeGetFunction("https://www.virustotal.com/api/v3/groups/","");
 	this.getGroupRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/groups/","/relationships/","");
 	this.getGroupAdministrators = makeGetFunction("https://www.virustotal.com/api/v3/groups/","/administrators");
+
+	this.getZipFileInfo = makeGetFunction("https://www.virustotal.com/api/v3/intelligence/zip_files/","");
+	this.getZipFileDownloadLink = makeGetFunction("https://www.virustotal.com/api/v3/intelligence/zip_files/","/download_url");
+	this.downloadZipFile = this.downloadMaliciousFile;
+	this.makePlainTextZipFile = makeRawPostFormFunction(makeZipFileLink, makePlainZipFileObject);
+	this.makePasswordZipFile = function(password, files, callback){
+		const body = JSON.stringify(makePasswordZipFileObject(password, files));
+		putInLine(function(){
+			request({
+				url: makeZipFileLink,
+				method: postString,
+				headers: standardHeader,
+				body: body
+			}, standardCallback(callback));
+		});
+		return self;
+	};
+	
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
