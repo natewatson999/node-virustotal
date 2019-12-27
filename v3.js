@@ -24,6 +24,25 @@ const thirtyTwoMegabytes = 34359738368;
 const defaultDelay = millisecondsPerMinute/4;
 const commentString = "comment";
 const voteString = "vote";
+const decompress = (function(){
+	const compressjs = require('compressjs');
+	const algorithm = compressjs.Bzip2;
+	const utf8 = 'utf8';
+	return function(input){
+		const stage1 = algorithm.decompressFile(compressed);
+		return new Buffer(stag1).toString(utf8);
+	};
+})();
+const processDate = (function(){
+	const dateFormat = require('dateformat');
+	const dateFormatString = 'yyyymmddHHMM';
+	return function(input){
+		return dateFormat(input, dateFormatString);
+	};
+})();
+const processFeedOutput = function(input){
+	return decompress(input).split('\r').join('').split('\n').map(JSON.parse);
+};
 const ensureBuffer = function(input){
 	if (typeof input=="string"){
 		return Buffer.from(input, 'utf8');
@@ -405,18 +424,33 @@ const v3 = function(delay){
 		return self;
 	};
 	
-const processFeedOutput = function(input){
-	
-};
 	const makeFeedFunction = function(input){
 		const target = input;
 		return function(timeStamp, callback){
+			const url = target + processDate(timeStamp);
 			putInLine(function(){
-				
+				request({
+					url: url,
+					method: getString,
+					headers: standardHeader
+				}, function(err, res, body){
+					if (err) {
+						callback(err);
+						return;
+					}
+					if (res.statusCode > 399) {
+						callback(body);
+						return;
+					}
+					callback(null, decompress(body));
+				});
 			});
 			return self;
 		};
 	};
+	this.getFilesForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/files/');
+	this.getURLsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/urls/');
+	this.getFileBehaviorsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/file-behaviors/');
 };
 output.makeAPI = function(delay){
 	return new v3(delay);

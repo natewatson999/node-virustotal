@@ -956,6 +956,27 @@ premiumAccess.makePlainTextZipFile(['549c0a11d2f01efee5dc09061ffe58730c1629d7763
 });
 ```
 
+## Feeds
+
+Note that feed features are exclusive to VirusTotal Enterprise users. These give all of the either files, URLs, or File Behaviors that have been analyzed within any given minute. Note that batches can be downloaded as long as they're 7 days old or younger, but older than 1 minute. 
+
+v3.getFilesForTime(), v3.getURLsForTime(), and v3.getFileBehaviorsForTime() all have the same interface: They take a JavaScript Date object and callback. The callback has 2 parameters: a possibly null error object, and an array of results. The array is an array of where each object in the array is either similar to what you'd get from v3.fileLookup, v3.urlLookup(), or v3.fileBehaviours(); depending on which one you used. 
+
+### Example
+
+```
+const nvt = require('node-virustotal');
+const premiumAccess = nvt.makeAPI().setKey('Oh, you have a premium key? I hate you.');
+const when = new Date('December 17, 1995 03:24:00');
+premiumAccess.getURLsForTime(when, function(err, results){
+	if (err) {
+		console.log(err);
+		return;
+	}
+	results.map(JSON.stringify).forEach(console.log);
+});
+```
+
 ## Security And Legal Notes
 This API only uses HTTPS.
 
