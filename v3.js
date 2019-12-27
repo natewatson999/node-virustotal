@@ -388,7 +388,6 @@ const v3 = function(delay){
 	this.getGroupInfo = makeGetFunction("https://www.virustotal.com/api/v3/groups/","");
 	this.getGroupRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/groups/","/relationships/","");
 	this.getGroupAdministrators = makeGetFunction("https://www.virustotal.com/api/v3/groups/","/administrators");
-
 	this.getZipFileInfo = makeGetFunction("https://www.virustotal.com/api/v3/intelligence/zip_files/","");
 	this.getZipFileDownloadLink = makeGetFunction("https://www.virustotal.com/api/v3/intelligence/zip_files/","/download_url");
 	this.downloadZipFile = this.downloadMaliciousFile;
@@ -406,6 +405,18 @@ const v3 = function(delay){
 		return self;
 	};
 	
+const processFeedOutput = function(input){
+	
+};
+	const makeFeedFunction = function(input){
+		const target = input;
+		return function(timeStamp, callback){
+			putInLine(function(){
+				
+			});
+			return self;
+		};
+	};
 };
 output.makeAPI = function(delay){
 	return new v3(delay);

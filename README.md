@@ -954,7 +954,6 @@ premiumAccess.makePlainTextZipFile(['549c0a11d2f01efee5dc09061ffe58730c1629d7763
   }
 	console.log(JSON.stringify(res));
 });
-
 ```
 
 ## Security And Legal Notes

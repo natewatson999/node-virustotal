@@ -1,6 +1,6 @@
 {
   "name": "node-virustotal",
-  "version": "3.14.0",
+  "version": "3.15.0",
   "description": "An implementation of the Virustotal API for Node.js",
   "main": "code.js",
   "scripts": {
@@ -26,14 +26,14 @@
     "url": "https://github.com/natewatson999/node-virustotal/issues"
   },
   "dependencies": {
-	  "speedconcat": "^1.0.2",
-	  "request": "^2.72.0",
- 	  "moment": "^2.17.1",
-		"compressjs": "^1.0.3",
-    "tar": ">=4.4.2",
+    "compressjs": "^1.0.3",
     "emailjs": "^1.0.8",
     "mail-notifier": "^0.3.0",
-    "shelljs": "^0.7.0"
+    "moment": "^2.24.0",
+    "request": "^2.88.0",
+    "shelljs": "^0.7.0",
+    "speedconcat": "^1.0.2",
+    "tar": ">=4.4.2"
   },
   "homepage": "https://github.com/natewatson999/node-virustotal#readme"
 }
