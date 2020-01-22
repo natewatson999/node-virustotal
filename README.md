@@ -175,7 +175,7 @@ const theSameKey = defaultTimedInstance.setDelay(15000);
 
 
 ## v3.uploadFile()
-This takes the contents of a potentially risky file in either string or Buffer form "Buffer is preferred" and a standard callback. The file is sent to VirusTotal for analysis, and the information regarding the pending analysis is returned in res. This returns this instance of the v3 object. Note that if your file's contents are at least 32 megabytes in size, this will take 2 uses of the internal task queue instead of the usual 1. This is because such files take 2 interactions with VirusTotal's interface.
+This takes the contents of a potentially risky file in either string or Buffer form "Buffer is preferred", a known filename, a MIME type, and a standard callback. The file is sent to VirusTotal for analysis, and the information regarding the pending analysis is returned in res. This returns this instance of the v3 object. Note that if your file's contents are at least 32 megabytes in size, this will take 2 uses of the internal task queue instead of the usual 1. This is because such files take 2 interactions with VirusTotal's interface. Note, if the filename and type are not included, they will be substituted as 'unknown' and 'application/octet-stream' respectively.
 
 ### Example
 
@@ -183,7 +183,7 @@ This takes the contents of a potentially risky file in either string or Buffer f
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const aMaliciousFile = require('fs').readFileSync('./aMaliciousFile.exe');
-const theSameObject = defaultTimedInstance.uploadFile(aMaliciousFile, function(err, res){
+const theSameObject = defaultTimedInstance.uploadFile(aMaliciousFile, 'aMaliciousFile.exe', 'application/x-msdownload', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);

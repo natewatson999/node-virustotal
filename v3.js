@@ -15,6 +15,8 @@ output.sha256 = (function(){
 })();
 output.malicious = "malicious";
 output.harmless = "harmless";
+const unknownName = 'unknown';
+const defaultType = 'application/octet-stream';
 const makeZipFileLink = 'https://www.virustotal.com/api/v3/intelligence/zip_files';
 const getString = "GET";
 const postString = "POST";
@@ -81,8 +83,8 @@ const commentToObject = function(input){
 const makeURLForm = function(input){
 	return {url: input};
 };
-const makeFileForm = function(input){
-	return {file: input};
+const makeFileForm = function(input, fileName, fileType){
+	return {file: {value: input, options: {filename: fileName, filetype: fileType}}};
 };
 const makeVoteObject = function(input){
 	switch (input) {
@@ -320,20 +322,26 @@ const v3 = function(delay){
 		};
 	};
 
-	const uploadFileToURL = function(content, location, callback){
+	const uploadFileToURL = function(content, location, name, type, callback){
 		request({
 			url: location,
 			method: postString,
 			headers: standardHeader,
-			form: makeFileForm(content)
+			formData: makeFileForm(content, name, type)
 		}, standardCallback(callback));
 	};
 
-	this.uploadFile = function(input, callback){
+	this.uploadFile = function(input, filename, filetype, callback){
+		if (filetype==undefined){
+			return self.uploadFile(input, unknownName, filename);
+		}
+		if (callback==undefined){
+			return self.uploadFile(input, filename, defaultType, filetype);
+		}
 		const asBuffer = ensureBuffer(input);
 		putInLine(function(){
 			if (asBuffer.length < thirtyTwoMegabytes) {
-				uploadFileToURL(asBuffer, filesLink,callback);
+				uploadFileToURL(asBuffer, filesLink, filename, filetype, callback);
 				return;
 			}
 			request({
@@ -451,6 +459,10 @@ const v3 = function(delay){
 	this.getFilesForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/files/');
 	this.getURLsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/urls/');
 	this.getFileBehaviorsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/file-behaviors/');
+	
+	
+	this.getHashAnalysis = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/analyses");
+	this.getHashItems = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/items");
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
