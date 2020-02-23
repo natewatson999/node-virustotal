@@ -32,7 +32,7 @@ const decompress = (function(){
 	const utf8 = 'utf8';
 	return function(input){
 		const stage1 = algorithm.decompressFile(compressed);
-		return new Buffer(stag1).toString(utf8);
+		return new Buffer(stage1).toString(utf8);
 	};
 })();
 const processDate = (function(){
@@ -460,7 +460,10 @@ const v3 = function(delay){
 	this.getURLsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/urls/');
 	this.getFileBehaviorsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/file-behaviors/');
 	
-	
+	//Graphs
+	//Retrohunt
+	//Software Publishers
+	//Antivirus Partners
 	this.getHashAnalysis = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/analyses");
 	this.getHashItems = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/items");
 };
