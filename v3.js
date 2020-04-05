@@ -13,13 +13,26 @@ output.sha256 = (function(){
 		return (hash.digest(hexString));
 	};
 })();
+output.confirmed = 'confirmed';
+output.None = 'None';
 output.malicious = "malicious";
 output.harmless = "harmless";
 const unknownName = 'unknown';
 const defaultType = 'application/octet-stream';
 const makeZipFileLink = 'https://www.virustotal.com/api/v3/intelligence/zip_files';
+const graphSearchLink = 'https://www.virustotal.com/api/v3/graphs';
+const individualGraphLink = graphSearchLink + '/';
+const invalidVoteString = "Invalid vote string";
+const filesLink = "https://www.virustotal.com/api/v3/files";
+const bigFileLink = "https://www.virustotal.com/api/v3/files/upload_url";
+const partnerCommentsLink = "https://www.virustotal.com/api/v3/monitor_partner/comments/"
+const monitorPartnerHashesString = "https://www.virustotal.com/api/v3/monitor_partner/hashes/";
+const defaultKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
+const monitor_hash_comment = 'monitor_hash_comment'
 const getString = "GET";
 const postString = "POST";
+const deleteString = 'DELETE';
+const patchString = 'PATCH';
 const request = require('request');
 const millisecondsPerMinute = 60000;
 const thirtyTwoMegabytes = 34359738368;
@@ -131,15 +144,24 @@ const makePasswordZipFileObject = function(password, files){
 		hashes: files
 	}};
 };
-const invalidVoteString = "Invalid vote string";
-const filesLink = "https://www.virustotal.com/api/v3/files";
-const bigFileLink = "https://www.virustotal.com/api/v3/files/upload_url";
-const defaultKey = "e2513a75f92a4169e8a47b4ab1df757f83ae45008b4a8a49903450c8402add4d";
+output.graphSortKeys = {
+	name: 'name',
+	owner: 'owner',
+	creation_date: 'creation_date',
+	last_modified_date: 'last_modified_date',
+	views_count: 'views_count',
+	comments_count: 'comments_count'
+};
 output.relationships = {
 	comments: 'comments',
 	communicating_files: 'communicating_files',
 	downloaded_files: 'downloaded_files',
 	graphs: 'graphs',
+	items: 'items',
+	viewers: 'viewers',
+	editors: 'editors',
+	owner: 'owner',
+	group: 'group',
 	historical_whois: 'historical_whois',
 	referrer_files: 'referrer_files',
 	resolutions: 'resolutions',
@@ -235,43 +257,48 @@ const v3 = function(delay){
 		if (wasNull){
 			performNext();
 		}
+		return self;
 	};
 	
 	this.queueTest = function(input){
 		const f = function(){
 			console.log(input);
 		};
-		putInLine(f);
-		return self;
+		return putInLine(f);
 	};
 
-	const makeGetFunction = function(beforePath, afterPath){
+	const makeGetOrDeleteFunction = function(beforePath, afterPath, type){
 		return function(contentID, cb){
 			const id = contentID;
 			const callback = cb;
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: beforePath + id + afterPath,
-					method: getString,
+					method: type,
 					headers: standardHeader
 				}, standardCallback(callback));
 			});
-			return self;
 		};
+	
+	};
+	const makeGetFunction = function(beforePath, afterPath){
+		return makeGetOrDeleteFunction(beforePath, afterPath, getString);
+	};
+	const makeDeleteFunction = function(beforePath, afterPath){
+		return makeGetOrDeleteFunction(beforePath, afterPath, deleteString);
 	};
 	const make3partGetFunction = function(beforePath, middlePath, afterPath){
 		return function(contentID, secondID, cb){
 			const id = contentID;
 			const sid = secondID;
 			const callback = cb;
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: beforePath + id + middlePath + sid + afterPath,
 					method: getString,
 					headers: standardHeader
 				}, standardCallback(callback));
 			});
-			return self;
 		};
 	};
 	const makePostFunction = function(beforePath, afterPath){
@@ -279,7 +306,7 @@ const v3 = function(delay){
 			const body = contents;
 			const id = contentID;
 			const callback = cb;
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: beforePath + id + afterPath,
 					method: postString,
@@ -287,7 +314,6 @@ const v3 = function(delay){
 					body: JSON.stringify(body)
 				}, standardCallback(callback));
 			});
-			return self;
 		};
 	};
 	const makeRawPostFunction = function(beforePath, afterPath){
@@ -295,7 +321,7 @@ const v3 = function(delay){
 			const body = contents;
 			const id = contentID;
 			const callback = cb;
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: beforePath + id + afterPath,
 					method: postString,
@@ -303,14 +329,13 @@ const v3 = function(delay){
 					body: body
 				}, standardCallback(callback));
 			});
-			return self;
 		};
 	};
 	const makeRawPostFormFunction = function(beforePath, modifier){
 		return function(input, cb){
 			const form = input;
 			const callback = cb;
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: beforePath,
 					method: postString,
@@ -318,7 +343,6 @@ const v3 = function(delay){
 					form: modifier(form)
 				}, standardCallback(callback));
 			});
-			return self;
 		};
 	};
 
@@ -339,7 +363,7 @@ const v3 = function(delay){
 			return self.uploadFile(input, filename, defaultType, filetype);
 		}
 		const asBuffer = ensureBuffer(input);
-		putInLine(function(){
+		return putInLine(function(){
 			if (asBuffer.length < thirtyTwoMegabytes) {
 				uploadFileToURL(asBuffer, filesLink, filename, filetype, callback);
 				return;
@@ -358,7 +382,6 @@ const v3 = function(delay){
 				});
 			}));
 		});
-		return self;
 	};
 	this.downloadMaliciousFile = function(contentID, cb){
 		const target = contentID;
@@ -421,7 +444,7 @@ const v3 = function(delay){
 	this.makePlainTextZipFile = makeRawPostFormFunction(makeZipFileLink, makePlainZipFileObject);
 	this.makePasswordZipFile = function(password, files, callback){
 		const body = JSON.stringify(makePasswordZipFileObject(password, files));
-		putInLine(function(){
+		return putInLine(function(){
 			request({
 				url: makeZipFileLink,
 				method: postString,
@@ -429,14 +452,13 @@ const v3 = function(delay){
 				body: body
 			}, standardCallback(callback));
 		});
-		return self;
 	};
 	
 	const makeFeedFunction = function(input){
 		const target = input;
 		return function(timeStamp, callback){
 			const url = target + processDate(timeStamp);
-			putInLine(function(){
+			return putInLine(function(){
 				request({
 					url: url,
 					method: getString,
@@ -453,7 +475,6 @@ const v3 = function(delay){
 					callback(null, decompress(body));
 				});
 			});
-			return self;
 		};
 	};
 	this.getFilesForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/files/');
@@ -461,11 +482,74 @@ const v3 = function(delay){
 	this.getFileBehaviorsForTime = makeFeedFunction('https://www.virustotal.com/api/v3/feeds/file-behaviors/');
 	
 	//Graphs
+	/*this.searchGraphs = function(filter, limit, cursor, order, attributes, callback){
+		if (arguments.length < 6) {
+			const expanded = Array.from(arguments);
+			expanded.splice(0,0,null);
+			return self.searchGraphs(...expanded);
+		}
+		const qs = {};
+		if (filter) {//TODO: Make an interface to make filters the way the old version did.
+			qs.filter = filter;
+		}
+		if (limit) {
+			qs.limit = limit;
+		}
+		if (cursor) {
+			qs.cursor = cursor;
+		}
+		if (order) {
+			qs.order = order;
+		}
+		if (attributes) {//TODO: Need an object of valid attributes values
+			qs.attributes = attributes.join(',');
+		}
+		return putInLine(function(){
+			request({
+				url: graphSearchLink,
+				method: getString,
+				headers: standardHeader,
+				qs: qs
+			},standardCallback(callback));
+		});
+	};
+	this.publishGraph = makePostFunction(graphSearchLink,'');
+	this.getGraph = makeGetFunction(individualGraphLink,'');*/
+
 	//Retrohunt
 	//Software Publishers
 	//Antivirus Partners
-	this.getHashAnalysis = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/analyses");
-	this.getHashItems = makeGetFunction("https://www.virustotal.com/api/v3/monitor_partner/hashes/","/items");
+	
+	this.getHashAnalysis = makeGetFunction(monitorPartnerHashesString,"/analyses");
+	this.getHashItems = makeGetFunction(monitorPartnerHashesString,"/items");
+	const sendPartnerComment = function(hash, text, detectionStatus, engineID, url, method, callback){
+		const target = url;
+		const body = JSON.stringify({
+			data: [{attributes:{
+				comment: text,
+				detectionStatus: detectionStatus,
+				engine: engineID,
+				sha256: hash,
+				type:  monitor_hash_comment
+			}}]
+		});
+		return putInLine(function(){
+			request({
+				url: target,
+				method: method,
+				headers: standardHeader,
+				body: body
+			}, standardCallback(callback));
+		});
+	};
+	this.makePartnerComment = function(hash, text, detectionStatus, engineID, callback){
+		return sendPartnerComment(hash, text, detectionStatus, engineID, monitorPartnerHashesString + hash + '/comments', postString, callback);
+	};
+	this.getPartnerComments = makeGetFunction(partnerCommentsLink,"");
+	this.updatePartnerComment = function(id, hash, text, detectionStatus, engineID, callback){
+		return sendPartnerComment(hash, text, detectionStatus, engineID, partnerCommentsLink + id, patchString, callback);
+	};
+	this.deletePartnerComment = makeDeleteFunction(partnerCommentsLink,'');
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
