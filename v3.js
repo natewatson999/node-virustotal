@@ -316,6 +316,19 @@ const v3 = function(delay){
 			});
 		};
 	};
+	const makeNoContentPostFunction = function(beforePath, afterPath){
+		return function(contentID, cb){
+			const id = contentID;
+			const callback = cb;
+			return putInLine(function(){
+				request({
+					url: beforePath + id + afterPath,
+					method: postString,
+					headers: standardHeader
+				}, standardCallback(callback));
+			});
+		};
+	};
 	const makeRawPostFunction = function(beforePath, afterPath){
 		return function(contentID, contents, cb){
 			const body = contents;
@@ -383,13 +396,8 @@ const v3 = function(delay){
 			}));
 		});
 	};
-	this.downloadMaliciousFile = function(contentID, cb){
-		const target = contentID;
-		const callback = cb;
-		request({
-			url: target,
-			method: getString
-		}, function(error, response, body){
+	const makeDownloadCallback = function(callback){
+		return function(error, response, body){
 			if (err) {
 				callback(err);
 				return;
@@ -399,12 +407,20 @@ const v3 = function(delay){
 				return;
 			}
 			callback(null, body);
-		});
+		};
+	};
+	this.downloadMaliciousFile = function(contentID, cb){
+		const target = contentID;
+		const callback = cb;
+		request({
+			url: target,
+			method: getString
+		}, makeDownloadCallback(callback));
 		return self;
 	};
 	this.getFileDownloadLink = makeGetFunction("https://www.virustotal.com/api/v3/files/","/download_url");
 	this.fileBehaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
-	this.reAnalyzeFile = makePostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
+	this.reAnalyzeFile = makeNoContentPostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
 	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");
 	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
@@ -431,7 +447,7 @@ const v3 = function(delay){
 	this.postURLComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
-	this.reAnalyzeURL = makePostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
+	this.reAnalyzeURL = makeNoContentPostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
 	this.getAnalysisInfo = makeGetFunction("https://www.virustotal.com/api/v3/analyses/","");
 	this.getUserInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","");
 	this.getUserUsageInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","/api_usage");
@@ -550,6 +566,38 @@ const v3 = function(delay){
 		return sendPartnerComment(hash, text, detectionStatus, engineID, partnerCommentsLink + id, patchString, callback);
 	};
 	this.deletePartnerComment = makeDeleteFunction(partnerCommentsLink,'');
+	this.getPartnerDownload = function(hash, callback){
+		return putInLine(function(){
+			self.downloadMaliciousFile('https://www.virustotal.com/api/v3/monitor_partner/files/' + hash + '/download_url', callback);
+		});
+	}; 
+	this.getPartnerDownloadURL = makeGetFunction('https://www.virustotal.com/api/v3/monitor_partner/files/','/download_url');
+	this.getEngineStatistics = makeGetFunction('https://www.virustotal.com/api/v3/monitor_partner/statistics?filter=engine:','');
+	this.makeDetectionBundleControlObject = function(){
+		return {
+			this.engine = null;
+			this.date = null;
+			this.cursor = 0;
+			this.limit = 40;
+		};
+	};
+	this.getDetectionsBundle = function(input, callback){
+	  let engineString = '';
+		let dateString = '';
+		if (input.engine) {
+			engineString = '/' + input.engine;
+		}
+		if (input.date) {
+			dateString = "/{date('" + input.date.getFullYear() + "-" + (input.date.getMonth()+1) + "-" + input.date.getDate() + "')}";
+		}
+		return putInLine(function(){
+			request({
+				url: "https://www.virustotal.com/api/v3/monitor_partner/detections_bundle" + engineString + dateString + "/download?cursor=" + input.cursor + '&limit=' + input.limit,
+				method: getString,
+				headers: standardHeader
+			}, standardCallback(callback));
+		});
+	};
 };
 output.makeAPI = function(delay){
 	return new v3(delay);
