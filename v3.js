@@ -35,7 +35,7 @@ const deleteString = 'DELETE';
 const patchString = 'PATCH';
 const request = require('request');
 const millisecondsPerMinute = 60000;
-const thirtyTwoMegabytes = 34359738368;
+const thirtyTwoMegabytes = 33554432;
 const defaultDelay = millisecondsPerMinute/4;
 const commentString = "comment";
 const voteString = "vote";
@@ -390,8 +390,9 @@ const v3 = function(delay){
 					callback(err);
 					return;
 				}
+				res = JSON.parse(res);
 				putInLine(function(){
-					uploadFileToURL(asBuffer, res.data, callback);
+					uploadFileToURL(asBuffer, res.data, filename, filetype, callback);
 				});
 			}));
 		});
