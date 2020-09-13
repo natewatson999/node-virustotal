@@ -35,7 +35,7 @@ const deleteString = 'DELETE';
 const patchString = 'PATCH';
 const request = require('request');
 const millisecondsPerMinute = 60000;
-const thirtyTwoMegabytes = 33554432;
+const thirtyTwoMegabytes = 34359738368;
 const defaultDelay = millisecondsPerMinute/4;
 const commentString = "comment";
 const voteString = "vote";
@@ -390,9 +390,8 @@ const v3 = function(delay){
 					callback(err);
 					return;
 				}
-				res = JSON.parse(res);
 				putInLine(function(){
-					uploadFileToURL(asBuffer, res.data, filename, filetype, callback);
+					uploadFileToURL(asBuffer, res.data, callback);
 				});
 			}));
 		});
@@ -576,10 +575,10 @@ const v3 = function(delay){
 	this.getEngineStatistics = makeGetFunction('https://www.virustotal.com/api/v3/monitor_partner/statistics?filter=engine:','');
 	this.makeDetectionBundleControlObject = function(){
 		return {
-			this.engine = null;
-			this.date = null;
-			this.cursor = 0;
-			this.limit = 40;
+			engine: null,
+			date: null,
+			cursor: 0,
+			limit: 40
 		};
 	};
 	this.getDetectionsBundle = function(input, callback){
