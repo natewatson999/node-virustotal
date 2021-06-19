@@ -350,7 +350,7 @@ const theSameObject = defaultTimedInstance.urlNetworkLocations(hashed, function(
 ```
 
 ## v3.initialScanURL()
-This takes a URL and a standard callback. This causes VirusTotal to initially analyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+This takes a URL and a standard callback. This causes VirusTotal to initially analyse the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
@@ -368,15 +368,15 @@ const theSameObject = defaultTimedInstance.initialScanURL('http://wikionemore.co
 });
 ```
 
-## v3.reAnalyzeFile()
-This takes a file ID and a standard callback. This causes VirusTotal to reanalyze the file. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+## v3.reAnalyseFile()
+This takes a file ID and a standard callback. This causes VirusTotal to reanalyse the file. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
 ```
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
-const theSameObject = defaultTimedInstance.reAnalyzeFile('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
+const theSameObject = defaultTimedInstance.reAnalyseFile('8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85', function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -387,8 +387,8 @@ const theSameObject = defaultTimedInstance.reAnalyzeFile('8739c76e681f900923b900
 });
 ```
 
-## v3.reAnalyzeURL()
-This takes a SHA256 hashed URL and a standard callback. This causes VirusTotal to reanalyze the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
+## v3.reAnalyseURL()
+This takes a SHA256 hashed URL and a standard callback. This causes VirusTotal to reanalyse the URL. The information regarding the analysis is returned in res. This returns this instance of the v3 object. 
 
 ### Example
 
@@ -396,7 +396,7 @@ This takes a SHA256 hashed URL and a standard callback. This causes VirusTotal t
 const nvt = require('node-virustotal');
 const defaultTimedInstance = nvt.makeAPI();
 const hashed = nvt.sha256('http://wikionemore.com/');
-const theSameObject = defaultTimedInstance.reAnalyzeURL(hashed, function(err, res){
+const theSameObject = defaultTimedInstance.reAnalyseURL(hashed, function(err, res){
   if (err) {
     console.log('Well, crap.');
     console.log(err);
@@ -958,7 +958,7 @@ premiumAccess.makePlainTextZipFile(['549c0a11d2f01efee5dc09061ffe58730c1629d7763
 
 ## Feeds
 
-Note that feed features are exclusive to VirusTotal Enterprise users. These give all of the either files, URLs, or File Behaviors that have been analyzed within any given minute. Note that batches can be downloaded as long as they're 7 days old or younger, but older than 1 minute. 
+Note that feed features are exclusive to VirusTotal Enterprise users. These give all of the either files, URLs, or File Behaviors that have been analysed within any given minute. Note that batches can be downloaded as long as they're 7 days old or younger, but older than 1 minute. 
 
 v3.getFilesForTime(), v3.getURLsForTime(), and v3.getFileBehaviorsForTime() all have the same interface: They take a JavaScript Date object and callback. The callback has 2 parameters: a possibly null error object, and an array of results. The array is an array of where each object in the array is either similar to what you'd get from v3.fileLookup, v3.urlLookup(), or v3.fileBehaviours(); depending on which one you used. 
 

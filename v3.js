@@ -420,7 +420,7 @@ const v3 = function(delay){
 	};
 	this.getFileDownloadLink = makeGetFunction("https://www.virustotal.com/api/v3/files/","/download_url");
 	this.fileBehaviours = makeGetFunction("https://www.virustotal.com/api/v3/file_behaviours/","/pcap");
-	this.reAnalyzeFile = makeNoContentPostFunction("https://www.virustotal.com/api/v3/files/","/analyze");
+	this.reAnalyseFile = makeNoContentPostFunction("https://www.virustotal.com/api/v3/files/","/analyse");
 	this.fileVotesLookup = makeGetFunction("https://www.virustotal.com/api/v3/files/","/votes");
 	this.postFileComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendFileVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/files/","/votes"), makeVoteObject);
@@ -447,7 +447,7 @@ const v3 = function(delay){
 	this.postURLComment = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/comments"), commentToObject);
 	this.sendURLVote = makePostTransform(makePostFunction("https://www.virustotal.com/api/v3/urls/","/votes"), makeVoteObject);
 	this.getURLRelationships = make3partGetFunction("https://www.virustotal.com/api/v3/urls/","/","");
-	this.reAnalyzeURL = makeNoContentPostFunction("https://www.virustotal.com/api/v3/urls/","/analyze");
+	this.reAnalyseURL = makeNoContentPostFunction("https://www.virustotal.com/api/v3/urls/","/analyse");
 	this.getAnalysisInfo = makeGetFunction("https://www.virustotal.com/api/v3/analyses/","");
 	this.getUserInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","");
 	this.getUserUsageInfo = makeGetFunction("https://www.virustotal.com/api/v3/users/","/api_usage");
