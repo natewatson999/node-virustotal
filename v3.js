@@ -212,7 +212,7 @@ const v3 = function(delay){
 		return self;
 	};
 	this.getDelay = function(){
-		return time;
+		return self.time;
 	};
 	this.setDelay = function(t){
 		self.time = t;
